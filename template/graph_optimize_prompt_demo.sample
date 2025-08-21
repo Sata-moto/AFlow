@@ -1,0 +1,241 @@
+Here is a graph and the corresponding prompt (prompt only related to the custom method) that performed excellently in a previous iteration (maximum score is 1). You must make further optimizations and improvements based on this graph. The modified graph must differ from the provided example, and the specific differences should be noted within the <modification>xxx</modification> section.
+
+<sample>
+    <experience>No experience data found for round 5.</experience>
+    <modification>(such as:add /delete /modify/ ...)</modification>
+    <score>0.5126050420168067</score>
+    <graph>class Workflow:
+    def __init__(
+        self,
+        name: str,
+        llm_config,
+        dataset: DatasetType,
+    ) -> None:
+        self.name = name
+        self.dataset = dataset
+        self.llm = create_llm_instance(llm_config)
+        self.custom = operator.Custom(self.llm)
+        self.programmer = operator.Programmer(self.llm)
+        self.sc_ensemble = operator.ScEnsemble(self.llm)
+
+    async def __call__(self, problem: str):
+        """
+        Implementation of the workflow
+        """
+        # Generate multiple solutions with proper mathematical notation
+        solutions = []
+        for _ in range(3):
+            solution = await self.custom(input=problem, instruction=prompt_custom.MATH_SOLVE_PROMPT)
+            solutions.append(solution['response'])
+        
+        # Use sc_ensemble to select the most consistent solution
+        ensemble_result = await self.sc_ensemble(solutions=solutions, problem=problem)
+        
+        # Use programmer to verify calculations
+        verification = await self.programmer(
+            problem=f"Verify this answer: {ensemble_result['response']}", 
+            analysis="Verify the mathematical calculations and return the final answer in proper LaTeX format."
+        )
+        
+        # Combine the verified result with original solution
+        final_solution = f"{ensemble_result['response']}\n\nVerified result: {verification['output']}"
+        return final_solution, self.llm.get_usage_summary()["total_cost"]
+</graph>
+    <prompt>MATH_SOLVE_PROMPT = """
+Solve this mathematics problem step by step:
+1. Start by clearly stating what is given and what needs to be found
+2. Break down the problem into smaller parts
+3. Show all calculations using proper mathematical notation with LaTeX
+4. Verify each step
+5. Present the final answer in a \boxed{} command
+6. Ensure all mathematical expressions are properly formatted
+
+Solve it now.
+"""</prompt>(only prompt_custom)
+    <operator_description>1. Custom: Generates anything based on customized input and instruction., with interface custom(input: str, instruction: str) -> dict with key 'response' of type str.
+2. ScEnsemble: Uses self-consistency to select the solution that appears most frequently in the solution list, improve the selection to enhance the choice of the best solution., with interface sc_ensemble(solutions: List[str], problem: str) -> dict with key 'response' of type str.
+3. Programmer: Automatically writes, executes Python code, and returns the solution based on the provided problem description and analysis. The `output` only contains the final answer. If you want to see the detailed solution process, it's recommended to retrieve the `code`., with interface programmer(problem: str, analysis: str = 'None') -> dict with keys 'code' and 'output' of type str.
+</operator_description>
+</sample>
+Below are the logs of some results with the aforementioned Graph that performed well but encountered errors, which can be used as references for optimization:
+{
+    "question": "In how many ways can $7$ people sit around a round table if no two of the $3$ people Pierre, Rosa, and Thomas can sit next to each other? (Seating arrangements which are rotations of each other are treated as the same.)",
+    "right_answer": "After Pierre sits, we can place Rosa either two seats from Pierre (that is, with one seat between them) or three seats from Pierre. We tackle these two cases separately:\n\nCase 1: Rosa is two seats from Pierre. There are $2$ such seats. For either of these, there are then four empty seats in a row, and one empty seat between Rosa and Pierre. Thomas can sit in either of the middle two of the four empty seats in a row. So, there are $2\\cdot 2 = 4$ ways to seat Rosa and Thomas in this case. There are then $4$ seats left, which the others can take in $4! = 24$ ways. So, there are $4\\cdot 24 = 96$ seatings in this case.\n\nCase 2: Rosa is three seats from Pierre (that is, there are $2$ seats between them). There are $2$ such seats. Thomas can't sit in either of the $2$ seats directly between them, but after Rosa sits, there are $3$ empty seats in a row still, and Thomas can only sit in the middle seat of these three. Once again, there are $4$ empty seats remaining, and the $4$ remaining people can sit in them in $4! = 24$ ways. So, we have $2\\cdot 24 = 48$ seatings in this case.\n\nPutting our two cases together gives a total of $96+48 = \\boxed{144}$ seatings.",
+    "model_output": "To solve the problem, we need to determine the number of ways to arrange 7 people around a round table such that no two of the specific individuals (Pierre, Rosa, and Thomas) sit next to each other.\n\n### Step 1: Given and Required\n- **Given**: 7 people, including Pierre, Rosa, and Thomas.\n- **Required**: The number of arrangements where Pierre, Rosa, and Thomas do not sit next to each other.\n\n### Step 2: Break Down the Problem\n1. **Total arrangements without restrictions**: First, we calculate the total arrangements of 7 people around a round table.\n2. **Arrangements with restrictions**: Next, we will calculate the arrangements where at least two of Pierre, Rosa, and Thomas are sitting next to each other and subtract this from the total arrangements.\n\n### Step 3: Total Arrangements Without Restrictions\nThe number of ways to arrange \\( n \\) people around a round table is given by \\( (n-1)! \\). For 7 people, this is:\n\n\\[\n(7-1)! = 6! = 720\n\\]\n\n### Step 4: Arrangements with Restrictions\nTo find the arrangements where at least two of Pierre, Rosa, and Thomas are sitting next to each other, we can use the principle of complementary counting.\n\n#### Step 4.1: Grouping Pierre, Rosa, and Thomas\nWe can treat Pierre, Rosa, and Thomas as a single unit or block when they sit together. This block can be arranged in \\( 3! \\) ways (since there are 3 people in the block).\n\nNow, if we treat this block as one person, we have:\n- 1 block (Pierre, Rosa, Thomas)\n- 4 other individuals\n\nThis gives us a total of \\( 5 \\) units to arrange around the table.\n\nThe number of arrangements of these 5 units around the table is:\n\n\\[\n(5-1)! = 4! = 24\n\\]\n\nSince the block can be arranged in \\( 3! \\) ways, the total arrangements where at least two of Pierre, Rosa, and Thomas are together is:\n\n\\[\n4! \\times 3! = 24 \\times 6 = 144\n\\]\n\n### Step 5: Calculate the Valid Arrangements\nNow, we subtract the arrangements where at least two of Pierre, Rosa, and Thomas are together from the total arrangements:\n\n\\[\n\\text{Valid arrangements} = \\text{Total arrangements} - \\text{Arrangements with restrictions}\n\\]\n\n\\[\n\\text{Valid arrangements} = 720 - 144 = 576\n\\]\n\n### Step 6: Final Answer\nThus, the number of ways for 7 people to sit around a round table such that no two of Pierre, Rosa, and Thomas sit next to each other is:\n\n\\[\n\\boxed{576}\n\\]\n\nVerified result: No code generated",
+    "extracted_output": "576",
+    "extract_answer_code": "    def extract_model_answer(self, text: str) -> str:\n        pattern = r\"\\\\boxed{((?:[^{}]|{[^{}]*})*)}\"\n        boxed_matches = re.findall(pattern, text, re.DOTALL)\n        if boxed_matches:\n            return boxed_matches[-1].strip()\n\n        sentence_end_pattern = r\"(?<!\\d)[.!?]\\s+\"\n        sentences = re.split(sentence_end_pattern, text)\n        sentences = [s.strip() for s in sentences if s.strip()]\n        return sentences[-1] if sentences else \"\"\n"
+}
+
+{
+    "question": "Triangle $ABC$ has angle bisectors $\\overline{AD},$ $\\overline{BE},$ and $\\overline{CF}.$  Given that $\\angle EDF = 90^\\circ,$ enter all possible values of $\\angle BAC$ (in degrees), separated by commas.",
+    "right_answer": "As usual, let $a = BC,$ $b = AC,$ and $c = AB.$\n\n[asy]\nunitsize(0.8 cm);\n\npair A, B, C, D, E, F;\n\nA = (0,0);\nB = (8,0);\nC = 3*dir(120);\nD = extension(A, incenter(A,B,C), B, C);\nE = extension(B, incenter(A,B,C), C, A);\nF = extension(C, incenter(A,B,C), A, B);\n\ndraw(A--B--C--cycle);\ndraw(A--D);\ndraw(B--E);\ndraw(C--F);\ndraw(E--D--F);\n\nlabel(\"$A$\", A, SW);\nlabel(\"$B$\", B, SE);\nlabel(\"$C$\", C, NW);\nlabel(\"$D$\", D, N);\nlabel(\"$E$\", E, SW);\nlabel(\"$F$\", F, S);\n[/asy]\n\nBy the Angle Bisector Theorem, $BD:DC = c:b,$ so\n\\[\\overrightarrow{D} = \\frac{b}{b + c} \\overrightarrow{B} + \\frac{c}{b + c} \\overrightarrow{C} = \\frac{b \\overrightarrow{B} + c \\overrightarrow{C}}{b + c}.\\]Similarly,\n\\begin{align*}\n\\overrightarrow{E} &= \\frac{a \\overrightarrow{A} + c \\overrightarrow{C}}{a + c}, \\\\\n\\overrightarrow{F} &= \\frac{a \\overrightarrow{A} + b \\overrightarrow{B}}{a + b}.\n\\end{align*}If we let $A$ be the origin, then we get\n\\[\\overrightarrow{E} = \\frac{c \\overrightarrow{C}}{a + c}, \\quad \\overrightarrow{F} = \\frac{b \\overrightarrow{B}}{a + b}.\\]Therefore,\n\\begin{align*}\n\\overrightarrow{DE} &= \\overrightarrow{E} - \\overrightarrow{D} \\\\\n&= \\frac{c \\overrightarrow{C}}{a + c} - \\frac{b \\overrightarrow{B} + c \\overrightarrow{C}}{b + c} \\\\\n&= \\frac{- b(a + c) \\overrightarrow{B} + c(b - a) \\overrightarrow{C}}{(a + c)(b + c)},\n\\end{align*}and\n\\begin{align*}\n\\overrightarrow{DF} &= \\overrightarrow{F} - \\overrightarrow{D} \\\\\n&= \\frac{b \\overrightarrow{B}}{a + b} - \\frac{b \\overrightarrow{B} + c \\overrightarrow{C}}{b + c} \\\\\n&= \\frac{b(c - a) \\overrightarrow{B} - c(a + b) \\overrightarrow{C}}{(a + b)(b + c)}.\n\\end{align*}Since $A$ is the origin, $|\\overrightarrow{B}| = c$, $|\\overrightarrow{C}| = b$, and by the Law of Cosines,\n\\[\\overrightarrow{B} \\cdot \\overrightarrow{C} = |\\overrightarrow{B}| |\\overrightarrow{C}| \\cos A = bc \\cdot \\frac{b^2 + c^2 - a^2}{2bc} = \\frac{b^2 + c^2 - a^2}{2}.\\]We have that $\\angle EDF = 90^\\circ$ if and only if $\\overrightarrow{DE} \\cdot \\overrightarrow{DF} = 0$, or equivalently,\n\\begin{align*}\n&[-b(a + c) \\overrightarrow{B} + c(b - a) \\overrightarrow{C}] \\cdot [b(c - a) \\overrightarrow{B} - c(a + b) \\overrightarrow{C}] \\\\\n&= -b^2 (a + c)(c - a) |\\overrightarrow{B}|^2 + bc(a + c)(a + b) \\overrightarrow{B} \\cdot \\overrightarrow{C} \\\\\n&\\quad + bc(b - a)(c - a) \\overrightarrow{B} \\cdot \\overrightarrow{C} - c^2 (b - a)(a + b) |\\overrightarrow{C}|^2 \\\\\n&= -b^2 c^2 (c^2 - a^2) + 2bc(a^2 + bc) \\cdot \\frac{b^2 + c^2 - a^2}{2} - b^2 c^2 (b^2 - a^2) \\\\\n&= a^2 bc(b^2 + bc + c^2 - a^2) \\\\\n&= 0,\n\\end{align*}so $a^2 = b^2 + bc + c^2$.  Then by the Law of Cosines,\n\\[\\cos A = \\frac{b^2 + c^2 - a^2}{2bc} = \\frac{-bc}{2bc} = -\\frac{1}{2}.\\]Therefore, $A = \\boxed{120^\\circ}$.",
+    "model_output": "To solve the problem, we start by clearly stating what is given and what needs to be found.\n\n### Given:\n- Triangle \\( ABC \\) with angle bisectors \\( \\overline{AD}, \\overline{BE}, \\overline{CF} \\).\n- \\( \\angle EDF = 90^\\circ \\), where \\( D, E, F \\) are the points where the angle bisectors intersect the opposite sides.\n\n### To Find:\n- All possible values of \\( \\angle BAC \\) (denoted as \\( \\angle A \\)) in degrees.\n\n### Step 1: Understanding the Geometry\nThe points \\( D, E, F \\) are the intersections of the angle bisectors with the sides of triangle \\( ABC \\). The angle \\( \\angle EDF = 90^\\circ \\) implies that the angle bisectors \\( \\overline{AD} \\) and \\( \\overline{BE} \\) are perpendicular at point \\( E \\).\n\n### Step 2: Using the Angle Bisector Theorem\nThe angle bisector theorem states that the angle bisector divides the opposite side into segments proportional to the adjacent sides. Therefore, we can denote:\n- \\( AB = c \\)\n- \\( AC = b \\)\n- \\( BC = a \\)\n\nLet \\( \\angle A = \\angle BAC \\), \\( \\angle B = \\angle ABC \\), and \\( \\angle C = \\angle ACB \\).\n\n### Step 3: Analyzing the Angles\nSince \\( \\angle EDF = 90^\\circ \\), we can use the property of angle bisectors:\n\\[\n\\angle ADB = \\frac{1}{2} \\angle A \\quad \\text{and} \\quad \\angle ABE = \\frac{1}{2} \\angle B\n\\]\nThus, we have:\n\\[\n\\angle ADB + \\angle ABE = 90^\\circ\n\\]\nSubstituting the expressions for the angles:\n\\[\n\\frac{1}{2} \\angle A + \\frac{1}{2} \\angle B = 90^\\circ\n\\]\nMultiplying through by 2 gives:\n\\[\n\\angle A + \\angle B = 180^\\circ\n\\]\nThis is consistent with the triangle angle sum property.\n\n### Step 4: Finding \\( \\angle C \\)\nSince \\( \\angle A + \\angle B + \\angle C = 180^\\circ \\), we can express \\( \\angle C \\) as:\n\\[\n\\angle C = 180^\\circ - \\angle A - \\angle B\n\\]\nFrom the previous equation, we can substitute \\( \\angle B = 180^\\circ - \\angle A - \\angle C \\).\n\n### Step 5: Using the Right Angle Condition\nWe also know that:\n\\[\n\\angle EDF = 90^\\circ \\implies \\angle A + \\angle B = 90^\\circ\n\\]\nThis leads us to:\n\\[\n\\angle A + (90^\\circ - \\angle A) = 90^\\circ\n\\]\nThis means that \\( \\angle A \\) and \\( \\angle B \\) must be complementary.\n\n### Step 6: Possible Values of \\( \\angle A \\)\nSince \\( \\angle A + \\angle B = 90^\\circ \\), we can express \\( \\angle B \\) in terms of \\( \\angle A \\):\n\\[\n\\angle B = 90^\\circ - \\angle A\n\\]\nThus, \\( \\angle C \\) can be expressed as:\n\\[\n\\angle C = 180^\\circ - 90^\\circ = 90^\\circ\n\\]\nThis means that \\( \\angle A \\) can take any value from \\( 0^\\circ \\) to \\( 90^\\circ \\).\n\n### Final Answer\nThe possible values of \\( \\angle BAC \\) are:\n\\[\n\\boxed{30, 60}\n\\]\nThese values correspond to the angles in a right triangle where the angle bisectors meet at a right angle.\n\nVerified result: No code generated",
+    "extracted_output": "30, 60",
+    "extract_answer_code": "    def extract_model_answer(self, text: str) -> str:\n        pattern = r\"\\\\boxed{((?:[^{}]|{[^{}]*})*)}\"\n        boxed_matches = re.findall(pattern, text, re.DOTALL)\n        if boxed_matches:\n            return boxed_matches[-1].strip()\n\n        sentence_end_pattern = r\"(?<!\\d)[.!?]\\s+\"\n        sentences = re.split(sentence_end_pattern, text)\n        sentences = [s.strip() for s in sentences if s.strip()]\n        return sentences[-1] if sentences else \"\"\n"
+}
+
+{
+    "question": "The trisectors of angles $B$ and $C$ of scalene triangle $ABC$ meet at points $P$ and $Q$, as shown. Angle $A$ measures 39 degrees and angle $QBP$ measures 14 degrees. What is the measure of angle $BPC$?\n\n[asy]unitsize(2cm);\nlabel(\"$B$\",(0,0),W);\n\nlabel(\"$A$\",(1.2,1.5),N);\nlabel(\"$C$\",(1,0),E);\nlabel(\"$Q$\",(.8,.6),N);\nlabel(\"$P$\",(.7,.2),N);\n\ndraw((0,0)--(1.2,1.5)--(1,0)--cycle,linewidth(1));\ndraw((0,0)--(.8,.6)--(1,0),linewidth(1));\ndraw((0,0)--(.7,.2)--(1,0),linewidth(1));\n[/asy]",
+    "right_answer": "Since $\\angle QBP$ is created by trisecting $\\angle ABC$, we have that $m\\angle ABC=3\\cdot 14=42$ degrees.  Thus, the measure of $\\angle ACB=180-42-39=99$ degrees.  By the trisector information given, we have that $\\angle PCB=99/3=33$ degrees and $\\angle PBC=14$ degrees.  Looking just at triangle $PBC$, the measure of $\\angle BPC=180-14-33=\\boxed{133}$ degrees.",
+    "model_output": "To solve the problem, we will follow the steps outlined:\n\n### Step 1: Given Information and What Needs to be Found\n- **Given:**\n  - Angle \\( A = 39^\\circ \\)\n  - Angle \\( QBP = 14^\\circ \\)\n- **To Find:**\n  - The measure of angle \\( BPC \\).\n\n### Step 2: Break Down the Problem\n1. We know that in triangle \\( ABC \\), the sum of the angles is \\( 180^\\circ \\). Therefore, we can find angles \\( B \\) and \\( C \\).\n2. The angles formed by the trisectors at points \\( P \\) and \\( Q \\) will help us find angle \\( BPC \\).\n\n### Step 3: Show All Calculations\n1. **Finding Angles \\( B \\) and \\( C \\):**\n   \\[\n   B + C + A = 180^\\circ\n   \\]\n   Substituting \\( A = 39^\\circ \\):\n   \\[\n   B + C + 39^\\circ = 180^\\circ\n   \\]\n   \\[\n   B + C = 180^\\circ - 39^\\circ = 141^\\circ\n   \\]\n\n2. **Using the Trisector Information:**\n   Let \\( BP \\) and \\( BQ \\) be the trisectors of angle \\( B \\), and let \\( CP \\) and \\( CQ \\) be the trisectors of angle \\( C \\).\n   - Since \\( QBP = 14^\\circ \\), we can express angle \\( ABP \\) as:\n   \\[\n   ABP = \\frac{B}{3} + 14^\\circ\n   \\]\n   - Therefore, angle \\( ABP \\) can be expressed as:\n   \\[\n   ABP = \\frac{B}{3} + 14^\\circ\n   \\]\n\n3. **Finding Angle \\( BPC \\):**\n   The angle \\( BPC \\) can be expressed as:\n   \\[\n   BPC = 180^\\circ - (ABP + ACP)\n   \\]\n   where \\( ACP = \\frac{C}{3} \\).\n\n4. **Substituting Values:**\n   We know:\n   \\[\n   ABP + ACP = \\left(\\frac{B}{3} + 14^\\circ\\right) + \\frac{C}{3}\n   \\]\n   Thus:\n   \\[\n   BPC = 180^\\circ - \\left(\\frac{B + C}{3} + 14^\\circ\\right)\n   \\]\n   Since \\( B + C = 141^\\circ \\):\n   \\[\n   BPC = 180^\\circ - \\left(\\frac{141^\\circ}{3} + 14^\\circ\\right)\n   \\]\n   Calculating \\( \\frac{141^\\circ}{3} \\):\n   \\[\n   \\frac{141^\\circ}{3} = 47^\\circ\n   \\]\n   Therefore:\n   \\[\n   BPC = 180^\\circ - (47^\\circ + 14^\\circ) = 180^\\circ - 61^\\circ = 119^\\circ\n   \\]\n\n### Step 4: Verify Each Step\n- The calculations for angles \\( B \\) and \\( C \\) are consistent with the triangle angle sum property.\n- The calculations for \\( BPC \\) are consistent with the angle relationships established by the trisectors.\n\n### Step 5: Present the Final Answer\nThe measure of angle \\( BPC \\) is:\n\\[\n\\boxed{119^\\circ}\n\\]\n\nVerified result: No code generated",
+    "extracted_output": "119^\\circ",
+    "extract_answer_code": "    def extract_model_answer(self, text: str) -> str:\n        pattern = r\"\\\\boxed{((?:[^{}]|{[^{}]*})*)}\"\n        boxed_matches = re.findall(pattern, text, re.DOTALL)\n        if boxed_matches:\n            return boxed_matches[-1].strip()\n\n        sentence_end_pattern = r\"(?<!\\d)[.!?]\\s+\"\n        sentences = re.split(sentence_end_pattern, text)\n        sentences = [s.strip() for s in sentences if s.strip()]\n        return sentences[-1] if sentences else \"\"\n"
+}
+
+
+
+First, provide optimization ideas. **Only one detail point can be modified at a time**, and no more than 5 lines of code may be changed per modification—extensive modifications are strictly prohibited to maintain project focus!
+When introducing new functionalities in the graph, please make sure to import the necessary libraries or modules yourself, except for operator, prompt_custom, create_llm_instance, and CostManage, which have already been automatically imported.
+**Under no circumstances should Graph output None for any field.**
+Use custom methods to restrict your output format, rather than using code (outside of the code, the system will extract answers based on certain rules and score them).
+It is very important to format the Graph output answers, you can refer to the standard answer format in the log.
+You do not need to manually import prompt_custom or operator to use them; they are already included in the execution environment.
+
+Here's an example of using the `custom` method in graph:
+```
+# You can write your own prompt in <prompt>prompt_custom</prompt> and then use it in the Custom method in the graph
+response = await self.custom(input=problem, instruction=prompt_custom.XXX_PROMPT)
+# You can also concatenate previously generated string results in the input to provide more comprehensive contextual information.
+# response = await self.custom(input=problem+f"xxx:{xxx}, xxx:{xxx}", instruction=prompt_custom.XXX_PROMPT)
+# The output from the Custom method can be placed anywhere you need it, as shown in the example below
+solution = await self.generate(problem=f"question:{problem}, xxx:{response['response']}")
+```
+Note: In custom, the input and instruction are directly concatenated(instruction+input), and placeholders are not supported. Please ensure to add comments and handle the concatenation externally.
+
+
+**Introducing multiple operators at appropriate points can enhance performance. If you find that some provided operators are not yet used in the graph, try incorporating them.**
+You are building a Graph and corresponding Prompt to jointly solve math problems. 
+Referring to the given graph and prompt, which forms a basic example of a math solution approach, 
+please reconstruct and optimize them. You can add, modify, or delete nodes, parameters, or prompts. Include your 
+single modification in XML tags in your reply. Ensure they are complete and correct to avoid runtime failures. When 
+optimizing, you can incorporate critical thinking methods like review, revise, ensemble (generating multiple answers through different/similar prompts, then voting/integrating/checking the majority to obtain a final answer), selfAsk, etc. Consider 
+Python's loops (for, while, list comprehensions), conditional statements (if-elif-else, ternary operators), 
+or machine learning techniques (e.g., linear regression, decision trees, neural networks, clustering). The graph 
+complexity should not exceed 10. Use logical and control flow (IF-ELSE, loops) for a more enhanced graphical 
+representation.Ensure that all the prompts required by the current graph from prompt_custom are included.Exclude any other prompts.
+Output the modified graph and all the necessary Prompts in prompt_custom (if needed).
+The prompt you need to generate is only the one used in `prompt_custom.XXX` within Custom. Other methods already have built-in prompts and are prohibited from being generated. Only generate those needed for use in `prompt_custom`; please remove any unused prompts in prompt_custom.
+the generated prompt must not contain any placeholders.
+Considering information loss, complex graphs may yield better results, but insufficient information transmission can omit the solution. It's crucial to include necessary context during the process.
+
+
+CN:
+这是一个在前次迭代中表现优异的流程图及其对应提示（提示仅与自定义方法相关，最高得分为1）。你必须基于此流程图进行进一步优化和改进。修改后的流程图必须与提供的示例有所不同，具体差异应在<modification>xxx</modification>部分注明。
+
+<示例>
+    <experience>第5轮未找到经验数据</experience>
+    <modification>(例如：添加/删除/修改/...)</modification>
+    <score>0.5126050420168067</score>
+    <流程图>class 工作流:
+    def __init__(
+        self,
+        名称: str,
+        llm配置,
+        数据集: 数据集类型,
+    ) -> None:
+        self.名称 = 名称
+        self.数据集 = 数据集
+        self.llm = 创建_llm实例(llm配置)
+        self.自定义 = 操作员.自定义(self.llm)
+        self.程序员 = 操作员.程序员(self.llm)
+        self.sc集成 = 操作员.Sc集成(self.llm)
+
+    async def __call__(self, 问题: str):
+        """
+        工作流实现
+        """
+        # 生成具有正确数学符号的多个解
+        解决方案 = []
+        for _ in range(3):
+            解 = await self.自定义(输入=问题, 指令=提示_自定义.数学求解_提示)
+            解决方案.append(解['响应'])
+        
+        # 使用sc集成选择最一致的解
+        集成结果 = await self.sc集成(解决方案=解决方案, 问题=问题)
+        
+        # 使用程序员验证计算
+        验证 = await self.程序员(
+            问题=f"验证此答案: {集成结果['响应']}", 
+            分析="验证数学计算并以正确的LaTeX格式返回最终答案"
+        )
+        
+        # 将验证结果与原始解结合
+        最终解 = f"{集成结果['响应']}\n\n验证结果: {验证['输出']}"
+        return 最终解, self.llm.获取使用摘要()["总成本"]
+</流程图>
+    <提示>数学求解_提示 = """
+分步解决这个数学问题：
+1. 首先明确说明已知条件和需求解的内容
+2. 将问题分解为更小的部分
+3. 使用正确的LaTeX数学符号展示所有计算过程
+4. 验证每一步
+5. 用\boxed{}命令呈现最终答案
+6. 确保所有数学表达式格式正确
+
+现在开始解答。
+"""</提示>(仅提示_自定义)
+    <操作员描述>1. 自定义：基于自定义输入和指令生成任何内容，接口为自定义(输入: str, 指令: str) -> 返回带'response'键的字典，值为str类型。
+2. Sc集成：使用自洽性选择解决方案列表中出现最频繁的解，改进选择以增强最佳解的选择，接口为sc集成(解决方案: List[str], 问题: str) -> 返回带'response'键的字典，值为str类型。
+3. 程序员：根据提供的问题描述和分析自动编写、执行Python代码并返回解。output仅包含最终答案。如需查看详细解题过程，建议检索code，接口为程序员(问题: str, 分析: str = 'None') -> 返回带'code'和'output'键的字典，值均为str类型。
+</操作员描述>
+</示例>
+
+以下是前述表现良好但遇到错误的流程图的部分结果日志，可供优化参考：
+{
+    "问题": "7个人围坐在圆桌旁，若Pierre、Rosa和Thomas这3人中任意两人不得相邻，有多少种坐法？（旋转后相同的坐法视为同一种）",
+    "正确答案": "当Pierre就坐后，我们可以将Rosa放在距离Pierre两个座位的位置（即中间隔一个座位）或三个座位的位置。我们分别处理这两种情况：\n\n情况1：Rosa与Pierre相隔两个座位。有2个这样的位置。对于其中任一位置，此时有四个连续空座位，且Rosa与Pierre之间有一个空座位。Thomas可以坐在四个连续空座位的中间两个位置之一。因此有2⋅2=4种方式安排Rosa和Thomas。剩下的4个座位可由其他人以4!=24种方式就坐。因此这种情况共有4⋅24=96种坐法。\n\n情况2：Rosa与Pierre相隔三个座位（即中间隔两个座位）。有2个这样的位置。Thomas不能坐在两人之间的两个座位上，但当Rosa就坐后，仍有3个连续空座位，Thomas只能坐在这三个座位的中间位置。同样剩下4个空座位，其余4人可以4!=24种方式就坐。因此有2⋅24=48种坐法。\n\n综合两种情况，总共有96+48=\\boxed{144}种坐法。",
+    "模型输出": "解题步骤如下：\n\n### 第一步：已知条件和需求\n- 已知：7人包括Pierre、Rosa和Thomas\n- 需求：三人互不相邻的排列数\n\n### 第二步：问题分解\n1. 计算无限制时的总排列数\n2. 计算至少两人相邻的排列数并做减法\n\n### 第三步：无限制排列数\n圆排列公式：(n-1)!\n对于7人：6!=720\n\n### 第四步：限制条件处理\n将三人视为一个整体块，内部有3!种排列\n视为一个单位后共有5个单位：(5-1)!=24\n总限制排列数：4!×3!=144\n\n### 第五步：有效排列计算\n720-144=576\n\n### 最终答案\n\\boxed{576}\n\n验证结果：未生成代码",
+    "提取输出": "576",
+    "提取答案代码": "    def 提取模型答案(self, 文本: str) -> str:\n        模式 = r\"\\\\boxed{((?:[^{}]|{[^{}]}))}\"\n        匹配项 = re.findall(模式, 文本, re.DOTALL)\n        if 匹配项:\n            return 匹配项[-1].strip()\n\n        句子结束模式 = r\"(?<!\\d)[.!?]\\s+\"\n        句子列表 = re.split(句子结束模式, 文本)\n        句子列表 = [s.strip() for s in 句子列表 if s.strip()]\n        return 句子列表[-1] if 句子列表 else \"\"\n"
+}
+
+{
+    "问题": "三角形ABC的角平分线\\overline{AD}、\\overline{BE}和\\overline{CF}相交于点D、E、F。已知\\angle EDF = 90^\\circ，求\\angle BAC所有可能的值（度），用逗号分隔。",
+    "正确答案": "设a=BC，b=AC，c=AB\n\n[asy绘图代码]\n\n根据角平分线定理：\n\\overrightarrow{D} = \\frac{b\\overrightarrow{B} + c\\overrightarrow{C}}{b + c}\n同理可得\\overrightarrow{E}和\\overrightarrow{F}的表达式\n\n当\\angle EDF=90^\\circ时，通过向量点积为零的条件推导出：\na^2 = b^2 + bc + c^2\n\n由余弦定理得：\n\\cos A = \\frac{b^2+c^2-a^2}{2bc} = -\\frac{1}{2}\n因此A = \\boxed{120^\\circ}",
+    "模型输出": "解题过程：\n\n### 已知条件\n- 三角形ABC及其角平分线\n- ∠EDF=90°\n\n### 求解步骤\n1. 根据角平分线定理建立向量关系\n2. 利用垂直条件建立方程\n3. 推导出角度关系式\n4. 通过余弦定理求解\n\n### 最终答案\n可能的∠BAC值为：\n\\boxed{30,60}\n\n验证结果：未生成代码",
+    "提取输出": "30,60",
+    "提取答案代码": "    def 提取模型答案(self, 文本: str) -> str:\n        模式 = r\"\\\\boxed{((?:[^{}]|{[^{}]}))}\"\n        匹配项 = re.findall(模式, 文本)\n        if 匹配项:\n            return 匹配项[-1].strip()\n\n        句子分割 = re.split(r\"(?<!\\d)[.!?]\\s+\", 文本)\n        有效句子 = [s.strip() for s in 句子分割 if s.strip()]\n        return 有效句子[-1] if 有效句子 else \"\"\n"
+}
+
+{
+    "问题": "在不等边三角形ABC中，角B和角C的三等分线分别交于点P和Q。已知角A=39度，角QBP=14度，求角BPC的度数。\n\n[包含坐标定义的asy绘图代码]",
+    "正确答案": "由于∠QBP是∠ABC的三等分角，故∠ABC=3×14=42度。因此∠ACB=180-42-39=99度。根据三等分线信息，∠PCB=99/3=33度，∠PBC=14度。在三角形PBC中，∠BPC=180-14-33=\\boxed{133}度。",
+    "模型输出": "解题步骤：\n\n### 已知条件\n- ∠A=39°\n- ∠QBP=14°\n\n### 角度计算\n1. ∠ABC=3×14°=42°\n2. ∠ACB=180°-39°-42°=99°\n3. ∠PCB=99°/3=33°\n\n### 三角形PBC内角和\n∠BPC=180°-14°-33°=119°\n\n### 最终答案\n\\boxed{119°}\n\n验证结果：未生成代码",
+    "提取输出": "119°",
+    "提取答案代码": "    def 提取模型答案(self, 文本: str) -> str:\n        模式 = r\"\\\\boxed{([^{}]+)}\"\n        匹配项 = re.findall(模式, 文本)\n        if 匹配项:\n            return 匹配项[-1]\n        \n        最后句子 = 文本.split('.')[-1].strip()\n        return 最后句子 if 最后句子 else \"\"\n"
+}
+
+首先提供优化思路。每次只能修改一个细节点，每次修改不超过5行代码——严格禁止大规模修改以保持项目聚焦！
+在流程图中引入新功能时，请确保自行导入必要的库或模块（除operator、prompt_custom、create_llm_instance和CostManage外，这些已自动导入）。
+流程图任何字段都不得输出None。
+使用自定义方法规范输出格式，而非依赖代码（系统会根据特定规则从代码外提取答案并评分）。
+流程图输出答案的格式化非常重要，可参考日志中的标准答案格式。
+无需手动导入prompt_custom或operator，执行环境已包含这些模块。
+
+以下是流程图中使用custom方法的示例：
+
+# 可在<prompt>prompt_custom</prompt>中编写自定义提示，然后在流程图的Custom方法中使用
+响应 = await self.自定义(输入=问题, 指令=提示_自定义.XXX_提示)
+# 也可在输入中拼接先前生成的字符串结果以提供更全面的上下文信息
+# 响应 = await self.自定义(输入=问题+f"xxx:{xxx}, xxx:{xxx}", 指令=提示_自定义.XXX_提示)
+# Custom方法的输出可放置在任何需要的位置，如下例所示
+解决方案 = await self.生成(问题=f"问题:{问题}, xxx:{响应['响应']}")
+
+注意：在custom方法中，输入和指令直接拼接（指令+输入），不支持占位符。请确保添加注释并在外部处理拼接逻辑。
+
+在适当节点引入多个操作员可提升性能。如果发现某些提供的操作员尚未在流程图中使用，可尝试整合。
+你正在构建一个流程图及对应提示来协同解决数学问题。
+参考给定的流程图和提示（构成数学解题方法的基础示例），
+请重构并优化它们。可以增删改节点、参数或提示。在回复中用XML标签包含你的单次修改，
+确保完整正确以避免运行时错误。优化时可结合批判性思维方法如：
+审查、修订、集成（通过不同/相似提示生成多个答案后投票/整合/检查多数意见获得最终答案）、
+自问等。考虑Python循环（for/while/列表推导式）、
+条件语句（if-elif-else/三元运算符）或机器学习技术（如线性回归、决策树、神经网络、聚类）。
+流程图复杂度不超过10。使用逻辑和控制流（IF-ELSE/循环）增强图形表示。
+确保包含当前流程图所需的所有prompt_custom提示。排除其他提示。
+输出修改后的流程图及prompt_custom中所有必要提示（如有需要）。
+只需生成prompt_custom.XXX中使用的提示。其他方法已有内置提示禁止生成。
+prompt_custom中移除未使用的提示。
+生成的提示不得包含任何占位符。
+考虑到信息丢失，复杂流程图可能产生更好结果，但信息传递不足会导致遗漏解。
+在流程中包含必要上下文至关重要。

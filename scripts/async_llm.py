@@ -232,12 +232,18 @@ class AsyncLLM:
         Raises:
             FormatError: If the response doesn't match the expected format
         """
-        # Prepare the prompt with formatting instructions
+        # Prepare the prompt with formatting instructions:
+        # "...
+        # # Response format (must be strictly followed):
+        # <modification>modification</modification>
+        # <graph>graph</graph>
+        # <prompt>prompt</prompt>"
         formatted_prompt = formatter.prepare_prompt(prompt)
+
         # Call the LLM
         response = await self.__call__(formatted_prompt)
         
-        # Validate and parse the response
+        # Validate and parse the response(Judge whether the response contains all required fields)
         is_valid, parsed_data = formatter.validate_response(response)
         
         if not is_valid:

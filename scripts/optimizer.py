@@ -107,6 +107,7 @@ class Optimizer:
 
             converged, convergence_round, final_round = self.convergence_utils.check_convergence(top_k=3)
 
+            # Early stop when convergence is detected
             if converged and self.check_convergence:
                 logger.info(
                     f"Convergence detected, occurred in round {convergence_round}, final round is {final_round}"
@@ -132,18 +133,27 @@ class Optimizer:
         while True:
             directory = self.graph_utils.create_round_directory(graph_path, self.round + 1)
 
+            # Select and return the top `sample` rounds with the highest scores from previous rounds.
             top_rounds = self.data_utils.get_top_rounds(self.sample)
+            # Sort and process the scores of each round, and select the optimal one based on the probability distribution
             sample = self.data_utils.select_round(top_rounds)
 
+            # Load the graph and prompt for the selected round
             prompt, graph_load = self.graph_utils.read_graph_files(sample["round"], graph_path)
+            # Remove unnecessary prefixes and extract the graph from the loaded data(see extract_solve_graph.sample)
             graph = self.graph_utils.extract_solve_graph(graph_load)
 
+            # Read historical experience and process it into the corresponding dataset's processed_experience.json
             processed_experience = self.experience_utils.load_experience()
+            # Integrate and format the processed_experience of selected round into a string suitable for LLM(see format_experience.sample)
             experience = self.experience_utils.format_experience(processed_experience, sample["round"])
 
+            # Load operator descriptions for the current dataset (workspace/{dataset}/template/operator.json), self.operators is set as a hyperparameter in run.py and needs to correspond to the content in operator.json
             operator_description = self.graph_utils.load_operators_description(self.operators)
+            # Extract three entries from the selected round's log.json (error cases), which will be passed to the LLM for optimization
             log_data = self.data_utils.load_log(sample["round"])
 
+            # Create the graph optimization prompt(see graph_optimize_prompt.sample)
             graph_optimize_prompt = self.graph_utils.create_graph_optimize_prompt(
                 experience, sample["score"], graph[0], prompt, operator_description, self.type, log_data
             )
@@ -173,7 +183,7 @@ class Optimizer:
                     logger.error("Failed to extract fields from raw response, retrying...")
                     continue
 
-            # Check if the modification meets the conditions
+            # Check if the modification is different from previous modifications
             check = self.experience_utils.check_modification(
                 processed_experience, response["modification"], sample["round"]
             )
@@ -182,17 +192,21 @@ class Optimizer:
             if check:
                 break
 
-        # Save the graph and evaluate
+        # Save the graph as static graph file
         self.graph_utils.write_graph_files(directory, response, self.round + 1, self.dataset)
 
+        # Save the experience(without the current round score)
         experience = self.experience_utils.create_experience_data(sample, response["modification"])
 
+        # English ver: Load the dynamic graph for testing(Import the static graph string as a valid callable dynamic class)
         self.graph = self.graph_utils.load_graph(self.round + 1, graph_path)
 
         logger.info(directory)
 
+        # Evaluate the graph
         avg_score = await self.evaluation_utils.evaluate_graph(self, directory, validation_n, data, initial=False)
 
+        # Update the current round score in the experience file
         self.experience_utils.update_experience(directory, experience, avg_score)
 
         return avg_score
@@ -236,19 +250,39 @@ class Optimizer:
             return None
 
     async def test(self):
-        rounds = [1]  # You can choose the rounds you want to test here.
+        # 自动选择表现最好的工作流轮次进行测试
+        source_graph_path = f"{self.root_path}/workflows"
+        source_results = self.data_utils.load_results(source_graph_path)
+        
+        if not source_results:
+            print("No optimization results found. Please run optimization first.")
+            return
+        
+        # 找到分数最高的轮次
+        best_result = max(source_results, key=lambda x: x["score"])
+        best_round = best_result["round"]
+        print(f"Testing best workflow from round {best_round} with score {best_result['score']:.4f}")
+        
+        rounds = [best_round]  # 测试最佳轮次
         data = []
 
-        graph_path = f"{self.root_path}/workflows_test"
-        json_file_path = self.data_utils.get_results_file_path(graph_path)
-
-        data = self.data_utils.load_results(graph_path)
+        # 测试结果保存路径
+        test_graph_path = f"{self.root_path}/workflows_test"
+        # 工作流实际所在路径（优化完成的工作流）
+        
+        json_file_path = self.data_utils.get_results_file_path(test_graph_path)
+        data = self.data_utils.load_results(test_graph_path)
 
         for round in rounds:
-            directory = self.graph_utils.create_round_directory(graph_path, round)
-            self.graph = self.graph_utils.load_graph(round, graph_path)
+            # 在测试路径创建目录（用于保存测试日志和结果）
+            directory = self.graph_utils.create_round_directory(test_graph_path, round)
+            # 从优化路径加载工作流（而不是从测试路径）
+            self.graph = self.graph_utils.load_graph(round, source_graph_path)
 
+            print(f"Running test evaluation for round {round}...")
             score, avg_cost, total_cost = await self.evaluation_utils.evaluate_graph_test(self, directory, is_test=True)
+
+            print(f"Test results - Score: {score:.4f}, Avg Cost: {avg_cost:.4f}, Total Cost: {total_cost:.4f}")
 
             new_data = self.data_utils.create_result_data(round, score, avg_cost, total_cost)
             data.append(new_data)

@@ -70,7 +70,7 @@ class GraphUtils:
             matched_data = operator_data[operator_name]
             desc = matched_data["description"]
             interface = matched_data["interface"]
-            return f"{id}. {operator_name}: {desc}, with interface {interface})."
+            return f"{id}. {operator_name}: {desc}, with interface {interface}."
 
     def create_graph_optimize_prompt(
         self,
@@ -113,6 +113,7 @@ class GraphUtils:
         return None
 
     def write_graph_files(self, directory: str, response: dict, round_number: int, dataset: str):
+        # Supplement necessary imports and other information in the generated Graph based on existing templates
         graph = WORKFLOW_TEMPLATE.format(graph=response["graph"], round=round_number, dataset=dataset)
 
         with open(os.path.join(directory, "graph.py"), "w", encoding="utf-8") as file:

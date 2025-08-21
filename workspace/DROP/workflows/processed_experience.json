@@ -1,0 +1,129 @@
+{
+    "1": {
+        "score": 0.11872679754998078,
+        "success": {
+            "2": {
+                "modification": "Add AnswerGenerate operator to get structured reasoning, then use Custom to format the final answer concisely. This helps ensure more accurate and direct answers matching the expected format.",
+                "score": 0.7927366522366522
+            }
+        },
+        "failure": {}
+    },
+    "2": {
+        "score": 0.7927366522366522,
+        "success": {
+            "3": {
+                "modification": "1. Add ScEnsemble operator to validate and select the best answer from multiple formatting attempts\n2. Modify the workflow to generate multiple formatted versions of the answer\n3. Update the FORMAT_PROMPT to be more strict about number formatting",
+                "score": 0.8104200244200246
+            },
+            "5": {
+                "modification": "1. Add ScEnsemble operator to combine multiple formatted answers\n2. Generate three different formatted versions using Custom operator\n3. Use ScEnsemble to select the most consistent format",
+                "score": 0.8266056786350905
+            },
+            "4": {
+                "modification": "1. Add ScEnsemble operator to validate results\n2. Generate multiple formatted answers using different prompts\n3. Use ensemble voting to select the most appropriate answer format",
+                "score": 0.8131645021645022
+            }
+        },
+        "failure": {}
+    },
+    "5": {
+        "score": 0.8266056786350905,
+        "success": {
+            "8": {
+                "modification": "Add a verification step using Custom operator to validate numerical answers and check for alternative answers before the final ensemble. This helps catch cases where multiple valid answers exist (like \"25|53\") and verifies time period calculations.",
+                "score": 0.8334645021645022
+            }
+        },
+        "failure": {
+            "7": {
+                "modification": "Add a pre-formatting step using Custom operator to standardize the detailed answer before generating multiple format attempts. This will help ensure more consistent formatting and better handling of alternative answers.",
+                "score": 0.7941754356754356
+            },
+            "9": {
+                "modification": "Add a numerical verification step using Custom operator after generating the formatted answer to double-check calculations and validate numerical values against the original passage. This helps catch calculation errors and ensures we select the correct number from multiple options.",
+                "score": 0.7198549783549784
+            },
+            "10": {
+                "modification": "Add a format verification step using Custom operator after the initial formatting to specifically check and standardize numerical answers and composite answers (like \"3 and 20 and 32\" should be summed to \"55\"). This helps ensure consistent numerical output and proper handling of composite answers.",
+                "score": 0.7995626566416041
+            }
+        }
+    },
+    "8": {
+        "score": 0.8334645021645022,
+        "success": {
+            "15": {
+                "modification": "Add a new format verification step specifically for numerical summation and standardization between the format attempts and final verification. This will help ensure proper handling of cases where numbers need to be added together (like the tank+armored+non-armored vehicles case) and maintain consistent number formatting.",
+                "score": 0.8408311688311687
+            }
+        },
+        "failure": {
+            "13": {
+                "modification": "Add a new format verification step specifically for handling ordinal numbers and multiple answer cases. This step will be inserted between the format attempts and the final verification to ensure proper formatting of numbers and multiple answers.",
+                "score": 0.6977332667332666
+            },
+            "12": {
+                "modification": "Add a new verification step specifically for time-period calculations and numerical accuracy before the final ensemble. This will help catch errors like the one in the FAI Cup calculation (2|3 vs 0) and improve number formatting consistency.",
+                "score": 0.8301056786350904
+            },
+            "20": {
+                "modification": "Add a new verification step between format attempts and final verification specifically focused on numerical calculations and multiple answers. This will help catch calculation errors like in the field goal difference case (6 vs 2) and ensure all valid answers are captured (like the GDP growth case where multiple answers were possible).",
+                "score": 0.828272345301757
+            },
+            "14": {
+                "modification": "Add a new format verification step specifically for numerical standardization and multiple answer completeness. This step will be inserted between the format attempts and the final verification to ensure proper number formatting and comprehensive answer collection.",
+                "score": 0.8109390119684238
+            }
+        }
+    },
+    "12": {
+        "score": 0.8301056786350904,
+        "success": {
+            "19": {
+                "modification": "1. Add a new numerical validation step specifically focused on finding all possible numerical answers in the text and comparing them.\n2. Modify the VERIFY_PROMPT to be more explicit about handling shortest/longest comparisons and sum calculations.",
+                "score": 0.8358567608861727
+            }
+        },
+        "failure": {
+            "18": {
+                "modification": "Add a numerical validation step specifically for handling multiple possible answers and mathematical calculations. This will help catch cases like the GDP calculation where multiple valid answers exist (3.1|5.3|.8).",
+                "score": 0.8282961548255666
+            }
+        }
+    },
+    "4": {
+        "score": 0.8131645021645022,
+        "success": {},
+        "failure": {
+            "11": {
+                "modification": "1. Modified FORMAT_PROMPT and FORMAT_PROMPT_ALT to be more strict about number formatting\n2. Added a verification step using Custom operator to double-check numerical answers\n3. Added result formatting to remove unwanted symbols",
+                "score": 0.7649022560030849
+            }
+        }
+    },
+    "15": {
+        "score": 0.8408311688311687,
+        "success": {},
+        "failure": {
+            "17": {
+                "modification": "Add a new numerical comparison step that specifically looks for the smallest/largest numbers in the context and compares them when dealing with numerical answers. This helps catch cases like the \"shortest pass\" example where we missed the 3-yard pass.",
+                "score": 0.8247961548255666
+            },
+            "16": {
+                "modification": "Modified the verification step to include a more robust numerical check that specifically looks for alternative valid calculations and ensures proper handling of multiple answers. Added an additional format attempt specifically for handling multiple numerical answers.",
+                "score": 0.8263311688311689
+            }
+        }
+    },
+    "3": {
+        "score": 0.8104200244200246,
+        "success": {},
+        "failure": {
+            "6": {
+                "modification": "Add a second custom formatting step specifically for standardizing answers and handling multiple valid options, particularly focusing on cases where different forms of the same answer are acceptable (e.g., \"Tennessee\" vs \"Titans\").",
+                "score": 0.8025866910866911
+            }
+        }
+    }
+}

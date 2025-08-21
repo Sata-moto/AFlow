@@ -25,16 +25,20 @@ class DataUtils:
                     return []
         return []
 
+    # Select and return the top `sample` rounds with the highest scores from previous rounds.
     def get_top_rounds(self, sample: int, path=None, mode="Graph"):
+        # Get scores from previous rounds in result.json
         self._load_scores(path, mode)
         unique_rounds = set()
         unique_top_scores = []
 
+        # Special handling: prioritize including the first round (to avoid premature convergence)
         first_round = next((item for item in self.top_scores if item["round"] == 1), None)
         if first_round:
             unique_top_scores.append(first_round)
             unique_rounds.add(1)
 
+        # Add other rounds in descending order of scores until the sample size is reached
         for item in self.top_scores:
             if item["round"] not in unique_rounds:
                 unique_top_scores.append(item)
@@ -49,10 +53,16 @@ class DataUtils:
         if not items:
             raise ValueError("Item list is empty.")
 
+        # Sort items by score in descending order(including round 1)
         sorted_items = sorted(items, key=lambda x: x["score"], reverse=True)
+
+        # Scale the scores by 100 (for easier computation)
         scores = [item["score"] * 100 for item in sorted_items]
 
+        # Compute mixed probability distribution and select the appropriate round
         probabilities = self._compute_probabilities(scores)
+        
+        # logger.info writes logs to the ./log folder under the root directory
         logger.info(f"\nMixed probability distribution: {probabilities}")
         logger.info(f"\nSorted rounds: {sorted_items}")
 

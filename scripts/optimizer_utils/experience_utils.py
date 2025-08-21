@@ -52,21 +52,26 @@ class ExperienceUtils:
         logger.info(f"Processed experience data saved to {output_path}")
         return experience_data
 
+    # Integrate and format the processed_experience of selected round into a string suitable for LLM(see format_experience.sample)
     def format_experience(self, processed_experience, sample_round):
         experience_data = processed_experience.get(sample_round)
         if experience_data:
+            # The score of this workflow
             experience = f"Original Score: {experience_data['score']}\n"
+            # Provide references for valid and invalid modifications derived from this workflow
             experience += "These are some conclusions drawn from experience:\n\n"
             for key, value in experience_data["failure"].items():
                 experience += f"-Absolutely prohibit {value['modification']} (Score: {value['score']})\n"
             for key, value in experience_data["success"].items():
                 experience += f"-Absolutely prohibit {value['modification']} \n"
+            # Require the LLM to consider past failures and be careful not to make the same mistakes
             experience += "\n\nNote: Take into account past failures and avoid repeating the same mistakes, as these failures indicate that these approaches are ineffective. You must fundamentally change your way of thinking, rather than simply using more advanced Python syntax like for, if, else, etc., or modifying the prompt."
         else:
             experience = f"No experience data found for round {sample_round}."
         return experience
 
     def check_modification(self, processed_experience, modification, sample_round):
+        # Get the historical experience of the parent node and avoid modifications that have already been made
         experience_data = processed_experience.get(sample_round)
         if experience_data:
             for key, value in experience_data["failure"].items():

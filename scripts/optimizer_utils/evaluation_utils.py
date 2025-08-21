@@ -31,6 +31,7 @@ class EvaluationUtils:
         evaluator = Evaluator(eval_path=directory)
         sum_score = 0
 
+        # Repeat the test validation_n times to get the average
         for i in range(validation_n):
             score, avg_cost, total_cost = await evaluator.graph_evaluate(
                 optimizer.dataset,

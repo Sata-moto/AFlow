@@ -4,6 +4,9 @@
 # @Desc    : Entrance of AFlow.
 
 import argparse
+import os
+import glob
+import shutil
 from typing import Dict, List
 
 from data.download_data import download
@@ -56,6 +59,67 @@ EXPERIMENT_CONFIGS: Dict[str, ExperimentConfig] = {
 }
 
 
+def clear_optimization_records(dataset: str, optimized_path: str = "workspace"):
+    """
+    Clear previous optimization records for the specified dataset.
+    
+    Args:
+        dataset: Dataset name (e.g., "MATH", "MBPP")
+        optimized_path: Base path where optimization records are stored
+    """
+    dataset_path = os.path.join(optimized_path, dataset)
+    workflows_path = os.path.join(dataset_path, "workflows")
+    
+    if not os.path.exists(workflows_path):
+        print(f"No existing records found for dataset {dataset}")
+        return
+    
+    print(f"Clearing previous optimization records for dataset {dataset}...")
+    
+    # 1. Remove round_2 and later directories
+    for round_dir in glob.glob(os.path.join(workflows_path, "round_*")):
+        round_name = os.path.basename(round_dir)
+        if round_name.startswith("round_"):
+            try:
+                round_num = int(round_name.split("_")[1])
+                if round_num >= 2:
+                    print(f"  Removing {round_dir}")
+                    shutil.rmtree(round_dir)
+            except (ValueError, IndexError):
+                continue
+    
+    # 2. Clear processed_experience.json
+    processed_exp_path = os.path.join(workflows_path, "processed_experience.json")
+    if os.path.exists(processed_exp_path):
+        print(f"  Clearing {processed_exp_path}")
+        with open(processed_exp_path, 'w', encoding='utf-8') as f:
+            f.write("")
+    
+    # 3. Clear results.json
+    results_path = os.path.join(workflows_path, "results.json")
+    if os.path.exists(results_path):
+        print(f"  Clearing {results_path}")
+        with open(results_path, 'w', encoding='utf-8') as f:
+            f.write("")
+    
+    # 4. Remove CSV files and clear log.json in round_1
+    round_1_path = os.path.join(workflows_path, "round_1")
+    if os.path.exists(round_1_path):
+        # Remove CSV files (score files like 0.45378_20250821_170128.csv)
+        for csv_file in glob.glob(os.path.join(round_1_path, "*.csv")):
+            print(f"  Removing {csv_file}")
+            os.remove(csv_file)
+        
+        # Clear log.json
+        log_path = os.path.join(round_1_path, "log.json")
+        if os.path.exists(log_path):
+            print(f"  Clearing {log_path}")
+            with open(log_path, 'w', encoding='utf-8') as f:
+                f.write("")
+    
+    print(f"Successfully cleared optimization records for dataset {dataset}")
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="AFlow Optimizer")
     parser.add_argument(
@@ -65,7 +129,7 @@ def parse_args():
         required=True,
         help="Dataset type",
     )
-    parser.add_argument("--sample", type=int, default=4, help="Sample count")
+    parser.add_argument("--sample", type=int, default=3, help="Sample count")
     parser.add_argument(
         "--optimized_path",
         type=str,
@@ -76,6 +140,12 @@ def parse_args():
     parser.add_argument("--max_rounds", type=int, default=20, help="Max iteration rounds")
     parser.add_argument("--check_convergence", type=bool, default=True, help="Whether to enable early stop")
     parser.add_argument("--validation_rounds", type=int, default=1, help="Validation rounds")
+    parser.add_argument(
+        "--clear_previous_records",
+        type=lambda x: x.lower() == "true",
+        default=True,
+        help="Whether to clear previous optimization records. Ignored when initial_round != 1.",
+    )
     parser.add_argument(
         "--if_force_download",
         type=lambda x: x.lower() == "true",
@@ -119,6 +189,10 @@ if __name__ == "__main__":
 
     download(["datasets"], force_download=args.if_force_download) # remove download initial_rounds in new version.
 
+    # Clear previous optimization records if requested and initial_round is 1
+    if args.clear_previous_records and args.initial_round == 1:
+        clear_optimization_records(config.dataset, args.optimized_path)
+
     optimizer = Optimizer(
         dataset=config.dataset,
         question_type=config.question_type,
@@ -137,4 +211,4 @@ if __name__ == "__main__":
     optimizer.optimize("Graph")
 
     # Test workflow via setting the optimizer's mode to 'Test'
-    # optimizer.optimize("Test")
+    optimizer.optimize("Test")

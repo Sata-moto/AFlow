@@ -83,7 +83,7 @@ async def main():
     # results = await test_mbpp_benchmark.run_baseline(mbpp_test_workflow)
     # results = await test_mbpp_benchmark.run_baseline(model_test_workflow)
     # results = await test_livecodebench.run_baseline(model_test_workflow)
-    results = await test_livecodebench.run_baseline(livecodebench_test_workflow)
+    results = await test_livecodebench.run_baseline(test_mbpp_benchmark)
 
     print(results)
 
