@@ -177,7 +177,11 @@ class AsyncLLM:
         
         # At this point, config should be an LLMConfig instance
         self.config = config
-        self.aclient = AsyncOpenAI(api_key=self.config.key, base_url=self.config.base_url)
+        self.aclient = AsyncOpenAI(
+            api_key=self.config.key, 
+            base_url=self.config.base_url,
+            timeout=120.0  # 设置120秒超时
+        )
         self.sys_msg = system_msg
         self.usage_tracker = TokenUsageTracker()
         
@@ -196,6 +200,7 @@ class AsyncLLM:
             messages=message,
             temperature=self.config.temperature,
             top_p = self.config.top_p,
+            timeout=120.0,
         )
 
         # Extract token usage from response
