@@ -37,7 +37,7 @@ class Evaluator:
 
     async def graph_evaluate(
         self, dataset: DatasetType, graph, params: dict, path: str, is_test: bool = False
-    ) -> Tuple[float, float, float]:
+    ) -> Tuple[float, float, float, set]:
         if dataset not in self.dataset_configs:
             raise ValueError(f"Unsupported dataset: {dataset}")
 

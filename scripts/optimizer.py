@@ -61,6 +61,9 @@ class Optimizer:
         self.round = initial_round
         self.max_rounds = max_rounds
         self.validation_rounds = validation_rounds
+        
+        # Initialize attribute to track solved problems for current round
+        self.current_round_solved_problems = set()
 
         self.graph_utils = GraphUtils(self.root_path)
         self.data_utils = DataUtils(self.root_path)
@@ -209,6 +212,21 @@ class Optimizer:
         # Update the current round score in the experience file
         self.experience_utils.update_experience(directory, experience, avg_score)
 
+        # After evaluation, find envelope workflows for potential fusion
+        logger.info("Finding envelope workflows for potential fusion...")
+        envelope_workflows = self.data_utils.find_envelope_workflows(max_workflows=3)
+        
+        if len(envelope_workflows) >= 2:
+            logger.info(f"Found {len(envelope_workflows)} envelope workflows. Fusion candidate detected.")
+            # TODO: Implement workflow fusion logic here
+            # For now, just log the envelope workflows information
+            total_coverage = set()
+            for workflow in envelope_workflows:
+                total_coverage.update(workflow['solved_problems'])
+            logger.info(f"Envelope workflows cover {len(total_coverage)} unique problems")
+        else:
+            logger.info("Insufficient workflows for fusion (need at least 2)")
+
         return avg_score
 
     def _extract_fields_from_response(self, response: str) -> Dict[str, str]:
@@ -280,11 +298,12 @@ class Optimizer:
             self.graph = self.graph_utils.load_graph(round, source_graph_path)
 
             print(f"Running test evaluation for round {round}...")
-            score, avg_cost, total_cost = await self.evaluation_utils.evaluate_graph_test(self, directory, is_test=True)
+            score, avg_cost, total_cost, solved_problems = await self.evaluation_utils.evaluate_graph_test(self, directory, is_test=True)
 
             print(f"Test results - Score: {score:.4f}, Avg Cost: {avg_cost:.4f}, Total Cost: {total_cost:.4f}")
+            print(f"Solved {len(solved_problems)} problems in test set")
 
-            new_data = self.data_utils.create_result_data(round, score, avg_cost, total_cost)
+            new_data = self.data_utils.create_result_data(round, score, avg_cost, total_cost, solved_problems)
             data.append(new_data)
 
             self.data_utils.save_results(json_file_path, data)

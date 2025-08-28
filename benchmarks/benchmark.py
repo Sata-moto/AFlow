@@ -38,12 +38,22 @@ class BaseBenchmark(ABC):
         avg_score = df["score"].mean()
         t_cost = df["cost"].max()
         a_cost = t_cost / len(df) if len(df) > 0 else 0
+        
+        # Extract solved problems (problems with score > 0)
+        solved_problems = set()
+        for i, result in enumerate(results):
+            # Assume score is in the 4th position (index 3) based on get_result_columns
+            if len(result) > 3 and result[3] > 0:  # score > 0
+                solved_problems.add(i)  # Use index as problem identifier
+        
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{avg_score:.5f}_{current_time}.csv"
         output_file = os.path.join(self.log_path, filename)
         df.to_csv(output_file, index=False)
         logger.info(f"Results saved to {output_file}")
-        return avg_score, a_cost, t_cost
+        logger.info(f"Solved {len(solved_problems)} out of {len(results)} problems")
+        
+        return avg_score, a_cost, t_cost, solved_problems
 
     def log_mismatch(
         self,
@@ -98,10 +108,10 @@ class BaseBenchmark(ABC):
         data = await self.load_data(va_list)
         results = await self.evaluate_all_problems(data, agent, max_concurrent_tasks)
         columns = self.get_result_columns()
-        average_score, average_cost, total_cost = self.save_results_to_csv(results, columns)
+        average_score, average_cost, total_cost, solved_problems = self.save_results_to_csv(results, columns)
         logger.info(f"Average score on {self.name} dataset: {average_score:.5f}")
         logger.info(f"Total Cost: {total_cost:.5f}")
-        return average_score, average_cost, total_cost
+        return average_score, average_cost, total_cost, solved_problems
     
 
     async def run_baseline(self, agent: Callable, max_concurrent_tasks: int = 50):

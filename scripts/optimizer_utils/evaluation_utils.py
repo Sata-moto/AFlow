@@ -11,7 +11,7 @@ class EvaluationUtils:
         evaluator = Evaluator(eval_path=directory)
 
         for i in range(validation_n):
-            score, avg_cost, total_cost = await evaluator.graph_evaluate(
+            score, avg_cost, total_cost, solved_problems = await evaluator.graph_evaluate(
                 optimizer.dataset,
                 optimizer.graph,
                 {"dataset": optimizer.dataset, "llm_config": optimizer.execute_llm_config},
@@ -19,7 +19,7 @@ class EvaluationUtils:
                 is_test=False,
             )
 
-            new_data = optimizer.data_utils.create_result_data(optimizer.round, score, avg_cost, total_cost)
+            new_data = optimizer.data_utils.create_result_data(optimizer.round, score, avg_cost, total_cost, solved_problems)
             data.append(new_data)
 
             result_path = optimizer.data_utils.get_results_file_path(graph_path)
@@ -30,10 +30,11 @@ class EvaluationUtils:
     async def evaluate_graph(self, optimizer, directory, validation_n, data, initial=False):
         evaluator = Evaluator(eval_path=directory)
         sum_score = 0
+        all_solved_problems = set()
 
         # Repeat the test validation_n times to get the average
         for i in range(validation_n):
-            score, avg_cost, total_cost = await evaluator.graph_evaluate(
+            score, avg_cost, total_cost, solved_problems = await evaluator.graph_evaluate(
                 optimizer.dataset,
                 optimizer.graph,
                 {"dataset": optimizer.dataset, "llm_config": optimizer.execute_llm_config},
@@ -43,7 +44,10 @@ class EvaluationUtils:
 
             cur_round = optimizer.round + 1 if initial is False else optimizer.round
 
-            new_data = optimizer.data_utils.create_result_data(cur_round, score, avg_cost, total_cost)
+            # Union solved problems across validation runs
+            all_solved_problems.update(solved_problems)
+            
+            new_data = optimizer.data_utils.create_result_data(cur_round, score, avg_cost, total_cost, solved_problems)
             data.append(new_data)
 
             result_path = optimizer.data_utils.get_results_file_path(f"{optimizer.root_path}/workflows")
@@ -51,6 +55,9 @@ class EvaluationUtils:
 
             sum_score += score
 
+        # Store the union of all solved problems for this round
+        optimizer.current_round_solved_problems = all_solved_problems
+        
         return sum_score / validation_n
 
     async def evaluate_graph_test(self, optimizer, directory, is_test=True):

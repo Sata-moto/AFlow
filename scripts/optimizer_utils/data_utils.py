@@ -130,12 +130,46 @@ class DataUtils:
     def get_results_file_path(self, graph_path: str) -> str:
         return os.path.join(graph_path, "results.json")
 
-    def create_result_data(self, round: int, score: float, avg_cost: float, total_cost: float) -> dict:
+    def create_result_data(self, round: int, score: float, avg_cost: float, total_cost: float, solved_problems: set = None) -> dict:
         now = datetime.datetime.now()
-        return {"round": round, "score": score, "avg_cost": avg_cost, "total_cost": total_cost, "time": now}
+        # Convert set to list for JSON serialization
+        solved_problems_list = list(solved_problems) if solved_problems else []
+        return {
+            "round": round, 
+            "score": score, 
+            "avg_cost": avg_cost, 
+            "total_cost": total_cost, 
+            "time": now,
+            "solved_problems": solved_problems_list
+        }
 
     def save_results(self, json_file_path: str, data: list):
-        write_json_file(json_file_path, data, encoding="utf-8", indent=4)
+        # Custom JSON serialization to keep solved_problems on one line
+        import json
+        
+        # First convert data to JSON string with default formatting
+        json_str = json.dumps(data, indent=2, ensure_ascii=False, default=str)
+        
+        # Post-process to make solved_problems arrays compact
+        import re
+        
+        # Pattern to match solved_problems arrays that span multiple lines
+        pattern = r'"solved_problems":\s*\[\s*\n(\s*\d+(?:,\s*\n\s*\d+)*)\s*\n\s*\]'
+        
+        def compact_array(match):
+            # Extract the numbers and format them compactly
+            numbers_text = match.group(1)
+            # Extract all numbers
+            numbers = re.findall(r'\d+', numbers_text)
+            return f'"solved_problems": [{", ".join(numbers)}]'
+        
+        # Apply the compaction
+        json_str = re.sub(pattern, compact_array, json_str)
+        
+        # Write to file
+        os.makedirs(os.path.dirname(json_file_path), exist_ok=True)
+        with open(json_file_path, 'w', encoding='utf-8') as f:
+            f.write(json_str)
 
     def _load_scores(self, path=None, mode="Graph"):
         if mode == "Graph":
@@ -157,3 +191,96 @@ class DataUtils:
         self.top_scores.sort(key=lambda x: x["score"], reverse=True)
 
         return self.top_scores
+
+    def find_envelope_workflows(self, max_workflows: int = 3) -> list:
+        """
+        Find the minimum set of workflows (at most max_workflows) that solve the maximum number of problems
+        using a greedy approach.
+        
+        Args:
+            max_workflows: Maximum number of workflows in the envelope set
+            
+        Returns:
+            List of workflow data with solved problems information
+        """
+        # Load current results and group by round
+        results = self.load_results(os.path.join(self.root_path, "workflows"))
+        if not results:
+            return []
+        
+        # Group results by round and collect solved problems for each round
+        rounds_data = {}
+        for result in results:
+            round_num = result["round"]
+            if round_num not in rounds_data:
+                rounds_data[round_num] = {
+                    "round": round_num,
+                    "scores": [],
+                    "avg_costs": [],
+                    "total_costs": [],
+                    "solved_problems": set()
+                }
+            
+            rounds_data[round_num]["scores"].append(result["score"])
+            rounds_data[round_num]["avg_costs"].append(result["avg_cost"])
+            rounds_data[round_num]["total_costs"].append(result["total_cost"])
+            
+            # Union solved problems across validation runs
+            if "solved_problems" in result:
+                rounds_data[round_num]["solved_problems"].update(result["solved_problems"])
+        
+        # Calculate average metrics for each round
+        round_summaries = []
+        for round_num, data in rounds_data.items():
+            avg_score = np.mean(data["scores"]) if data["scores"] else 0.0
+            avg_cost = np.mean(data["avg_costs"]) if data["avg_costs"] else 0.0
+            total_cost = np.mean(data["total_costs"]) if data["total_costs"] else 0.0
+            
+            round_summaries.append({
+                "round": round_num,
+                "avg_score": avg_score,
+                "avg_cost": avg_cost,
+                "total_cost": total_cost,
+                "solved_problems": data["solved_problems"]
+            })
+        
+        # Greedy algorithm to find envelope workflows
+        envelope_workflows = []
+        covered_problems = set()
+        available_workflows = round_summaries.copy()
+        
+        for _ in range(min(max_workflows, len(available_workflows))):
+            if not available_workflows:
+                break
+                
+            # Find workflow that covers the most uncovered problems
+            best_workflow = None
+            best_new_coverage = 0
+            best_index = -1
+            
+            for i, workflow in enumerate(available_workflows):
+                new_problems = workflow["solved_problems"] - covered_problems
+                new_coverage = len(new_problems)
+                
+                # If tie, prefer workflow with higher score
+                if (new_coverage > best_new_coverage or 
+                    (new_coverage == best_new_coverage and 
+                     (best_workflow is None or workflow["avg_score"] > best_workflow["avg_score"]))):
+                    best_workflow = workflow
+                    best_new_coverage = new_coverage
+                    best_index = i
+            
+            # If no new coverage, break
+            if best_new_coverage == 0:
+                break
+                
+            # Add best workflow to envelope
+            envelope_workflows.append(best_workflow)
+            covered_problems.update(best_workflow["solved_problems"])
+            available_workflows.pop(best_index)
+        
+        logger.info(f"Found envelope workflows covering {len(covered_problems)} problems:")
+        for workflow in envelope_workflows:
+            logger.info(f"  Round {workflow['round']}: score={workflow['avg_score']:.4f}, problems={len(workflow['solved_problems'])}")
+        
+        return envelope_workflows

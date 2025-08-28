@@ -1,85 +1,15 @@
 {
     "1": {
-        "score": 0.48739495798319327,
-        "success": {
-            "3": {
-                "modification": "1. Add Programmer operator to verify numerical calculations\n2. Add format standardization in Custom prompt\n3. Add solution verification step",
-                "score": 0.5042016806722689
-            }
-        },
+        "score": 0.5042016806722689,
+        "success": {},
         "failure": {
             "2": {
-                "modification": "Add ScEnsemble operator to generate multiple solutions and select the best one, and standardize the answer format using Custom operator.",
-                "score": 0.47058823529411764
-            },
-            "14": {
-                "modification": "Add a verification step using Programmer operator to check the mathematical correctness and format standardization of the Custom operator's output. This will help catch errors in calculations and ensure consistent answer formatting.",
-                "score": 0.0
-            }
-        }
-    },
-    "5": {
-        "score": 0.5042016806722689,
-        "success": {},
-        "failure": {
-            "7": {
-                "modification": "Add mathematical reasoning verification using the Programmer operator to check the solution's logical steps and calculations before finalizing the answer. This helps catch errors in the reasoning process.",
-                "score": 0.48739495798319327
-            },
-            "8": {
-                "modification": "Add a mathematical notation verification step using the Programmer operator to check LaTeX syntax and mathematical expressions before finalizing the answer. This helps catch formatting errors in mathematical expressions.",
+                "modification": "Add ScEnsemble operator to combine multiple solution approaches and improve accuracy. Also add structured formatting instructions in the prompt.",
                 "score": 0.4789915966386555
-            }
-        }
-    },
-    "9": {
-        "score": 0.5462184873949579,
-        "success": {},
-        "failure": {
-            "13": {
-                "modification": "Add a mathematical reasoning verification step using ScEnsemble to check the solution's logical flow and completeness before final formatting. This helps ensure all necessary steps are included and the reasoning is sound.",
-                "score": 0.4957983193277311
             },
-            "11": {
-                "modification": "Add a verification step using ScEnsemble to check the solution's mathematical reasoning and calculations before final formatting. This helps catch logical errors that pure numerical verification might miss.",
+            "3": {
+                "modification": "1. Add Programmer operator to generate a structured solution first\n2. Add formatting instructions in the Custom operator to ensure consistent output format with \\boxed{}\n3. Combine both approaches using ScEnsemble to improve accuracy",
                 "score": 0.46218487394957986
-            },
-            "12": {
-                "modification": "Add a verification step using ScEnsemble to check the final formatted answer against the original solutions before returning. This helps ensure consistency between the reasoning and the final boxed answer.",
-                "score": 0.4957983193277311
-            },
-            "10": {
-                "modification": "Add a verification step using the Programmer operator to check numerical calculations before generating multiple solutions. This helps ensure accuracy early in the process.",
-                "score": 0.5126050420168067
-            }
-        }
-    },
-    "4": {
-        "score": 0.4957983193277311,
-        "success": {
-            "5": {
-                "modification": "Add a verification step using the Programmer operator to check numerical calculations and validate the final answer format before returning it. This helps catch potential errors and ensures the answer matches the expected format.",
-                "score": 0.5042016806722689
-            }
-        },
-        "failure": {}
-    },
-    "3": {
-        "score": 0.5042016806722689,
-        "success": {
-            "9": {
-                "modification": "Add ScEnsemble operator to verify the solution by generating multiple solutions and selecting the most consistent one before final verification and formatting.",
-                "score": 0.5462184873949579
-            }
-        },
-        "failure": {
-            "4": {
-                "modification": "Add ScEnsemble operator to generate multiple solutions and select the most consistent one before final verification and formatting.",
-                "score": 0.4957983193277311
-            },
-            "6": {
-                "modification": "Add a verification step using Programmer operator to check mathematical reasoning and calculations before final formatting, and modify the FORMAT_PROMPT to ensure consistent LaTeX notation.",
-                "score": 0.47058823529411764
             }
         }
     }
