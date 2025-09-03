@@ -180,7 +180,7 @@ class AsyncLLM:
         self.aclient = AsyncOpenAI(
             api_key=self.config.key, 
             base_url=self.config.base_url,
-            timeout=120.0  # 设置120秒超时
+            timeout=60.0  # 设置60秒超时
         )
         self.sys_msg = system_msg
         self.usage_tracker = TokenUsageTracker()

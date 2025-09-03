@@ -80,7 +80,7 @@ class Optimizer:
                 score = loop.run_until_complete(self.test())
             return None
 
-        for opt_round in range(self.max_rounds):
+        while self.round < self.max_rounds:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
 
@@ -201,7 +201,7 @@ class Optimizer:
         # Save the experience(without the current round score)
         experience = self.experience_utils.create_experience_data(sample, response["modification"])
 
-        # English ver: Load the dynamic graph for testing(Import the static graph string as a valid callable dynamic class)
+        # Load the dynamic graph for testing(Import the static graph string as a valid callable dynamic class)
         self.graph = self.graph_utils.load_graph(self.round + 1, graph_path)
 
         logger.info(directory)
