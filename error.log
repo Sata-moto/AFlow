@@ -1,0 +1,3459 @@
+2025-09-04 16:13:02 - Error: .
+ Solution: def average_tuple(nums):
+    return [sum(t) / len(t) for t in nums].
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:13:02 - Error: .
+ Solution: def string_to_tuple(str1):
+    return tuple(str1).
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-04 16:13:02 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.title() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:13:02 - Error: .
+ Solution: def extract_freq(test_list):
+    unique_tuples = set(test_list)
+    return len(unique_tuples).
+ Test: def check():
+    assert extract_freq([(3, 4), (1, 2), (4, 3), (5, 6)] ) == 3
+    assert extract_freq([(4, 15), (2, 3), (5, 4), (6, 7)] ) == 4
+    assert extract_freq([(5, 16), (2, 3), (6, 5), (6, 9)] ) == 4
+
+2025-09-04 16:13:02 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.search(pattern, text):
+        return 'Match found'
+    else:
+        return 'No match'.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:13:02 - Error: .
+ Solution: def round_and_sum(list1):
+    rounded_numbers = [round(num) for num in list1]
+    total_sum = sum(rounded_numbers)
+    result = total_sum * len(list1)
+    print(result).
+ Test: def check():
+    assert round_and_sum([22.4, 4.0, -16.22, -9.10, 11.00, -12.22, 14.20, -5.20, 17.50])==243
+    assert round_and_sum([5,2,9,24.3,29])==345
+    assert round_and_sum([25.0,56.7,89.2])==513
+
+2025-09-04 16:13:03 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:13:03 - Error: .
+ Solution: import re
+def start_withp(words):
+    p_words = [word for word in words if word.lower().startswith('p')]
+    return p_words[:2].
+ Test: def check():
+    assert start_withp(["Python PHP", "Java JavaScript", "c c++"])==('Python', 'PHP')
+    assert start_withp(["Python Programming","Java Programming"])==('Python','Programming')
+    assert start_withp(["Pqrst Pqr","qrstuv"])==('Pqrst','Pqr')
+
+2025-09-04 16:13:03 - Error: .
+ Solution: def Find_Max_Length(lst):
+    if not lst:
+        return 0
+    max_length = 0
+    current_length = 1
+    for i in range(1, len(lst)):
+        if lst[i] == lst[i - 1]:
+            current_length += 1
+        else:
+            max_length = max(max_length, current_length)
+            current_length = 1
+    max_length = max(max_length, current_length)
+    return max_length.
+ Test: def check():
+    assert Find_Max_Length([[1],[1,4],[5,6,7,8]]) == 4
+    assert Find_Max_Length([[0,1],[2,2,],[3,2,1]]) == 3
+    assert Find_Max_Length([[7],[22,23],[13,14,15],[10,20,30,40,50]]) == 5
+
+2025-09-04 16:13:03 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0
+    return sum((1 / i for i in range(1, n))).
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:13:03 - Error: .
+ Solution: def is_undulating(n):
+    s = str(n)
+    if len(s) < 2:
+        return True
+    for i in range(1, len(s)):
+        if s[i] == s[i - 1]:
+            return False
+        if i > 1 and s[i] == s[i - 2]:
+            return False
+    return True.
+ Test: def check():
+    assert is_undulating(1212121) == True
+    assert is_undulating(1991) == False
+    assert is_undulating(121) == True
+
+2025-09-04 16:13:03 - Error: .
+ Solution: import math
+def is_polite(n):
+    if n < 1:
+        return []
+    polite_numbers = []
+    count = 0
+    num = 1
+    while count < n:
+        if num % 2 == 1 or not has_power_of_two(num):
+            polite_numbers.append(num)
+            count += 1
+        num += 1
+    return polite_numbers[-1]
+def has_power_of_two(num):
+    while num % 2 == 0:
+        num //= 2
+    return num == 1
+n = 10.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:13:03 - Error: .
+ Solution: def count_rotation(arr):
+    n = len(arr)
+    (low, high) = (0, n - 1)
+    while low <= high:
+        if arr[low] <= arr[high]:
+            return low
+        mid = (low + high) // 2
+        next_mid = (mid + 1) % n
+        prev_mid = (mid - 1 + n) % n
+        if arr[mid] <= arr[next_mid] and arr[mid] <= arr[prev_mid]:
+            return mid
+        if arr[mid] <= arr[high]:
+            high = mid - 1
+        else:
+            low = mid + 1
+    return 0.
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:13:03 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:13:04 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    count = 0
+    if x == y:
+        count += 1
+    if y == z:
+        count += 1
+    if x == z:
+        count += 1
+    return count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:13:04 - Error: .
+ Solution: def sum_div(number):
+    if number < 1:
+        return 0
+    total = 0
+    for i in range(1, number + 1):
+        if number % i == 0:
+            total += i
+    return total.
+ Test: def check():
+    assert sum_div(8)==7
+    assert sum_div(12)==16
+    assert sum_div(7)==1
+
+2025-09-04 16:13:04 - Error: .
+ Solution: import cmath
+def angle_complex(a, b):
+    complex_number = complex(a, b)
+    angle = cmath.phase(complex_number)
+    return angle.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:13:04 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:13:04 - Error: .
+ Solution: def long_words(n, words):
+    return [word for word in words if len(word) > n].
+ Test: def check():
+    assert long_words(3,"python is a programming language")==['python','programming','language']
+    assert long_words(2,"writing a program")==['writing','program']
+    assert long_words(5,"sorting list")==['sorting']
+
+2025-09-04 16:13:05 - Error: .
+ Solution: def find_star_num(n):
+    if n < 1:
+        return 0
+    return n * (2 * n - 1).
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-04 16:13:05 - Error: .
+ Solution: def max_product_tuple(list1):
+    max_product = 0
+    for i in range(len(list1)):
+        for j in range(i + 1, len(list1)):
+            product = abs(list1[i][0] * list1[i][1] * list1[j][0] * list1[j][1])
+            if product > max_product:
+                max_product = product
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:13:05 - Error: .
+ Solution: def find_sum(arr):
+    from collections import Counter
+    element_count = Counter(arr)
+    return sum((key for (key, count) in element_count.items() if count == 1)).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:13:05 - Error: .
+ Solution: def jacobsthal_num(n):
+    if n < 0:
+        return None
+    elif n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        jacobsthal = [0] * (n + 1)
+        jacobsthal[0] = 0
+        jacobsthal[1] = 1
+        for i in range(2, n + 1):
+            jacobsthal[i] = jacobsthal[i - 2] + 2 * jacobsthal[i - 1]
+        return jacobsthal[n]
+n = 10.
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-04 16:13:05 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    lateral_area = 2 * math.pi * r * h
+    base_area = 2 * math.pi * r ** 2
+    total_surface_area = lateral_area + base_area
+    return total_surface_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:13:07 - Error: .
+ Solution: import heapq
+def k_smallest_pairs(nums1, nums2, k):
+    if not nums1 or not nums2 or k <= 0:
+        return []
+    min_heap = []
+    for i in range(min(k, len(nums1))):
+        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))
+    result = []
+    while k > 0 and min_heap:
+        (sum_pair, i, j) = heapq.heappop(min_heap)
+        result.append((nums1[i], nums2[j]))
+        if j + 1 < len(nums2):
+            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))
+        k -= 1
+    return result.
+ Test: def check():
+    assert k_smallest_pairs([1,3,7],[2,4,6],2)==[[1, 2], [1, 4]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],1)==[[1, 2]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],7)==[[1, 2], [1, 4], [3, 2], [1, 6], [3, 4], [3, 6], [7, 2]]
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_Abs_Diff((2,1,5,3)) == 4
+    assert max_Abs_Diff((9,3,2,5,1)) == 8
+    assert max_Abs_Diff((3,2,1)) == 2
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_digits(345)==12
+    assert sum_digits(12)==3
+    assert sum_digits(97)==16
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert hexagonal_num(10) == 190
+    assert hexagonal_num(5) == 45
+    assert hexagonal_num(7) == 91
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert volume_cube(3)==27
+    assert volume_cube(2)==8
+    assert volume_cube(5)==125
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert unique_product([10, 20, 30, 40, 20, 50, 60, 40]) ==  720000000
+    assert unique_product([1, 2, 3, 1,]) == 6
+    assert unique_product([7, 8, 9, 0, 1, 1]) == 0
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert maximum(5,10) == 10
+    assert maximum(-1,-2) == -1
+    assert maximum(9,7) == 9
+
+2025-09-04 16:13:26 - Error: name 'bisect' is not defined.
+ Solution: def left_insertion(a, x):
+    return bisect.bisect_left(a, x).
+ Test: def check():
+    assert left_insertion([1,2,4,5],6)==4
+    assert left_insertion([1,2,4,5],3)==2
+    assert left_insertion([1,2,4,5],7)==4
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert multiply_elements((1, 5, 7, 8, 10)) == (5, 35, 56, 80)
+    assert multiply_elements((2, 4, 5, 6, 7)) == (8, 20, 30, 42)
+    assert multiply_elements((12, 13, 14, 9, 15)) == (156, 182, 126, 135)
+    assert multiply_elements((12,)) == ()
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert median_trapezium(15,25,35)==20
+    assert median_trapezium(10,20,30)==15
+    assert median_trapezium(6,9,4)==7.5
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert (Diff([10, 15, 20, 25, 30, 35, 40], [25, 40, 35])) == [10, 20, 30, 15]
+    assert (Diff([1,2,3,4,5], [6,7,1])) == [2,3,4,5,6,7]
+    assert (Diff([1,2,3], [6,7,1])) == [2,3,6,7]
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert subject_marks([('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)])==[('Social sciences', 82), ('English', 88), ('Science', 90), ('Maths', 97)]
+    assert subject_marks([('Telugu',49),('Hindhi',54),('Social',33)])==([('Social',33),('Telugu',49),('Hindhi',54)])
+    assert subject_marks([('Physics',96),('Chemistry',97),('Biology',45)])==([('Biology',45),('Physics',96),('Chemistry',97)])
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert swap_List([12, 35, 9, 56, 24]) == [24, 35, 9, 56, 12]
+    assert swap_List([1, 2, 3]) == [3, 2, 1]
+    assert swap_List([4, 5, 6]) == [6, 5, 4]
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert _sum([1, 2, 3]) == 6
+    assert _sum([15, 12, 13, 10]) == 50
+    assert _sum([0, 1, 2]) == 3
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert pos_count([1,-2,3,-4]) == 2
+    assert pos_count([3,4,5,-1]) == 3
+    assert pos_count([1,2,3,4]) == 4
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert opposite_Signs(1,-2) == True
+    assert opposite_Signs(3,2) == False
+    assert opposite_Signs(-10,-10) == False
+    assert opposite_Signs(-2,2) == True
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_majority([1, 2, 3, 3, 3, 3, 10], 7, 3) == True
+    assert is_majority([1, 1, 2, 4, 4, 4, 6, 6], 8, 4) == False
+    assert is_majority([1, 1, 1, 2, 2], 5, 1) == True
+    assert is_majority([1, 1, 2, 2], 5, 1) == False
+
+2025-09-04 16:13:26 - Error: name 'collections' is not defined.
+ Solution: def freq_count(list1):
+    return dict(collections.Counter(list1)).
+ Test: def check():
+    assert freq_count([10,10,10,10,20,20,20,20,40,40,50,50,30])==({10: 4, 20: 4, 40: 2, 50: 2, 30: 1})
+    assert freq_count([1,2,3,4,3,2,4,1,3,1,4])==({1:3, 2:2,3:3,4:3})
+    assert freq_count([5,6,7,4,9,10,4,5,6,7,9,5])==({10:1,5:3,6:2,7:2,4:2,9:2})
+
+2025-09-04 16:13:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert second_smallest([1, 2, -8, -2, 0, -2])==-2
+    assert second_smallest([1, 1, -0.5, 0, 2, -2, -2])==-0.5
+    assert second_smallest([2,2])==None
+    assert second_smallest([2,2,2])==None
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert last_Digit_Factorial(4) == 4
+    assert last_Digit_Factorial(21) == 0
+    assert last_Digit_Factorial(30) == 0
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_Odd_Pair([5,4,7,2,1],5) == 6
+    assert find_Odd_Pair([7,2,8,1,0,5,11],7) == 12
+    assert find_Odd_Pair([1,2,3],3) == 2
+
+2025-09-04 16:13:27 - Error: name 'tan' is not defined.
+ Solution: def area_polygon(s, l):
+    if s < 3:
+        return 0
+    area = s * l ** 2 / (4 * tan(pi / s))
+    return area.
+ Test: def check():
+    assert math.isclose(area_polygon(4, 20), 400., rel_tol=0.001)
+    assert math.isclose(area_polygon(10, 15), 1731.197, rel_tol=0.001)
+    assert math.isclose(area_polygon(9, 7), 302.909, rel_tol=0.001)
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert left_rotate(16,2) == 64
+    assert left_rotate(10,2) == 40
+    assert left_rotate(99,3) == 792
+    assert left_rotate(99,3) == 792
+    assert left_rotate(0b0001,3) == 0b1000
+    assert left_rotate(0b0101,3) == 0b101000
+    assert left_rotate(0b11101,3) == 0b11101000
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert bell_number(2)==2
+    assert bell_number(10)==115975
+    assert bell_number(56)==6775685320645824322581483068371419745979053216268760300
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_lucas(9) == 76
+    assert find_lucas(4) == 7
+    assert find_lucas(3) == 4
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_Volume(10,8,6) == 240
+    assert find_Volume(3,2,2) == 6
+    assert find_Volume(1,2,1) == 1
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert reverse_vowels("Python") == "Python"
+    assert reverse_vowels("USA") == "ASU"
+    assert reverse_vowels("ab") == "ab"
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert tuple_to_dict((1, 5, 7, 10, 13, 5)) == {1: 5, 7: 10, 13: 5}
+    assert tuple_to_dict((1, 2, 3, 4, 5, 6)) == {1: 2, 3: 4, 5: 6}
+    assert tuple_to_dict((7, 8, 9, 10, 11, 12)) == {7: 8, 9: 10, 11: 12}
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_undulating(1212121) == True
+    assert is_undulating(1991) == False
+    assert is_undulating(121) == True
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert extract_index_list([1, 1, 3, 4, 5, 6, 7],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[1, 7]
+    assert extract_index_list([1, 1, 3, 4, 5, 6, 7],[0, 1, 2, 3, 4, 6, 5],[0, 1, 2, 3, 4, 6, 7])==[1, 6]
+    assert extract_index_list([1, 1, 3, 4, 6, 5, 6],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[1, 5]
+    assert extract_index_list([1, 2, 3, 4, 6, 6, 6],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[]
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert check_answer(70) == False
+    assert check_answer(23) == False
+    assert check_answer(73) == True
+
+2025-09-04 16:13:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_sum_list([[1,2,3], [4,5,6], [10,11,12], [7,8,9]])==[10, 11, 12]
+    assert max_sum_list([[3,2,1], [6,5,4], [12,11,10]])==[12,11,10]
+    assert max_sum_list([[2,3,1]])==[2,3,1]
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert check_min_heap([1, 2, 3, 4, 5, 6]) == True
+    assert check_min_heap([2, 3, 4, 5, 10, 15]) == True
+    assert check_min_heap([2, 10, 4, 5, 3, 15]) == False
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert rear_extract([(1, 'Rash', 21), (2, 'Varsha', 20), (3, 'Kil', 19)]) == [21, 20, 19]
+    assert rear_extract([(1, 'Sai', 36), (2, 'Ayesha', 25), (3, 'Salman', 45)]) == [36, 25, 45]
+    assert rear_extract([(1, 'Sudeep', 14), (2, 'Vandana', 36), (3, 'Dawood', 56)]) == [14, 36, 56]
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert get_max_sum(60) == 106
+    assert get_max_sum(10) == 12
+    assert get_max_sum(2) == 2
+
+2025-09-04 16:13:28 - Error: .
+ Solution: def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.search(pattern, text):
+        return 'Match found'.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert validate(1234) == True
+    assert validate(51241) == False
+    assert validate(321) == True
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert Split([1,2,3,4,5]) == [2,4]
+    assert Split([4,5,6,7,8,0,1]) == [4,6,8,0]
+    assert Split ([8,12,15,19]) == [8,12]
+
+2025-09-04 16:13:28 - Error: .
+ Solution: def start_withp(words):
+    p_words = [word for word in words if word.lower().startswith('p')].
+ Test: def check():
+    assert start_withp(["Python PHP", "Java JavaScript", "c c++"])==('Python', 'PHP')
+    assert start_withp(["Python Programming","Java Programming"])==('Python','Programming')
+    assert start_withp(["Pqrst Pqr","qrstuv"])==('Pqrst','Pqr')
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_series(6) == 12
+    assert sum_series(10) == 30
+    assert sum_series(9) == 25
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert extract_freq([(3, 4), (1, 2), (4, 3), (5, 6)] ) == 3
+    assert extract_freq([(4, 15), (2, 3), (5, 4), (6, 7)] ) == 4
+    assert extract_freq([(5, 16), (2, 3), (6, 5), (6, 9)] ) == 4
+
+2025-09-04 16:13:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_list([10,20,30],[15,25,35])==[25,45,65]
+    assert sum_list([1,2,3],[5,6,7])==[6,8,10]
+    assert sum_list([15,20,30],[15,45,75])==[30,65,105]
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert empty_list(5)==[{},{},{},{},{}]
+    assert empty_list(6)==[{},{},{},{},{},{}]
+    assert empty_list(7)==[{},{},{},{},{},{},{}]
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),4) == 0
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),10) == 3
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),8) == 4
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert multiply_int(10,20)==200
+    assert multiply_int(5,10)==50
+    assert multiply_int(4,8)==32
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert remove_nested((1, 5, 7, (4, 6), 10)) == (1, 5, 7, 10)
+    assert remove_nested((2, 6, 8, (5, 7), 11)) == (2, 6, 8, 11)
+    assert remove_nested((3, 7, 9, (6, 8), 12)) == (3, 7, 9, 12)
+    assert remove_nested((3, 7, 9, (6, 8), (5,12), 12)) == (3, 7, 9, 12)
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],3)==[60, 54, 50]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],4)==[60, 54, 50, 48]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],5)==[60, 54, 50, 48, 45]
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert square_Sum(2) == 10
+    assert square_Sum(3) == 35
+    assert square_Sum(4) == 84
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_subarray_product([1, -2, -3, 0, 7, -8, -2]) == 112
+    assert max_subarray_product([6, -3, -10, 0, 2]) == 180
+    assert max_subarray_product([-2, -40, 0, -2, -3]) == 80
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert minimum(1,2) == 1
+    assert minimum(-5,-4) == -5
+    assert minimum(0,0) == 0
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_length("11000010001") == 6
+    assert find_length("10111") == 1
+    assert find_length("11011101100101") == 2
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert kth_element([12,3,5,7,19], 2) == 3
+    assert kth_element([17,24,8,23], 3) == 8
+    assert kth_element([16,21,25,36,4], 4) == 36
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sequential_search([11,23,58,31,56,77,43,12,65,19],31) == (True, 3)
+    assert sequential_search([12, 32, 45, 62, 35, 47, 44, 61],61) == (True, 7)
+    assert sequential_search([9, 10, 17, 19, 22, 39, 48, 56],48) == (True, 6)
+
+2025-09-04 16:13:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert number_of_substrings("abc") == 6
+    assert number_of_substrings("abcd") == 10
+    assert number_of_substrings("abcde") == 15
+
+2025-09-04 16:13:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_Parity(12) == False
+    assert find_Parity(7) == True
+    assert find_Parity(10) == False
+
+2025-09-04 16:13:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_Diff (12345) == False
+    assert is_Diff(1212112) == True
+    assert is_Diff(1212) == False
+
+2025-09-04 16:13:30 - Error: name 'defaultdict' is not defined.
+ Solution: def max_occurrences(nums):
+    frequency = defaultdict(int)
+    for num in nums:
+        frequency[num] += 1
+    max_freq = 0
+    max_item = None
+    for (item, freq) in frequency.items():
+        if freq > max_freq:
+            max_freq = freq
+            max_item = item
+    return max_item.
+ Test: def check():
+    assert max_occurrences([2,3,8,4,7,9,8,2,6,5,1,6,1,2,3,2,4,6,9,1,2])==2
+    assert max_occurrences([2,3,8,4,7,9,8,7,9,15,14,10,12,13,16,18])==8
+    assert max_occurrences([10,20,20,30,40,90,80,50,30,20,50,10])==20
+
+2025-09-04 16:13:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:13:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert long_words(3,"python is a programming language")==['python','programming','language']
+    assert long_words(2,"writing a program")==['writing','program']
+    assert long_words(5,"sorting list")==['sorting']
+
+2025-09-04 16:13:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_run_uppercase('GeMKSForGERksISBESt') == 5
+    assert max_run_uppercase('PrECIOusMOVemENTSYT') == 6
+    assert max_run_uppercase('GooGLEFluTTER') == 4
+
+2025-09-04 16:13:31 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert round_and_sum([22.4, 4.0, -16.22, -9.10, 11.00, -12.22, 14.20, -5.20, 17.50])==243
+    assert round_and_sum([5,2,9,24.3,29])==345
+    assert round_and_sum([25.0,56.7,89.2])==513
+
+2025-09-04 16:13:31 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert Find_Max_Length([[1],[1,4],[5,6,7,8]]) == 4
+    assert Find_Max_Length([[0,1],[2,2,],[3,2,1]]) == 3
+    assert Find_Max_Length([[7],[22,23],[13,14,15],[10,20,30,40,50]]) == 5
+
+2025-09-04 16:13:31 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_div(8)==7
+    assert sum_div(12)==16
+    assert sum_div(7)==1
+
+2025-09-04 16:13:31 - Error: name 'heapq' is not defined.
+ Solution: def k_smallest_pairs(nums1, nums2, k):
+    if not nums1 or not nums2 or k <= 0:
+        return []
+    min_heap = []
+    for i in range(min(k, len(nums1))):
+        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))
+    result = []
+    while k > 0 and min_heap:
+        (sum_pair, i, j) = heapq.heappop(min_heap)
+        result.append([nums1[i], nums2[j]])
+        if j + 1 < len(nums2):
+            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))
+        k -= 1
+    return result.
+ Test: def check():
+    assert k_smallest_pairs([1,3,7],[2,4,6],2)==[[1, 2], [1, 4]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],1)==[[1, 2]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],7)==[[1, 2], [1, 4], [3, 2], [1, 6], [3, 4], [3, 6], [7, 2]]
+
+2025-09-04 16:13:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert rgb_to_hsv(255, 255, 255)==(0, 0.0, 100.0)
+    assert rgb_to_hsv(0, 215, 0)==(120.0, 100.0, 84.31372549019608)
+    assert rgb_to_hsv(10, 215, 110)==(149.26829268292684, 95.34883720930233, 84.31372549019608)
+
+2025-09-04 16:13:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:13:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-04 16:13:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert set(similar_elements((3, 4, 5, 6),(5, 7, 4, 10))) == set((4, 5))
+    assert set(similar_elements((1, 2, 3, 4),(5, 4, 3, 7))) == set((3, 4))
+    assert set(similar_elements((11, 12, 14, 13),(17, 15, 14, 13))) == set((13, 14))
+
+2025-09-04 16:13:33 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:13:33 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:13:33 - Error: name 'cmath' is not defined.
+ Solution: def angle_complex(a, b):
+    complex_number = complex(a, b)
+    angle = cmath.phase(complex_number).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:13:33 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert magic_square_test([[7, 12, 1, 14], [2, 13, 8, 11], [16, 3, 10, 5], [9, 6, 15, 4]])==True
+    assert magic_square_test([[2, 7, 6], [9, 5, 1], [4, 3, 8]])==True
+    assert magic_square_test([[2, 7, 6], [9, 5, 1], [4, 3, 7]])==False
+
+2025-09-04 16:13:34 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-04 16:13:34 - Error: Function divisible_by_digits is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:13:35 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:13:36 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:13:39 - Error: Function is_polite is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:13:40 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:13:43 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:14:09 - Error: Function maximum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert maximum(5,10) == 10
+    assert maximum(-1,-2) == -1
+    assert maximum(9,7) == 9
+
+2025-09-04 16:14:09 - Error: Function count_X is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),4) == 0
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),10) == 3
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),8) == 4
+
+2025-09-04 16:14:09 - Error: Function remove_odd is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:14:10 - Error: Function sum_series is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert sum_series(6) == 12
+    assert sum_series(10) == 30
+    assert sum_series(9) == 25
+
+2025-09-04 16:14:10 - Error: Function _sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert _sum([1, 2, 3]) == 6
+    assert _sum([15, 12, 13, 10]) == 50
+    assert _sum([0, 1, 2]) == 3
+
+2025-09-04 16:14:10 - Error: Function minimum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert minimum(1,2) == 1
+    assert minimum(-5,-4) == -5
+    assert minimum(0,0) == 0
+
+2025-09-04 16:14:10 - Error: Function remove_whitespaces is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert remove_whitespaces(' Google    Flutter ') == 'GoogleFlutter'
+    assert remove_whitespaces(' Google    Dart ') == 'GoogleDart'
+    assert remove_whitespaces(' iOS    Swift ') == 'iOSSwift'
+
+2025-09-04 16:14:10 - Error: Function max_Abs_Diff is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert max_Abs_Diff((2,1,5,3)) == 4
+    assert max_Abs_Diff((9,3,2,5,1)) == 8
+    assert max_Abs_Diff((3,2,1)) == 2
+
+2025-09-04 16:14:10 - Error: Function rear_extract is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert rear_extract([(1, 'Rash', 21), (2, 'Varsha', 20), (3, 'Kil', 19)]) == [21, 20, 19]
+    assert rear_extract([(1, 'Sai', 36), (2, 'Ayesha', 25), (3, 'Salman', 45)]) == [36, 25, 45]
+    assert rear_extract([(1, 'Sudeep', 14), (2, 'Vandana', 36), (3, 'Dawood', 56)]) == [14, 36, 56]
+
+2025-09-04 16:14:10 - Error: Function multiply_elements is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert multiply_elements((1, 5, 7, 8, 10)) == (5, 35, 56, 80)
+    assert multiply_elements((2, 4, 5, 6, 7)) == (8, 20, 30, 42)
+    assert multiply_elements((12, 13, 14, 9, 15)) == (156, 182, 126, 135)
+    assert multiply_elements((12,)) == ()
+
+2025-09-04 16:14:10 - Error: Function tuple_to_dict is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert tuple_to_dict((1, 5, 7, 10, 13, 5)) == {1: 5, 7: 10, 13: 5}
+    assert tuple_to_dict((1, 2, 3, 4, 5, 6)) == {1: 2, 3: 4, 5: 6}
+    assert tuple_to_dict((7, 8, 9, 10, 11, 12)) == {7: 8, 9: 10, 11: 12}
+
+2025-09-04 16:14:10 - Error: Function is_Diff is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_Diff (12345) == False
+    assert is_Diff(1212112) == True
+    assert is_Diff(1212) == False
+
+2025-09-04 16:14:10 - Error: Function sum_list is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert sum_list([10,20,30],[15,25,35])==[25,45,65]
+    assert sum_list([1,2,3],[5,6,7])==[6,8,10]
+    assert sum_list([15,20,30],[15,45,75])==[30,65,105]
+
+2025-09-04 16:14:10 - Error: Function swap_List is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert swap_List([12, 35, 9, 56, 24]) == [24, 35, 9, 56, 12]
+    assert swap_List([1, 2, 3]) == [3, 2, 1]
+    assert swap_List([4, 5, 6]) == [6, 5, 4]
+
+2025-09-04 16:14:10 - Error: Function median_trapezium is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert median_trapezium(15,25,35)==20
+    assert median_trapezium(10,20,30)==15
+    assert median_trapezium(6,9,4)==7.5
+
+2025-09-04 16:14:11 - Error: Function Split is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert Split([1,2,3,4,5]) == [2,4]
+    assert Split([4,5,6,7,8,0,1]) == [4,6,8,0]
+    assert Split ([8,12,15,19]) == [8,12]
+
+2025-09-04 16:14:11 - Error: list index out of range.
+ Solution: def is_majority(arr, n, x):
+    if n == 0:
+        return False
+    count = 0
+    for i in range(n):
+        if arr[i] == x:
+            count += 1
+    return count > n // 2.
+ Test: def check():
+    assert is_majority([1, 2, 3, 3, 3, 3, 10], 7, 3) == True
+    assert is_majority([1, 1, 2, 4, 4, 4, 6, 6], 8, 4) == False
+    assert is_majority([1, 1, 1, 2, 2], 5, 1) == True
+    assert is_majority([1, 1, 2, 2], 5, 1) == False
+
+2025-09-04 16:14:11 - Error: Function empty_list is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert empty_list(5)==[{},{},{},{},{}]
+    assert empty_list(6)==[{},{},{},{},{},{}]
+    assert empty_list(7)==[{},{},{},{},{},{},{}]
+
+2025-09-04 16:14:11 - Error: Function surfacearea_sphere is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert math.isclose(surfacearea_sphere(10), 1256.6370614359173, rel_tol=0.001)
+    assert math.isclose(surfacearea_sphere(15), 2827.4333882308138, rel_tol=0.001)
+    assert math.isclose(surfacearea_sphere(20), 5026.548245743669, rel_tol=0.001)
+
+2025-09-04 16:14:11 - Error: Function freq_count is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert freq_count([10,10,10,10,20,20,20,20,40,40,50,50,30])==({10: 4, 20: 4, 40: 2, 50: 2, 30: 1})
+    assert freq_count([1,2,3,4,3,2,4,1,3,1,4])==({1:3, 2:2,3:3,4:3})
+    assert freq_count([5,6,7,4,9,10,4,5,6,7,9,5])==({10:1,5:3,6:2,7:2,4:2,9:2})
+
+2025-09-04 16:14:11 - Error: Function get_max_sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert get_max_sum(60) == 106
+    assert get_max_sum(10) == 12
+    assert get_max_sum(2) == 2
+
+2025-09-04 16:14:11 - Error: Function number_of_substrings is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert number_of_substrings("abc") == 6
+    assert number_of_substrings("abcd") == 10
+    assert number_of_substrings("abcde") == 15
+
+2025-09-04 16:14:11 - Error: Function kth_element is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert kth_element([12,3,5,7,19], 2) == 3
+    assert kth_element([17,24,8,23], 3) == 8
+    assert kth_element([16,21,25,36,4], 4) == 36
+
+2025-09-04 16:14:11 - Error: Function find_star_num is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-04 16:14:11 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    count = 0
+    if x == y:
+        count += 1
+    if y == z:
+        count += 1
+    if x == z:
+        count += 1
+    return count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:14:11 - Error: Function long_words is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert long_words(3,"python is a programming language")==['python','programming','language']
+    assert long_words(2,"writing a program")==['writing','program']
+    assert long_words(5,"sorting list")==['sorting']
+
+2025-09-04 16:14:11 - Error: Function square_Sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert square_Sum(2) == 10
+    assert square_Sum(3) == 35
+    assert square_Sum(4) == 84
+
+2025-09-04 16:14:11 - Error: Function left_rotate is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert left_rotate(16,2) == 64
+    assert left_rotate(10,2) == 40
+    assert left_rotate(99,3) == 792
+    assert left_rotate(99,3) == 792
+    assert left_rotate(0b0001,3) == 0b1000
+    assert left_rotate(0b0101,3) == 0b101000
+    assert left_rotate(0b11101,3) == 0b11101000
+
+2025-09-04 16:14:14 - Error: Function sum_digits is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert sum_digits(345)==12
+    assert sum_digits(12)==3
+    assert sum_digits(97)==16
+
+2025-09-04 16:14:14 - Error: Function volume_cube is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert volume_cube(3)==27
+    assert volume_cube(2)==8
+    assert volume_cube(5)==125
+
+2025-09-04 16:14:14 - Error: Function multiply_int is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert multiply_int(10,20)==200
+    assert multiply_int(5,10)==50
+    assert multiply_int(4,8)==32
+
+2025-09-04 16:14:15 - Error: Function jacobsthal_num is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-04 16:14:15 - Error: Function volume_cylinder is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert math.isclose(volume_cylinder(10,5), 1570.7500000000002, rel_tol=0.001)
+    assert math.isclose(volume_cylinder(4,5), 251.32000000000002, rel_tol=0.001)
+    assert math.isclose(volume_cylinder(4,10), 502.64000000000004, rel_tol=0.001)
+
+2025-09-04 16:14:15 - Error: Function average_tuple is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:14:16 - Error: Function snake_to_camel is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:14:16 - Error: Function check_answer is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert check_answer(70) == False
+    assert check_answer(23) == False
+    assert check_answer(73) == True
+
+2025-09-04 16:14:16 - Error: Function dif_Square is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:14:16 - Error: Function area_polygon is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert math.isclose(area_polygon(4, 20), 400., rel_tol=0.001)
+    assert math.isclose(area_polygon(10, 15), 1731.197, rel_tol=0.001)
+    assert math.isclose(area_polygon(9, 7), 302.909, rel_tol=0.001)
+
+2025-09-04 16:14:16 - Error: Function find_Parity is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_Parity(12) == False
+    assert find_Parity(7) == True
+    assert find_Parity(10) == False
+
+2025-09-04 16:14:16 - Error: Function pos_count is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert pos_count([1,-2,3,-4]) == 2
+    assert pos_count([3,4,5,-1]) == 3
+    assert pos_count([1,2,3,4]) == 4
+
+2025-09-04 16:14:16 - Error: Function subject_marks is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert subject_marks([('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)])==[('Social sciences', 82), ('English', 88), ('Science', 90), ('Maths', 97)]
+    assert subject_marks([('Telugu',49),('Hindhi',54),('Social',33)])==([('Social',33),('Telugu',49),('Hindhi',54)])
+    assert subject_marks([('Physics',96),('Chemistry',97),('Biology',45)])==([('Biology',45),('Physics',96),('Chemistry',97)])
+
+2025-09-04 16:14:16 - Error: Function max_sum_list is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert max_sum_list([[1,2,3], [4,5,6], [10,11,12], [7,8,9]])==[10, 11, 12]
+    assert max_sum_list([[3,2,1], [6,5,4], [12,11,10]])==[12,11,10]
+    assert max_sum_list([[2,3,1]])==[2,3,1]
+
+2025-09-04 16:14:17 - Error: Function find_sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:14:17 - Error: Function text_match_zero_one is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:14:18 - Error: Function hexagonal_num is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert hexagonal_num(10) == 190
+    assert hexagonal_num(5) == 45
+    assert hexagonal_num(7) == 91
+
+2025-09-04 16:14:18 - Error: Function similar_elements is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert set(similar_elements((3, 4, 5, 6),(5, 7, 4, 10))) == set((4, 5))
+    assert set(similar_elements((1, 2, 3, 4),(5, 4, 3, 7))) == set((3, 4))
+    assert set(similar_elements((11, 12, 14, 13),(17, 15, 14, 13))) == set((13, 14))
+
+2025-09-04 16:14:18 - Error: Function opposite_Signs is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert opposite_Signs(1,-2) == True
+    assert opposite_Signs(3,2) == False
+    assert opposite_Signs(-10,-10) == False
+    assert opposite_Signs(-2,2) == True
+
+2025-09-04 16:14:18 - Error: Function string_to_tuple is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-04 16:14:18 - Error: Function left_insertion is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert left_insertion([1,2,4,5],6)==4
+    assert left_insertion([1,2,4,5],3)==2
+    assert left_insertion([1,2,4,5],7)==4
+
+2025-09-04 16:14:18 - Error: Function remove_nested is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert remove_nested((1, 5, 7, (4, 6), 10)) == (1, 5, 7, 10)
+    assert remove_nested((2, 6, 8, (5, 7), 11)) == (2, 6, 8, 11)
+    assert remove_nested((3, 7, 9, (6, 8), 12)) == (3, 7, 9, 12)
+    assert remove_nested((3, 7, 9, (6, 8), (5,12), 12)) == (3, 7, 9, 12)
+
+2025-09-04 16:14:19 - Error: .
+ Solution: def divisible_by_digits(startnum, endnum):
+
+    def is_divisible_by_digits(num):
+        digits = [int(d) for d in str(num) if d != '0']
+        return all((num % d == 0 for d in digits))
+    result = [num for num in range(startnum, endnum + 1) if is_divisible_by_digits(num)]
+    return result.
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:14:19 - Error: Function extract_freq is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert extract_freq([(3, 4), (1, 2), (4, 3), (5, 6)] ) == 3
+    assert extract_freq([(4, 15), (2, 3), (5, 4), (6, 7)] ) == 4
+    assert extract_freq([(5, 16), (2, 3), (6, 5), (6, 9)] ) == 4
+
+2025-09-04 16:14:19 - Error: Function Diff is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert (Diff([10, 15, 20, 25, 30, 35, 40], [25, 40, 35])) == [10, 20, 30, 15]
+    assert (Diff([1,2,3,4,5], [6,7,1])) == [2,3,4,5,6,7]
+    assert (Diff([1,2,3], [6,7,1])) == [2,3,6,7]
+
+2025-09-04 16:14:20 - Error: .
+ Solution: def is_polite(n):
+    if n < 1:
+        return False
+    if n == 1:
+        return True
+    if n % 2 == 1:
+        return True
+    while n % 2 == 0:
+        n //= 2
+    return n != 1.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:14:21 - Error: Function harmonic_sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:14:22 - Error: Function angle_complex is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:14:22 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:14:22 - Error: Function start_withp is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert start_withp(["Python PHP", "Java JavaScript", "c c++"])==('Python', 'PHP')
+    assert start_withp(["Python Programming","Java Programming"])==('Python','Programming')
+    assert start_withp(["Pqrst Pqr","qrstuv"])==('Pqrst','Pqr')
+
+2025-09-04 16:14:24 - Error: .
+ Solution: def is_undulating(n):
+    s = str(n)
+    if len(s) < 2:
+        return True
+    for i in range(1, len(s)):
+        if s[i] == s[i - 1]:
+            return False
+    for i in range(2, len(s)):
+        if s[i] == s[i - 2]:
+            return False
+    return True.
+ Test: def check():
+    assert is_undulating(1212121) == True
+    assert is_undulating(1991) == False
+    assert is_undulating(121) == True
+
+2025-09-04 16:14:26 - Error: Function count_rotation is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:14:28 - Error: .
+ Solution: def max_product_tuple(list1):
+    max_product = float('-inf')
+    for i in range(len(list1)):
+        for j in range(i + 1, len(list1)):
+            product = abs(list1[i][0] * list1[j][0]) * abs(list1[i][1] * list1[j][1])
+            max_product = max(max_product, product)
+    return max_product if max_product != float('-inf') else 0.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:14:29 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:14:56 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert square_Sum(2) == 10
+    assert square_Sum(3) == 35
+    assert square_Sum(4) == 84
+
+2025-09-04 16:14:57 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert _sum([1, 2, 3]) == 6
+    assert _sum([15, 12, 13, 10]) == 50
+    assert _sum([0, 1, 2]) == 3
+
+2025-09-04 16:14:57 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert empty_list(5)==[{},{},{},{},{}]
+    assert empty_list(6)==[{},{},{},{},{},{}]
+    assert empty_list(7)==[{},{},{},{},{},{},{}]
+
+2025-09-04 16:14:57 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert number_of_substrings("abc") == 6
+    assert number_of_substrings("abcd") == 10
+    assert number_of_substrings("abcde") == 15
+
+2025-09-04 16:14:57 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_series(6) == 12
+    assert sum_series(10) == 30
+    assert sum_series(9) == 25
+
+2025-09-04 16:14:57 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert multiply_int(10,20)==200
+    assert multiply_int(5,10)==50
+    assert multiply_int(4,8)==32
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_Diff (12345) == False
+    assert is_Diff(1212112) == True
+    assert is_Diff(1212) == False
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_list([10,20,30],[15,25,35])==[25,45,65]
+    assert sum_list([1,2,3],[5,6,7])==[6,8,10]
+    assert sum_list([15,20,30],[15,45,75])==[30,65,105]
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert Split([1,2,3,4,5]) == [2,4]
+    assert Split([4,5,6,7,8,0,1]) == [4,6,8,0]
+    assert Split ([8,12,15,19]) == [8,12]
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert pos_count([1,-2,3,-4]) == 2
+    assert pos_count([3,4,5,-1]) == 3
+    assert pos_count([1,2,3,4]) == 4
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert kth_element([12,3,5,7,19], 2) == 3
+    assert kth_element([17,24,8,23], 3) == 8
+    assert kth_element([16,21,25,36,4], 4) == 36
+
+2025-09-04 16:14:58 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),4) == 0
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),10) == 3
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),8) == 4
+
+2025-09-04 16:14:58 - Error: .
+ Solution: def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.search(pattern, text):
+        return 'Match found'.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert multiply_elements((1, 5, 7, 8, 10)) == (5, 35, 56, 80)
+    assert multiply_elements((2, 4, 5, 6, 7)) == (8, 20, 30, 42)
+    assert multiply_elements((12, 13, 14, 9, 15)) == (156, 182, 126, 135)
+    assert multiply_elements((12,)) == ()
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert swap_List([12, 35, 9, 56, 24]) == [24, 35, 9, 56, 12]
+    assert swap_List([1, 2, 3]) == [3, 2, 1]
+    assert swap_List([4, 5, 6]) == [6, 5, 4]
+
+2025-09-04 16:14:59 - Error: name 'defaultdict' is not defined.
+ Solution: def max_occurrences(nums):
+    frequency = defaultdict(int)
+    for num in nums:
+        frequency[num] += 1
+    max_freq = 0
+    max_item = None
+    for (item, freq) in frequency.items():
+        if freq > max_freq:
+            max_freq = freq
+            max_item = item
+    return max_item.
+ Test: def check():
+    assert max_occurrences([2,3,8,4,7,9,8,2,6,5,1,6,1,2,3,2,4,6,9,1,2])==2
+    assert max_occurrences([2,3,8,4,7,9,8,7,9,15,14,10,12,13,16,18])==8
+    assert max_occurrences([10,20,20,30,40,90,80,50,30,20,50,10])==20
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_majority([1, 2, 3, 3, 3, 3, 10], 7, 3) == True
+    assert is_majority([1, 1, 2, 4, 4, 4, 6, 6], 8, 4) == False
+    assert is_majority([1, 1, 1, 2, 2], 5, 1) == True
+    assert is_majority([1, 1, 2, 2], 5, 1) == False
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert magic_square_test([[7, 12, 1, 14], [2, 13, 8, 11], [16, 3, 10, 5], [9, 6, 15, 4]])==True
+    assert magic_square_test([[2, 7, 6], [9, 5, 1], [4, 3, 8]])==True
+    assert magic_square_test([[2, 7, 6], [9, 5, 1], [4, 3, 7]])==False
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_sum_list([[1,2,3], [4,5,6], [10,11,12], [7,8,9]])==[10, 11, 12]
+    assert max_sum_list([[3,2,1], [6,5,4], [12,11,10]])==[12,11,10]
+    assert max_sum_list([[2,3,1]])==[2,3,1]
+
+2025-09-04 16:14:59 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert opposite_Signs(1,-2) == True
+    assert opposite_Signs(3,2) == False
+    assert opposite_Signs(-10,-10) == False
+    assert opposite_Signs(-2,2) == True
+
+2025-09-04 16:15:00 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_run_uppercase('GeMKSForGERksISBESt') == 5
+    assert max_run_uppercase('PrECIOusMOVemENTSYT') == 6
+    assert max_run_uppercase('GooGLEFluTTER') == 4
+
+2025-09-04 16:15:00 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_subarray_product([1, -2, -3, 0, 7, -8, -2]) == 112
+    assert max_subarray_product([6, -3, -10, 0, 2]) == 180
+    assert max_subarray_product([-2, -40, 0, -2, -3]) == 80
+
+2025-09-04 16:15:00 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert long_words(3,"python is a programming language")==['python','programming','language']
+    assert long_words(2,"writing a program")==['writing','program']
+    assert long_words(5,"sorting list")==['sorting']
+
+2025-09-04 16:15:00 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_Odd_Pair([5,4,7,2,1],5) == 6
+    assert find_Odd_Pair([7,2,8,1,0,5,11],7) == 12
+    assert find_Odd_Pair([1,2,3],3) == 2
+
+2025-09-04 16:15:00 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert median_trapezium(15,25,35)==20
+    assert median_trapezium(10,20,30)==15
+    assert median_trapezium(6,9,4)==7.5
+
+2025-09-04 16:15:01 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert get_max_sum(60) == 106
+    assert get_max_sum(10) == 12
+    assert get_max_sum(2) == 2
+
+2025-09-04 16:15:01 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert check_min_heap([1, 2, 3, 4, 5, 6]) == True
+    assert check_min_heap([2, 3, 4, 5, 10, 15]) == True
+    assert check_min_heap([2, 10, 4, 5, 3, 15]) == False
+
+2025-09-04 16:15:01 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_length("11000010001") == 6
+    assert find_length("10111") == 1
+    assert find_length("11011101100101") == 2
+
+2025-09-04 16:15:01 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert second_smallest([1, 2, -8, -2, 0, -2])==-2
+    assert second_smallest([1, 1, -0.5, 0, 2, -2, -2])==-0.5
+    assert second_smallest([2,2])==None
+    assert second_smallest([2,2,2])==None
+
+2025-09-04 16:15:01 - Error: .
+ Solution: def start_withp(words):
+    p_words = [word for word in words if word.lower().startswith('p')].
+ Test: def check():
+    assert start_withp(["Python PHP", "Java JavaScript", "c c++"])==('Python', 'PHP')
+    assert start_withp(["Python Programming","Java Programming"])==('Python','Programming')
+    assert start_withp(["Pqrst Pqr","qrstuv"])==('Pqrst','Pqr')
+
+2025-09-04 16:15:03 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert set(similar_elements((3, 4, 5, 6),(5, 7, 4, 10))) == set((4, 5))
+    assert set(similar_elements((1, 2, 3, 4),(5, 4, 3, 7))) == set((3, 4))
+    assert set(similar_elements((11, 12, 14, 13),(17, 15, 14, 13))) == set((13, 14))
+
+2025-09-04 16:15:03 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:15:04 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert round_and_sum([22.4, 4.0, -16.22, -9.10, 11.00, -12.22, 14.20, -5.20, 17.50])==243
+    assert round_and_sum([5,2,9,24.3,29])==345
+    assert round_and_sum([25.0,56.7,89.2])==513
+
+2025-09-04 16:15:05 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert hexagonal_num(10) == 190
+    assert hexagonal_num(5) == 45
+    assert hexagonal_num(7) == 91
+
+2025-09-04 16:15:05 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_digits(345)==12
+    assert sum_digits(12)==3
+    assert sum_digits(97)==16
+
+2025-09-04 16:15:05 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-04 16:15:05 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert rear_extract([(1, 'Rash', 21), (2, 'Varsha', 20), (3, 'Kil', 19)]) == [21, 20, 19]
+    assert rear_extract([(1, 'Sai', 36), (2, 'Ayesha', 25), (3, 'Salman', 45)]) == [36, 25, 45]
+    assert rear_extract([(1, 'Sudeep', 14), (2, 'Vandana', 36), (3, 'Dawood', 56)]) == [14, 36, 56]
+
+2025-09-04 16:15:05 - Error: name 'heapq' is not defined.
+ Solution: def k_smallest_pairs(nums1, nums2, k):
+    if not nums1 or not nums2 or k <= 0:
+        return []
+    min_heap = []
+    for i in range(min(k, len(nums1))):
+        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))
+    result = []
+    while k > 0 and min_heap:
+        (sum_pair, i, j) = heapq.heappop(min_heap)
+        result.append([nums1[i], nums2[j]])
+        if j + 1 < len(nums2):
+            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))
+        k -= 1
+    return result.
+ Test: def check():
+    assert k_smallest_pairs([1,3,7],[2,4,6],2)==[[1, 2], [1, 4]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],1)==[[1, 2]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],7)==[[1, 2], [1, 4], [3, 2], [1, 6], [3, 4], [3, 6], [7, 2]]
+
+2025-09-04 16:15:06 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:15:06 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert minimum(1,2) == 1
+    assert minimum(-5,-4) == -5
+    assert minimum(0,0) == 0
+
+2025-09-04 16:15:07 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_lucas(9) == 76
+    assert find_lucas(4) == 7
+    assert find_lucas(3) == 4
+
+2025-09-04 16:15:07 - Error: name 'bisect' is not defined.
+ Solution: def left_insertion(a, x):
+    return bisect.bisect_left(a, x).
+ Test: def check():
+    assert left_insertion([1,2,4,5],6)==4
+    assert left_insertion([1,2,4,5],3)==2
+    assert left_insertion([1,2,4,5],7)==4
+
+2025-09-04 16:15:07 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert subject_marks([('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)])==[('Social sciences', 82), ('English', 88), ('Science', 90), ('Maths', 97)]
+    assert subject_marks([('Telugu',49),('Hindhi',54),('Social',33)])==([('Social',33),('Telugu',49),('Hindhi',54)])
+    assert subject_marks([('Physics',96),('Chemistry',97),('Biology',45)])==([('Biology',45),('Physics',96),('Chemistry',97)])
+
+2025-09-04 16:15:07 - Error: name 'collections' is not defined.
+ Solution: def freq_count(list1):
+    return dict(collections.Counter(list1)).
+ Test: def check():
+    assert freq_count([10,10,10,10,20,20,20,20,40,40,50,50,30])==({10: 4, 20: 4, 40: 2, 50: 2, 30: 1})
+    assert freq_count([1,2,3,4,3,2,4,1,3,1,4])==({1:3, 2:2,3:3,4:3})
+    assert freq_count([5,6,7,4,9,10,4,5,6,7,9,5])==({10:1,5:3,6:2,7:2,4:2,9:2})
+
+2025-09-04 16:15:07 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert check_answer(70) == False
+    assert check_answer(23) == False
+    assert check_answer(73) == True
+
+2025-09-04 16:15:07 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:15:07 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert validate(1234) == True
+    assert validate(51241) == False
+    assert validate(321) == True
+
+2025-09-04 16:15:08 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert tuple_to_dict((1, 5, 7, 10, 13, 5)) == {1: 5, 7: 10, 13: 5}
+    assert tuple_to_dict((1, 2, 3, 4, 5, 6)) == {1: 2, 3: 4, 5: 6}
+    assert tuple_to_dict((7, 8, 9, 10, 11, 12)) == {7: 8, 9: 10, 11: 12}
+
+2025-09-04 16:15:08 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert maximum(5,10) == 10
+    assert maximum(-1,-2) == -1
+    assert maximum(9,7) == 9
+
+2025-09-04 16:15:09 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert (Diff([10, 15, 20, 25, 30, 35, 40], [25, 40, 35])) == [10, 20, 30, 15]
+    assert (Diff([1,2,3,4,5], [6,7,1])) == [2,3,4,5,6,7]
+    assert (Diff([1,2,3], [6,7,1])) == [2,3,6,7]
+
+2025-09-04 16:15:09 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sequential_search([11,23,58,31,56,77,43,12,65,19],31) == (True, 3)
+    assert sequential_search([12, 32, 45, 62, 35, 47, 44, 61],61) == (True, 7)
+    assert sequential_search([9, 10, 17, 19, 22, 39, 48, 56],48) == (True, 6)
+
+2025-09-04 16:15:09 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert rgb_to_hsv(255, 255, 255)==(0, 0.0, 100.0)
+    assert rgb_to_hsv(0, 215, 0)==(120.0, 100.0, 84.31372549019608)
+    assert rgb_to_hsv(10, 215, 110)==(149.26829268292684, 95.34883720930233, 84.31372549019608)
+
+2025-09-04 16:15:09 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:15:09 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-04 16:15:09 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert remove_nested((1, 5, 7, (4, 6), 10)) == (1, 5, 7, 10)
+    assert remove_nested((2, 6, 8, (5, 7), 11)) == (2, 6, 8, 11)
+    assert remove_nested((3, 7, 9, (6, 8), 12)) == (3, 7, 9, 12)
+    assert remove_nested((3, 7, 9, (6, 8), (5,12), 12)) == (3, 7, 9, 12)
+
+2025-09-04 16:15:09 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],3)==[60, 54, 50]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],4)==[60, 54, 50, 48]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],5)==[60, 54, 50, 48, 45]
+
+2025-09-04 16:15:10 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert volume_cube(3)==27
+    assert volume_cube(2)==8
+    assert volume_cube(5)==125
+
+2025-09-04 16:15:10 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert last_Digit_Factorial(4) == 4
+    assert last_Digit_Factorial(21) == 0
+    assert last_Digit_Factorial(30) == 0
+
+2025-09-04 16:15:10 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert sum_div(8)==7
+    assert sum_div(12)==16
+    assert sum_div(7)==1
+
+2025-09-04 16:15:10 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_Parity(12) == False
+    assert find_Parity(7) == True
+    assert find_Parity(10) == False
+
+2025-09-04 16:15:10 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert bell_number(2)==2
+    assert bell_number(10)==115975
+    assert bell_number(56)==6775685320645824322581483068371419745979053216268760300
+
+2025-09-04 16:15:11 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_Volume(10,8,6) == 240
+    assert find_Volume(3,2,2) == 6
+    assert find_Volume(1,2,1) == 1
+
+2025-09-04 16:15:11 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert extract_index_list([1, 1, 3, 4, 5, 6, 7],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[1, 7]
+    assert extract_index_list([1, 1, 3, 4, 5, 6, 7],[0, 1, 2, 3, 4, 6, 5],[0, 1, 2, 3, 4, 6, 7])==[1, 6]
+    assert extract_index_list([1, 1, 3, 4, 6, 5, 6],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[1, 5]
+    assert extract_index_list([1, 2, 3, 4, 6, 6, 6],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[]
+
+2025-09-04 16:15:11 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert extract_freq([(3, 4), (1, 2), (4, 3), (5, 6)] ) == 3
+    assert extract_freq([(4, 15), (2, 3), (5, 4), (6, 7)] ) == 4
+    assert extract_freq([(5, 16), (2, 3), (6, 5), (6, 9)] ) == 4
+
+2025-09-04 16:15:11 - Error: Function divisible_by_digits is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:15:11 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert Find_Max_Length([[1],[1,4],[5,6,7,8]]) == 4
+    assert Find_Max_Length([[0,1],[2,2,],[3,2,1]]) == 3
+    assert Find_Max_Length([[7],[22,23],[13,14,15],[10,20,30,40,50]]) == 5
+
+2025-09-04 16:15:12 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert unique_product([10, 20, 30, 40, 20, 50, 60, 40]) ==  720000000
+    assert unique_product([1, 2, 3, 1,]) == 6
+    assert unique_product([7, 8, 9, 0, 1, 1]) == 0
+
+2025-09-04 16:15:12 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert reverse_vowels("Python") == "Python"
+    assert reverse_vowels("USA") == "ASU"
+    assert reverse_vowels("ab") == "ab"
+
+2025-09-04 16:15:12 - Error: Function count_rotation is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:15:12 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert left_rotate(16,2) == 64
+    assert left_rotate(10,2) == 40
+    assert left_rotate(99,3) == 792
+    assert left_rotate(99,3) == 792
+    assert left_rotate(0b0001,3) == 0b1000
+    assert left_rotate(0b0101,3) == 0b101000
+    assert left_rotate(0b11101,3) == 0b11101000
+
+2025-09-04 16:15:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_Abs_Diff((2,1,5,3)) == 4
+    assert max_Abs_Diff((9,3,2,5,1)) == 8
+    assert max_Abs_Diff((3,2,1)) == 2
+
+2025-09-04 16:15:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_undulating(1212121) == True
+    assert is_undulating(1991) == False
+    assert is_undulating(121) == True
+
+2025-09-04 16:15:15 - Error: name 'tan' is not defined.
+ Solution: def area_polygon(s, l):
+    if s < 3:
+        return 0
+    area = s * l ** 2 / (4 * tan(pi / s))
+    return area.
+ Test: def check():
+    assert math.isclose(area_polygon(4, 20), 400., rel_tol=0.001)
+    assert math.isclose(area_polygon(10, 15), 1731.197, rel_tol=0.001)
+    assert math.isclose(area_polygon(9, 7), 302.909, rel_tol=0.001)
+
+2025-09-04 16:15:17 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:15:21 - Error: name 'cmath' is not defined.
+ Solution: def angle_complex(a, b):
+    complex_number = complex(a, b)
+    angle = cmath.phase(complex_number).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:15:22 - Error: Function is_polite is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:15:23 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:15:25 - Error: .
+ Solution: def max_product_tuple(list1):
+    max_product = 0
+    n = len(list1)
+    for i in range(n):
+        for j in range(i + 1, n):
+            product = abs(list1[i][0] * list1[i][1] * list1[j][0] * list1[j][1])
+            max_product = max(max_product, product)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:15:51 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.title() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:15:52 - Error: Function find_Volume is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_Volume(10,8,6) == 240
+    assert find_Volume(3,2,2) == 6
+    assert find_Volume(1,2,1) == 1
+
+2025-09-04 16:15:53 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = '^a(b+)$'
+    return bool(re.search(pattern, text)).
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:15:56 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:15:57 - Error: .
+ Solution: def divisible_by_digits(startnum, endnum):
+
+    def is_divisible_by_digits(num):
+        digits = [int(d) for d in str(num) if d != '0']
+        return all((num % d == 0 for d in digits))
+    result = [num for num in range(startnum, endnum + 1) if is_divisible_by_digits(num)]
+    return result
+startnum = 1
+endnum = 22.
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:15:58 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:15:58 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    count = 0
+    if x == y:
+        count += 1
+    if y == z:
+        count += 1
+    if x == z:
+        count += 1
+    return count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:16:00 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:16:01 - Error: .
+ Solution: def average_tuple(nums):
+    return [sum(t) / len(t) for t in nums].
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:16:02 - Error: angle_complex() takes 1 positional argument but 2 were given.
+ Solution: import cmath
+def angle_complex(z):
+    angle = cmath.phase(z)
+    return angle.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:16:05 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0
+    return sum((1 / i for i in range(1, n))).
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:16:05 - Error: .
+ Solution: def max_product_tuple(list1):
+    max_product = 0
+    for i in range(len(list1)):
+        for j in range(i + 1, len(list1)):
+            product = abs(list1[i][0] * list1[i][1] * list1[j][0] * list1[j][1])
+            max_product = max(max_product, product)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:16:07 - Error: .
+ Solution: def is_polite(n):
+    if n < 1:
+        return False
+    if n == 1:
+        return True
+    if n % 2 == 1:
+        return True
+    for k in range(1, n):
+        if (n - k * (k + 1) // 2) % k == 0 and (n - k * (k + 1) // 2) // k > 0:
+            return True
+    return False
+n = 10.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:16:13 - Error: Function count_rotation is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:16:15 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:16:52 - Error: Function Split is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert Split([1,2,3,4,5]) == [2,4]
+    assert Split([4,5,6,7,8,0,1]) == [4,6,8,0]
+    assert Split ([8,12,15,19]) == [8,12]
+
+2025-09-04 16:16:52 - Error: Function is_Diff is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_Diff (12345) == False
+    assert is_Diff(1212112) == True
+    assert is_Diff(1212) == False
+
+2025-09-04 16:16:52 - Error: Function check_answer is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert check_answer(70) == False
+    assert check_answer(23) == False
+    assert check_answer(73) == True
+
+2025-09-04 16:16:52 - Error: Function find_Volume is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_Volume(10,8,6) == 240
+    assert find_Volume(3,2,2) == 6
+    assert find_Volume(1,2,1) == 1
+
+2025-09-04 16:16:53 - Error: .
+ Solution: def remove_odd(str1):
+    """
+    Remove characters at odd indices from the input string.
+
+    Parameters:
+    str1 (str): The input string from which to remove odd-indexed characters.
+
+    Returns:
+    str: A new string with characters at odd indices removed.
+    """
+    if not isinstance(str1, str):
+        raise ValueError('Input must be a string.')
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:16:53 - Error: Function sum_series is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert sum_series(6) == 12
+    assert sum_series(10) == 30
+    assert sum_series(9) == 25
+
+2025-09-04 16:16:54 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0
+    return sum((1 / i for i in range(1, n))).
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:16:55 - Error: Function large_product is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],3)==[60, 54, 50]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],4)==[60, 54, 50, 48]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],5)==[60, 54, 50, 48, 45]
+
+2025-09-04 16:16:56 - Error: Function Diff is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert (Diff([10, 15, 20, 25, 30, 35, 40], [25, 40, 35])) == [10, 20, 30, 15]
+    assert (Diff([1,2,3,4,5], [6,7,1])) == [2,3,4,5,6,7]
+    assert (Diff([1,2,3], [6,7,1])) == [2,3,6,7]
+
+2025-09-04 16:16:57 - Error: angle_complex() takes 1 positional argument but 2 were given.
+ Solution: import cmath
+def angle_complex(z):
+    """
+    Calculate the angle (phase) of a complex number.
+
+    Parameters:
+    z (complex): A complex number.
+
+    Returns:
+    float: The angle of the complex number in radians.
+    """
+    if not isinstance(z, complex):
+        raise ValueError('Input must be a complex number.')
+    angle = cmath.phase(z)
+    return angle.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:17:00 - Error: .
+ Solution: def find_sum(arr):
+    """
+    Function to find the sum of non-repeated elements in a given list.
+
+    Parameters:
+    arr (list): A list of integers.
+
+    Returns:
+    int: The sum of non-repeated elements.
+    """
+    from collections import Counter
+    if not arr:
+        return 0
+    element_count = Counter(arr)
+    non_repeated_sum = sum((key for (key, count) in element_count.items() if count == 1))
+    return non_repeated_sum.
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:17:00 - Error: Function average_tuple is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:17:00 - Error: .
+ Solution: def snake_to_camel(word):
+    if not isinstance(word, str):
+        raise ValueError('Input must be a string.')
+    if not word:
+        return ''
+    components = word.split('_')
+    return components[0] + ''.join((x.title() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:17:03 - Error: Function max_product_tuple is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:17:03 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    if not isinstance(r, (int, float)) or not isinstance(h, (int, float)):
+        raise ValueError('Both radius and height must be numbers.')
+    if r < 0 or h < 0:
+        raise ValueError('Both radius and height must be non-negative.')
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:17:05 - Error: Function find_lucas is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_lucas(9) == 76
+    assert find_lucas(4) == 7
+    assert find_lucas(3) == 4
+
+2025-09-04 16:17:05 - Error: .
+ Solution: def dif_Square(n):
+    """
+    Check if a given number can be represented as the difference of two squares.
+
+    Args:
+    n (int): The number to check.
+
+    Returns:
+    bool: True if the number can be represented as the difference of two squares, False otherwise.
+    """
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:17:05 - Error: .
+ Solution: def string_to_tuple(str1):
+    """
+    Convert a given string to a tuple of characters.
+
+    Parameters:
+    str1 (str): The input string to be converted.
+
+    Returns:
+    tuple: A tuple containing the characters of the input string.
+    """
+    if not isinstance(str1, str):
+        raise ValueError('Input must be a string.')
+    if str1 == '':
+        return tuple()
+    return tuple(str1).
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-04 16:17:06 - Error: Function count_rotation is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:17:07 - Error: Function opposite_Signs is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert opposite_Signs(1,-2) == True
+    assert opposite_Signs(3,2) == False
+    assert opposite_Signs(-10,-10) == False
+    assert opposite_Signs(-2,2) == True
+
+2025-09-04 16:17:08 - Error: Function kth_element is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert kth_element([12,3,5,7,19], 2) == 3
+    assert kth_element([17,24,8,23], 3) == 8
+    assert kth_element([16,21,25,36,4], 4) == 36
+
+2025-09-04 16:17:08 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:17:11 - Error: Function is_majority is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_majority([1, 2, 3, 3, 3, 3, 10], 7, 3) == True
+    assert is_majority([1, 1, 2, 4, 4, 4, 6, 6], 8, 4) == False
+    assert is_majority([1, 1, 1, 2, 2], 5, 1) == True
+    assert is_majority([1, 1, 2, 2], 5, 1) == False
+
+2025-09-04 16:17:12 - Error: Function square_Sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert square_Sum(2) == 10
+    assert square_Sum(3) == 35
+    assert square_Sum(4) == 84
+
+2025-09-04 16:17:12 - Error: Function test_three_equal is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:17:16 - Error: .
+ Solution: def divisible_by_digits(startnum, endnum):
+
+    def is_divisible_by_digits(num):
+        digits = [int(d) for d in str(num) if d != '0']
+        return all((num % d == 0 for d in digits))
+    result = [num for num in range(startnum, endnum + 1) if is_divisible_by_digits(num)]
+    return result
+startnum = 1
+endnum = 100.
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:17:19 - Error: .
+ Solution: def is_polite(n):
+    if n < 1:
+        return False
+    if n % 2 == 1:
+        return True
+    for i in range(1, n):
+        total = 0
+        for j in range(i, n):
+            total += j
+            if total == n:
+                return True
+            if total > n:
+                break
+    return False.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:17:25 - Error: Input must be a tuple with at least two elements..
+ Solution: def multiply_elements(test_tup):
+    if not isinstance(test_tup, tuple) or len(test_tup) < 2:
+        raise ValueError('Input must be a tuple with at least two elements.')
+    return tuple((test_tup[i] * test_tup[i + 1] for i in range(len(test_tup) - 1))).
+ Test: def check():
+    assert multiply_elements((1, 5, 7, 8, 10)) == (5, 35, 56, 80)
+    assert multiply_elements((2, 4, 5, 6, 7)) == (8, 20, 30, 42)
+    assert multiply_elements((12, 13, 14, 9, 15)) == (156, 182, 126, 135)
+    assert multiply_elements((12,)) == ()
+
+2025-09-04 16:18:03 - Error: Function find_Volume is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert find_Volume(10,8,6) == 240
+    assert find_Volume(3,2,2) == 6
+    assert find_Volume(1,2,1) == 1
+
+2025-09-04 16:18:04 - Error: Input must be a tuple with at least two elements..
+ Solution: def multiply_elements(test_tup):
+    if not isinstance(test_tup, tuple) or len(test_tup) < 2:
+        raise ValueError('Input must be a tuple with at least two elements.')
+    return tuple((test_tup[i] * test_tup[i + 1] for i in range(len(test_tup) - 1))).
+ Test: def check():
+    assert multiply_elements((1, 5, 7, 8, 10)) == (5, 35, 56, 80)
+    assert multiply_elements((2, 4, 5, 6, 7)) == (8, 20, 30, 42)
+    assert multiply_elements((12, 13, 14, 9, 15)) == (156, 182, 126, 135)
+    assert multiply_elements((12,)) == ()
+
+2025-09-04 16:18:04 - Error: .
+ Solution: def snake_to_camel(word):
+    if not isinstance(word, str):
+        raise ValueError('Input must be a string.')
+    if not word:
+        return ''
+    components = word.split('_')
+    return components[0] + ''.join((x.title() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:18:05 - Error: Function is_Diff is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_Diff (12345) == False
+    assert is_Diff(1212112) == True
+    assert is_Diff(1212) == False
+
+2025-09-04 16:18:05 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    """
+    This function checks if the input string matches the pattern of 
+    an 'a' followed by one or more 'b's.
+    
+    Args:
+    text (str): The input string to be checked.
+
+    Returns:
+    bool: True if the string matches the pattern, False otherwise.
+    """
+    pattern = '^a(b+)$'
+    return bool(re.match(pattern, text)).
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:18:05 - Error: Function Split is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert Split([1,2,3,4,5]) == [2,4]
+    assert Split([4,5,6,7,8,0,1]) == [4,6,8,0]
+    assert Split ([8,12,15,19]) == [8,12]
+
+2025-09-04 16:18:10 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:18:13 - Error: angle_complex() takes 1 positional argument but 2 were given.
+ Solution: import cmath
+def angle_complex(z):
+    """
+    Calculate the angle (phase) of a complex number.
+
+    Parameters:
+    z (complex): A complex number.
+
+    Returns:
+    float: The angle of the complex number in radians.
+    """
+    if not isinstance(z, complex):
+        raise ValueError('Input must be a complex number.')
+    angle = cmath.phase(z)
+    return angle.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:18:15 - Error: .
+ Solution: def divisible_by_digits(startnum, endnum):
+
+    def is_divisible_by_digits(num):
+        digits = [int(d) for d in str(num) if d != '0']
+        return all((num % d == 0 for d in digits))
+    if not isinstance(startnum, int) or not isinstance(endnum, int):
+        raise ValueError('Both startnum and endnum must be integers.')
+    if startnum > endnum:
+        raise ValueError('startnum must be less than or equal to endnum.')
+    result = [num for num in range(startnum, endnum + 1) if is_divisible_by_digits(num)]
+    return result
+startnum = 1
+endnum = 22
+result = divisible_by_digits(startnum, endnum).
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:18:15 - Error: .
+ Solution: def is_polite(n):
+    """
+    Check if a number is polite.
+    A polite number is a number that can be expressed as the sum of two or more consecutive positive integers.
+    """
+    if n < 1:
+        return None
+    while n > 0 and n % 2 == 0:
+        n //= 2
+    return n != 1
+n = 10.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:18:16 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:18:18 - Error: .
+ Solution: def remove_odd(str1):
+    if not isinstance(str1, str):
+        raise ValueError('Input must be a string.')
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:18:21 - Error: .
+ Solution: def max_product_tuple(list1):
+    if not list1 or len(list1) < 2:
+        return 0
+    max_product = 0
+    for i in range(len(list1)):
+        for j in range(i + 1, len(list1)):
+            if isinstance(list1[i], tuple) and isinstance(list1[j], tuple) and (len(list1[i]) == 2) and (len(list1[j]) == 2):
+                product = abs(list1[i][0] * list1[i][1] * list1[j][0] * list1[j][1])
+                max_product = max(max_product, product)
+            else:
+                raise ValueError('All elements in the list must be tuples of two numbers.')
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:18:21 - Error: .
+ Solution: def count_rotation(arr):
+    """
+    Function to count the number of rotations in a sorted and rotated array.
+    
+    Parameters:
+    arr (list): A list of integers representing the rotated sorted array.
+    
+    Returns:
+    int: The number of rotations, or 0 if the array is empty.
+    """
+    n = len(arr)
+    if n == 0:
+        return 0
+    (low, high) = (0, n - 1)
+    while low <= high:
+        if arr[low] <= arr[high]:
+            return low
+        mid = (low + high) // 2
+        next_index = (mid + 1) % n
+        prev_index = (mid - 1 + n) % n
+        if arr[mid] <= arr[next_index] and arr[mid] <= arr[prev_index]:
+            return mid
+        if arr[mid] <= arr[high]:
+            high = mid - 1
+        else:
+            low = mid + 1
+    return 0.
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-04 16:18:22 - Error: .
+ Solution: def average_tuple(nums):
+    if not isinstance(nums, tuple) or not all((isinstance(t, tuple) for t in nums)):
+        raise ValueError('Input must be a tuple of tuples.')
+    averages = []
+    for t in nums:
+        if len(t) > 0:
+            avg = sum(t) / len(t)
+        else:
+            avg = 0
+        averages.append(avg)
+    return averages.
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:18:24 - Error: Function test_three_equal is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:18:24 - Error: .
+ Solution: def find_sum(arr):
+    from collections import Counter
+    if not isinstance(arr, list) or len(arr) == 0:
+        return 0
+    element_count = Counter(arr)
+    non_repeated_sum = sum((key for (key, count) in element_count.items() if count == 1))
+    return non_repeated_sum.
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:18:27 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:18:29 - Error: Function count_Substrings is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_Substrings('112112') == 6
+    assert count_Substrings('111') == 6
+    assert count_Substrings('1101112') == 12
+
+2025-09-04 16:18:30 - Error: Function harmonic_sum is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:19:12 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def hexagonal_num(n):.
+ Test: def check():
+    assert hexagonal_num(10) == 190
+    assert hexagonal_num(5) == 45
+    assert hexagonal_num(7) == 91
+
+2025-09-04 16:19:12 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def sum_digits(n):.
+ Test: def check():
+    assert sum_digits(345)==12
+    assert sum_digits(12)==3
+    assert sum_digits(97)==16
+
+2025-09-04 16:19:12 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def empty_list(length):.
+ Test: def check():
+    assert empty_list(5)==[{},{},{},{},{}]
+    assert empty_list(6)==[{},{},{},{},{},{}]
+    assert empty_list(7)==[{},{},{},{},{},{},{}]
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def square_Sum(n):.
+ Test: def check():
+    assert square_Sum(2) == 10
+    assert square_Sum(3) == 35
+    assert square_Sum(4) == 84
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def subject_marks(subjectmarks):.
+ Test: def check():
+    assert subject_marks([('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)])==[('Social sciences', 82), ('English', 88), ('Science', 90), ('Maths', 97)]
+    assert subject_marks([('Telugu',49),('Hindhi',54),('Social',33)])==([('Social',33),('Telugu',49),('Hindhi',54)])
+    assert subject_marks([('Physics',96),('Chemistry',97),('Biology',45)])==([('Biology',45),('Physics',96),('Chemistry',97)])
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def _sum(arr):.
+ Test: def check():
+    assert _sum([1, 2, 3]) == 6
+    assert _sum([15, 12, 13, 10]) == 50
+    assert _sum([0, 1, 2]) == 3
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def find_Parity(x):.
+ Test: def check():
+    assert find_Parity(12) == False
+    assert find_Parity(7) == True
+    assert find_Parity(10) == False
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def number_of_substrings(s):.
+ Test: def check():
+    assert number_of_substrings("abc") == 6
+    assert number_of_substrings("abcd") == 10
+    assert number_of_substrings("abcde") == 15
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def check_answer(n):.
+ Test: def check():
+    assert check_answer(70) == False
+    assert check_answer(23) == False
+    assert check_answer(73) == True
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def rear_extract(test_list):.
+ Test: def check():
+    assert rear_extract([(1, 'Rash', 21), (2, 'Varsha', 20), (3, 'Kil', 19)]) == [21, 20, 19]
+    assert rear_extract([(1, 'Sai', 36), (2, 'Ayesha', 25), (3, 'Salman', 45)]) == [36, 25, 45]
+    assert rear_extract([(1, 'Sudeep', 14), (2, 'Vandana', 36), (3, 'Dawood', 56)]) == [14, 36, 56]
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def pos_count(lst):.
+ Test: def check():
+    assert pos_count([1,-2,3,-4]) == 2
+    assert pos_count([3,4,5,-1]) == 3
+    assert pos_count([1,2,3,4]) == 4
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def multiply_elements(test_tup):.
+ Test: def check():
+    assert multiply_elements((1, 5, 7, 8, 10)) == (5, 35, 56, 80)
+    assert multiply_elements((2, 4, 5, 6, 7)) == (8, 20, 30, 42)
+    assert multiply_elements((12, 13, 14, 9, 15)) == (156, 182, 126, 135)
+    assert multiply_elements((12,)) == ()
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def remove_odd(str1):.
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def large_product(nums1, nums2, N):.
+ Test: def check():
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],3)==[60, 54, 50]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],4)==[60, 54, 50, 48]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],5)==[60, 54, 50, 48, 45]
+
+2025-09-04 16:19:13 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def Split(numbers):.
+ Test: def check():
+    assert Split([1,2,3,4,5]) == [2,4]
+    assert Split([4,5,6,7,8,0,1]) == [4,6,8,0]
+    assert Split ([8,12,15,19]) == [8,12]
+
+2025-09-04 16:19:14 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def opposite_Signs(x, y):.
+ Test: def check():
+    assert opposite_Signs(1,-2) == True
+    assert opposite_Signs(3,2) == False
+    assert opposite_Signs(-10,-10) == False
+    assert opposite_Signs(-2,2) == True
+
+2025-09-04 16:19:14 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def string_to_tuple(str1):.
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-04 16:19:14 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def long_words(n, str):.
+ Test: def check():
+    assert long_words(3,"python is a programming language")==['python','programming','language']
+    assert long_words(2,"writing a program")==['writing','program']
+    assert long_words(5,"sorting list")==['sorting']
+
+2025-09-04 16:19:14 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def Diff(li1, li2):.
+ Test: def check():
+    assert (Diff([10, 15, 20, 25, 30, 35, 40], [25, 40, 35])) == [10, 20, 30, 15]
+    assert (Diff([1,2,3,4,5], [6,7,1])) == [2,3,4,5,6,7]
+    assert (Diff([1,2,3], [6,7,1])) == [2,3,6,7]
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def sequential_search(dlist, item):.
+ Test: def check():
+    assert sequential_search([11,23,58,31,56,77,43,12,65,19],31) == (True, 3)
+    assert sequential_search([12, 32, 45, 62, 35, 47, 44, 61],61) == (True, 7)
+    assert sequential_search([9, 10, 17, 19, 22, 39, 48, 56],48) == (True, 6)
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def is_Diff(n):.
+ Test: def check():
+    assert is_Diff (12345) == False
+    assert is_Diff(1212112) == True
+    assert is_Diff(1212) == False
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def find_Volume(l, b, h):.
+ Test: def check():
+    assert find_Volume(10,8,6) == 240
+    assert find_Volume(3,2,2) == 6
+    assert find_Volume(1,2,1) == 1
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def max_Abs_Diff(arr):.
+ Test: def check():
+    assert max_Abs_Diff((2,1,5,3)) == 4
+    assert max_Abs_Diff((9,3,2,5,1)) == 8
+    assert max_Abs_Diff((3,2,1)) == 2
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def extract_index_list(l1, l2, l3):.
+ Test: def check():
+    assert extract_index_list([1, 1, 3, 4, 5, 6, 7],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[1, 7]
+    assert extract_index_list([1, 1, 3, 4, 5, 6, 7],[0, 1, 2, 3, 4, 6, 5],[0, 1, 2, 3, 4, 6, 7])==[1, 6]
+    assert extract_index_list([1, 1, 3, 4, 6, 5, 6],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[1, 5]
+    assert extract_index_list([1, 2, 3, 4, 6, 6, 6],[0, 1, 2, 3, 4, 5, 7],[0, 1, 2, 3, 4, 5, 7])==[]
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def volume_cube(l):.
+ Test: def check():
+    assert volume_cube(3)==27
+    assert volume_cube(2)==8
+    assert volume_cube(5)==125
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def is_undulating(n):.
+ Test: def check():
+    assert is_undulating(1212121) == True
+    assert is_undulating(1991) == False
+    assert is_undulating(121) == True
+
+2025-09-04 16:19:15 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def median_trapezium(base1, base2, height):.
+ Test: def check():
+    assert median_trapezium(15,25,35)==20
+    assert median_trapezium(10,20,30)==15
+    assert median_trapezium(6,9,4)==7.5
+
+2025-09-04 16:19:15 - Error: name 'tan' is not defined.
+ Solution: def area_polygon(s, l):
+    if s < 3:
+        return 0
+    area = s * l ** 2 / (4 * tan(pi / s))
+    return area.
+ Test: def check():
+    assert math.isclose(area_polygon(4, 20), 400., rel_tol=0.001)
+    assert math.isclose(area_polygon(10, 15), 1731.197, rel_tol=0.001)
+    assert math.isclose(area_polygon(9, 7), 302.909, rel_tol=0.001)
+
+2025-09-04 16:19:16 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def last_Digit_Factorial(n):.
+ Test: def check():
+    assert last_Digit_Factorial(4) == 4
+    assert last_Digit_Factorial(21) == 0
+    assert last_Digit_Factorial(30) == 0
+
+2025-09-04 16:19:17 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def reverse_vowels(str1):.
+ Test: def check():
+    assert reverse_vowels("Python") == "Python"
+    assert reverse_vowels("USA") == "ASU"
+    assert reverse_vowels("ab") == "ab"
+
+2025-09-04 16:19:18 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def is_majority(arr, n, x):.
+ Test: def check():
+    assert is_majority([1, 2, 3, 3, 3, 3, 10], 7, 3) == True
+    assert is_majority([1, 1, 2, 4, 4, 4, 6, 6], 8, 4) == False
+    assert is_majority([1, 1, 1, 2, 2], 5, 1) == True
+    assert is_majority([1, 1, 2, 2], 5, 1) == False
+
+2025-09-04 16:19:18 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def kth_element(arr, k):.
+ Test: def check():
+    assert kth_element([12,3,5,7,19], 2) == 3
+    assert kth_element([17,24,8,23], 3) == 8
+    assert kth_element([16,21,25,36,4], 4) == 36
+
+2025-09-04 16:19:19 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def check_min_heap(arr):.
+ Test: def check():
+    assert check_min_heap([1, 2, 3, 4, 5, 6]) == True
+    assert check_min_heap([2, 3, 4, 5, 10, 15]) == True
+    assert check_min_heap([2, 10, 4, 5, 3, 15]) == False
+
+2025-09-04 16:19:19 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def magic_square_test(my_matrix):.
+ Test: def check():
+    assert magic_square_test([[7, 12, 1, 14], [2, 13, 8, 11], [16, 3, 10, 5], [9, 6, 15, 4]])==True
+    assert magic_square_test([[2, 7, 6], [9, 5, 1], [4, 3, 8]])==True
+    assert magic_square_test([[2, 7, 6], [9, 5, 1], [4, 3, 7]])==False
+
+2025-09-04 16:19:19 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def test_three_equal(x, y, z):.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-04 16:19:19 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-04 16:19:21 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-04 16:19:23 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-04 16:19:23 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def rgb_to_hsv(r, g, b):.
+ Test: def check():
+    assert rgb_to_hsv(255, 255, 255)==(0, 0.0, 100.0)
+    assert rgb_to_hsv(0, 215, 0)==(120.0, 100.0, 84.31372549019608)
+    assert rgb_to_hsv(10, 215, 110)==(149.26829268292684, 95.34883720930233, 84.31372549019608)
+
+2025-09-04 16:19:23 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-04 16:19:24 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-04 16:19:25 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def multiply_int(x, y):.
+ Test: def check():
+    assert multiply_int(10,20)==200
+    assert multiply_int(5,10)==50
+    assert multiply_int(4,8)==32
+
+2025-09-04 16:19:25 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = '^a(b+)$'
+    return bool(re.match(pattern, text)).
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-04 16:19:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def sum_list(lst1, lst2):.
+ Test: def check():
+    assert sum_list([10,20,30],[15,25,35])==[25,45,65]
+    assert sum_list([1,2,3],[5,6,7])==[6,8,10]
+    assert sum_list([15,20,30],[15,45,75])==[30,65,105]
+
+2025-09-04 16:19:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def max_run_uppercase(test_str):.
+ Test: def check():
+    assert max_run_uppercase('GeMKSForGERksISBESt') == 5
+    assert max_run_uppercase('PrECIOusMOVemENTSYT') == 6
+    assert max_run_uppercase('GooGLEFluTTER') == 4
+
+2025-09-04 16:19:26 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def count_X(tup, x):.
+ Test: def check():
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),4) == 0
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),10) == 3
+    assert count_X((10, 8, 5, 2, 10, 15, 10, 8, 5, 8, 8, 2),8) == 4
+
+2025-09-04 16:19:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def remove_nested(test_tup):.
+ Test: def check():
+    assert remove_nested((1, 5, 7, (4, 6), 10)) == (1, 5, 7, 10)
+    assert remove_nested((2, 6, 8, (5, 7), 11)) == (2, 6, 8, 11)
+    assert remove_nested((3, 7, 9, (6, 8), 12)) == (3, 7, 9, 12)
+    assert remove_nested((3, 7, 9, (6, 8), (5,12), 12)) == (3, 7, 9, 12)
+
+2025-09-04 16:19:27 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def get_max_sum(n):.
+ Test: def check():
+    assert get_max_sum(60) == 106
+    assert get_max_sum(10) == 12
+    assert get_max_sum(2) == 2
+
+2025-09-04 16:19:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-04 16:19:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def snake_to_camel(word):.
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-04 16:19:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def left_rotate(n, d):.
+ Test: def check():
+    assert left_rotate(16,2) == 64
+    assert left_rotate(10,2) == 40
+    assert left_rotate(99,3) == 792
+    assert left_rotate(99,3) == 792
+    assert left_rotate(0b0001,3) == 0b1000
+    assert left_rotate(0b0101,3) == 0b101000
+    assert left_rotate(0b11101,3) == 0b11101000
+
+2025-09-04 16:19:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def sum_div(number):.
+ Test: def check():
+    assert sum_div(8)==7
+    assert sum_div(12)==16
+    assert sum_div(7)==1
+
+2025-09-04 16:19:28 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def swap_List(newList):.
+ Test: def check():
+    assert swap_List([12, 35, 9, 56, 24]) == [24, 35, 9, 56, 12]
+    assert swap_List([1, 2, 3]) == [3, 2, 1]
+    assert swap_List([4, 5, 6]) == [6, 5, 4]
+
+2025-09-04 16:19:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def find_Odd_Pair(A, N):.
+ Test: def check():
+    assert find_Odd_Pair([5,4,7,2,1],5) == 6
+    assert find_Odd_Pair([7,2,8,1,0,5,11],7) == 12
+    assert find_Odd_Pair([1,2,3],3) == 2
+
+2025-09-04 16:19:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def tuple_to_dict(test_tup):.
+ Test: def check():
+    assert tuple_to_dict((1, 5, 7, 10, 13, 5)) == {1: 5, 7: 10, 13: 5}
+    assert tuple_to_dict((1, 2, 3, 4, 5, 6)) == {1: 2, 3: 4, 5: 6}
+    assert tuple_to_dict((7, 8, 9, 10, 11, 12)) == {7: 8, 9: 10, 11: 12}
+
+2025-09-04 16:19:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def max_sum_list(lists):.
+ Test: def check():
+    assert max_sum_list([[1,2,3], [4,5,6], [10,11,12], [7,8,9]])==[10, 11, 12]
+    assert max_sum_list([[3,2,1], [6,5,4], [12,11,10]])==[12,11,10]
+    assert max_sum_list([[2,3,1]])==[2,3,1]
+
+2025-09-04 16:19:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-04 16:19:29 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def extract_freq(test_list):.
+ Test: def check():
+    assert extract_freq([(3, 4), (1, 2), (4, 3), (5, 6)] ) == 3
+    assert extract_freq([(4, 15), (2, 3), (5, 4), (6, 7)] ) == 4
+    assert extract_freq([(5, 16), (2, 3), (6, 5), (6, 9)] ) == 4
+
+2025-09-04 16:19:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def sum_series(n):.
+ Test: def check():
+    assert sum_series(6) == 12
+    assert sum_series(10) == 30
+    assert sum_series(9) == 25
+
+2025-09-04 16:19:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def bell_number(n):.
+ Test: def check():
+    assert bell_number(2)==2
+    assert bell_number(10)==115975
+    assert bell_number(56)==6775685320645824322581483068371419745979053216268760300
+
+2025-09-04 16:19:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def Find_Max_Length(lst):.
+ Test: def check():
+    assert Find_Max_Length([[1],[1,4],[5,6,7,8]]) == 4
+    assert Find_Max_Length([[0,1],[2,2,],[3,2,1]]) == 3
+    assert Find_Max_Length([[7],[22,23],[13,14,15],[10,20,30,40,50]]) == 5
+
+2025-09-04 16:19:30 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def start_withp(words):.
+ Test: def check():
+    assert start_withp(["Python PHP", "Java JavaScript", "c c++"])==('Python', 'PHP')
+    assert start_withp(["Python Programming","Java Programming"])==('Python','Programming')
+    assert start_withp(["Pqrst Pqr","qrstuv"])==('Pqrst','Pqr')
+
+2025-09-04 16:19:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def validate(n):.
+ Test: def check():
+    assert validate(1234) == True
+    assert validate(51241) == False
+    assert validate(321) == True
+
+2025-09-04 16:19:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def unique_product(list_data):.
+ Test: def check():
+    assert unique_product([10, 20, 30, 40, 20, 50, 60, 40]) ==  720000000
+    assert unique_product([1, 2, 3, 1,]) == 6
+    assert unique_product([7, 8, 9, 0, 1, 1]) == 0
+
+2025-09-04 16:19:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def max_subarray_product(arr):.
+ Test: def check():
+    assert max_subarray_product([1, -2, -3, 0, 7, -8, -2]) == 112
+    assert max_subarray_product([6, -3, -10, 0, 2]) == 180
+    assert max_subarray_product([-2, -40, 0, -2, -3]) == 80
+
+2025-09-04 16:19:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert set(similar_elements((3, 4, 5, 6),(5, 7, 4, 10))) == set((4, 5))
+    assert set(similar_elements((1, 2, 3, 4),(5, 4, 3, 7))) == set((3, 4))
+    assert set(similar_elements((11, 12, 14, 13),(17, 15, 14, 13))) == set((13, 14))
+
+2025-09-04 16:19:32 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def find_length(string):.
+ Test: def check():
+    assert find_length("11000010001") == 6
+    assert find_length("10111") == 1
+    assert find_length("11011101100101") == 2
+
+2025-09-04 16:19:33 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def find_lucas(n):.
+ Test: def check():
+    assert find_lucas(9) == 76
+    assert find_lucas(4) == 7
+    assert find_lucas(3) == 4
+
+2025-09-04 16:19:33 - Error: angle_complex() takes 1 positional argument but 2 were given.
+ Solution: def angle_complex(z):
+    angle = cmath.phase(z)
+    return angle.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-04 16:19:34 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-04 16:19:34 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def dif_Square(n):.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-04 16:19:34 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-04 16:19:38 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return round(total_surface_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-04 16:19:42 - Error: invalid syntax (<string>, line 1).
+ Solution: Solution: def second_smallest(numbers):.
+ Test: def check():
+    assert second_smallest([1, 2, -8, -2, 0, -2])==-2
+    assert second_smallest([1, 1, -0.5, 0, 2, -2, -2])==-0.5
+    assert second_smallest([2,2])==None
+    assert second_smallest([2,2,2])==None
+
+2025-09-04 16:19:43 - Error: invalid syntax (<string>, line 1).
+ Solution: Error: ..
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+

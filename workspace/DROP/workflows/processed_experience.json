@@ -1,54 +1,10 @@
 {
     "1": {
-        "score": 0.11606396114024572,
-        "success": {},
-        "failure": {
+        "score": 0.11723797214601892,
+        "success": {
             "2": {
-                "modification": "Add AnswerGenerate operator to get structured reasoning first, then use Custom operator with a specific prompt to format the final answer. This helps ensure consistent answer formatting and clear reasoning steps.",
-                "score": 0.034599887044960954
-            },
-            "7": {
-                "modification": "1. Add AnswerGenerate operator to get structured reasoning first\n2. Use Custom operator with specific formatting prompt to ensure consistent output format\n3. Chain the operators to maintain context and reasoning",
-                "score": 0.03652064339612604
-            }
-        }
-    },
-    "2": {
-        "score": 0.034599887044960954,
-        "success": {
-            "6": {
-                "modification": "1. Add a verification step using Custom operator to double-check the extracted answer and ensure it matches the required format\n2. Modify the final output format to be more structured and consistent",
-                "score": 0.03653559350459018
-            }
-        },
-        "failure": {
-            "3": {
-                "modification": "Add ScEnsemble operator to generate multiple solutions and select the most consistent one. This adds redundancy and improves reliability by generating multiple answers and selecting the most frequent one.",
-                "score": 0.034447248393982166
-            }
-        }
-    },
-    "4": {
-        "score": 0.03729133052530105,
-        "success": {
-            "8": {
-                "modification": "Modify the FORMAT_PROMPT and EXTRACT_PROMPT to better handle numerical answers and ensure they are clearly marked with ** symbols. Add specific instructions to extract pure numerical values when possible.",
-                "score": 0.04446478343072818
-            }
-        },
-        "failure": {
-            "5": {
-                "modification": "Add a final verification step using Custom operator to ensure the answer strictly follows the required format and contains all necessary numerical values. This helps prevent format mismatches and ensures consistent output structure.",
-                "score": 0.030771433458757342
-            }
-        }
-    },
-    "3": {
-        "score": 0.034447248393982166,
-        "success": {
-            "4": {
-                "modification": "Add a final formatting step using Custom operator to ensure consistent answer formatting and explicit answer extraction. This helps standardize the output format and makes it easier for the system to extract the final answer.",
-                "score": 0.03729133052530105
+                "modification": "Add AnswerGenerate operator to get structured reasoning steps and modify the custom operator to format the final answer based on the reasoning.",
+                "score": 0.6578882783882785
             }
         },
         "failure": {}

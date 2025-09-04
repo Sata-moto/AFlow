@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Date    : 8/28/2025 20:00 PM
-# @Author  : didi
-# @Desc    : AFlow with Workflow Fusion Enhancement
-
 import argparse
 import os
 import glob
@@ -10,9 +5,8 @@ import shutil
 from typing import Dict, List
 
 from data.download_data import download
-from scripts.optimizer import Optimizer
+from scripts.enhanced_optimizer import EnhancedOptimizer
 from scripts.async_llm import LLMsConfig
-from scripts.workflow_fusion import WorkflowFusion
 
 class ExperimentConfig:
     def __init__(self, dataset: str, question_type: str, operators: List[str]):
@@ -77,10 +71,16 @@ def clear_optimization_records(dataset: str, optimized_path: str = "workspace"):
     
     print(f"Clearing previous optimization records for dataset {dataset}...")
     
-    # 1. Remove round_2 and later directories
+    # 1. Remove round_2 and later directories, including round_fused
     for round_dir in glob.glob(os.path.join(workflows_path, "round_*")):
         round_name = os.path.basename(round_dir)
         if round_name.startswith("round_"):
+            # Handle special case of round_fused
+            if round_name == "round_fused":
+                print(f"  Removing {round_dir}")
+                shutil.rmtree(round_dir)
+                continue
+                
             try:
                 round_num = int(round_name.split("_")[1])
                 if round_num >= 2:
@@ -103,7 +103,13 @@ def clear_optimization_records(dataset: str, optimized_path: str = "workspace"):
         with open(results_path, 'w', encoding='utf-8') as f:
             f.write("")
     
-    # 4. Remove CSV files and clear log.json in round_1
+    # 4. Remove fusion metadata
+    fusion_metadata_path = os.path.join(workflows_path, "fusion_metadata.json")
+    if os.path.exists(fusion_metadata_path):
+        print(f"  Removing {fusion_metadata_path}")
+        os.remove(fusion_metadata_path)
+    
+    # 5. Remove CSV files and clear log.json in round_1
     round_1_path = os.path.join(workflows_path, "round_1")
     if os.path.exists(round_1_path):
         # Remove CSV files (score files like 0.45378_20250821_170128.csv)
@@ -122,7 +128,7 @@ def clear_optimization_records(dataset: str, optimized_path: str = "workspace"):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="AFlow Optimizer with Workflow Fusion")
+    parser = argparse.ArgumentParser(description="Enhanced AFlow Optimizer with Integrated Workflow Fusion")
     parser.add_argument(
         "--dataset",
         type=str,
@@ -165,17 +171,24 @@ def parse_args():
         default="gpt-4o-mini",
         help="Specifies the name of the model used for execution tasks.",
     )
+    # Fusion-specific parameters
     parser.add_argument(
         "--enable_fusion",
         type=lambda x: x.lower() == "true",
         default=True,
-        help="Whether to enable workflow fusion after optimization.",
+        help="Whether to enable workflow fusion during optimization.",
     )
     parser.add_argument(
         "--max_envelope_workflows",
         type=int,
         default=3,
         help="Maximum number of workflows in envelope set for fusion.",
+    )
+    parser.add_argument(
+        "--fusion_score_threshold",
+        type=float,
+        default=0.0,
+        help="Minimum score improvement required for fusion adoption.",
     )
     return parser.parse_args()
 
@@ -206,7 +219,7 @@ if __name__ == "__main__":
     if args.clear_previous_records and args.initial_round == 1:
         clear_optimization_records(config.dataset, args.optimized_path)
 
-    optimizer = Optimizer(
+    optimizer = EnhancedOptimizer(
         dataset=config.dataset,
         question_type=config.question_type,
         opt_llm_config=opt_llm_config,
@@ -218,48 +231,31 @@ if __name__ == "__main__":
         initial_round=args.initial_round,
         max_rounds=args.max_rounds,
         validation_rounds=args.validation_rounds,
+        enable_fusion=args.enable_fusion,
+        max_envelope_workflows=args.max_envelope_workflows,
+        fusion_score_threshold=args.fusion_score_threshold,
     )
 
     print("\n" + "="*50)
-    print("Phase 1: Standard Workflow Optimization")
+    print("Enhanced AFlow with Integrated Workflow Fusion")
+    print("="*50)
+    print(f"Dataset: {config.dataset}")
+    print(f"Fusion enabled: {args.enable_fusion}")
+    if args.enable_fusion:
+        print(f"Max envelope workflows: {args.max_envelope_workflows}")
+        print(f"Fusion score threshold: {args.fusion_score_threshold}")
     print("="*50)
     
-    # Phase 1: Standard optimization
-    # optimizer.optimize("Graph")
-
-    # Phase 2: Workflow Fusion (if enabled)
-    if args.enable_fusion:
-        print("\n" + "="*50)
-        print("Phase 2: Workflow Fusion")
-        print("="*50)
-        
-        fusion_processor = WorkflowFusion(
-            dataset=config.dataset,
-            question_type=config.question_type,
-            opt_llm_config=opt_llm_config,
-            exec_llm_config=exec_llm_config,
-            operators=config.operators,
-            optimized_path=args.optimized_path,
-            max_envelope_workflows=args.max_envelope_workflows,
-            validation_rounds=args.validation_rounds,
-        )
-        
-        # Execute fusion process
-        fusion_processor.execute_fusion()
+    # Run enhanced optimization with integrated fusion
+    optimizer.optimize("Graph")
 
     print("\n" + "="*50)
-    print("Phase 3: Testing Phase")
+    print("Testing Phase")
     print("="*50)
 
-    # Phase 3: Test original best workflow
-    print("Testing original best workflow...")
-    # optimizer.optimize("Test")
-    
-    # Phase 4: Test fused workflow (if fusion was performed)
-    if args.enable_fusion:
-        print("Testing fused workflow...")
-        fusion_processor.test_fused_workflow()
+    # Test the best workflow
+    optimizer.optimize("Test")
 
     print("\n" + "="*50)
-    print("Workflow optimization and fusion completed!")
+    print("Enhanced optimization with integrated fusion completed!")
     print("="*50)

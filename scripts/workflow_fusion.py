@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Date    : 8/28/2025 20:00 PM
-# @Author  : didi
-# @Desc    : Workflow Fusion Module for AFlow
-
 import asyncio
 import os
 import json

@@ -192,14 +192,15 @@ class DataUtils:
 
         return self.top_scores
 
-    def find_envelope_workflows(self, max_workflows: int = 3) -> list:
+    def find_envelope_workflows(self, max_workflows: int = 3, should_log: bool = False) -> list:
         """
         Find the minimum set of workflows (at most max_workflows) that solve the maximum number of problems
         using a greedy approach.
         
         Args:
             max_workflows: Maximum number of workflows in the envelope set
-            
+            should_log: Whether to log the selected envelope workflows
+
         Returns:
             List of workflow data with solved problems information
         """
@@ -279,8 +280,9 @@ class DataUtils:
             covered_problems.update(best_workflow["solved_problems"])
             available_workflows.pop(best_index)
         
-        logger.info(f"Found envelope workflows covering {len(covered_problems)} problems:")
-        for workflow in envelope_workflows:
-            logger.info(f"  Round {workflow['round']}: score={workflow['avg_score']:.4f}, problems={len(workflow['solved_problems'])}")
+        if should_log:
+            logger.info(f"Found envelope workflows covering {len(covered_problems)} problems:")
+            for workflow in envelope_workflows:
+                logger.info(f"  Round {workflow['round']}: score={workflow['avg_score']:.4f}, problems={len(workflow['solved_problems'])}")
         
         return envelope_workflows
