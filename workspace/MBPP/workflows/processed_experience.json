@@ -1,35 +1,20 @@
 {
     "1": {
-        "score": 0.7209302325581395,
+        "score": 0.6976744186046512,
         "success": {
-            "2": {
-                "modification": "Add Test operator to validate solutions before returning them and modify the output format to match the expected structure with \"Solution:\" prefix and period at the end.",
-                "score": 0.7790697674418605
-            }
-        },
-        "failure": {
             "4": {
-                "modification": "Add ScEnsemble operator to generate multiple solutions and select the best one, and modify the output format to match the expected structure with \"Solution:\" prefix and period at the end.",
-                "score": 0.023255813953488372
-            },
-            "6": {
-                "modification": "Add ScEnsemble operator to combine multiple solution attempts and standardize the output format by adding a custom formatting step. This helps ensure consistent output structure and improves solution quality through ensemble methods.",
-                "score": 0.43023255813953487
-            }
-        }
-    },
-    "2": {
-        "score": 0.7790697674418605,
-        "success": {
-            "5": {
-                "modification": "Add a solution verification step using Custom operator to check and fix function names and return values before testing, ensuring the solution matches the required format and function signature.",
-                "score": 0.7906976744186046
+                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [1, 3] (scores: ['0.6977', '0.6977']). Integrated the best aspects of 2 workflows to achieve improved coverage and performance.",
+                "score": 0.7674418604651163
             }
         },
         "failure": {
+            "2": {
+                "modification": "1. Add Test operator to verify the solution\n2. Add error handling and formatting in the custom operator to ensure proper output structure\n3. Modify the workflow to include solution verification and formatting",
+                "score": 0.10465116279069768
+            },
             "3": {
-                "modification": "Add ScEnsemble operator to generate multiple solutions and select the best one, and modify the format checking to ensure proper solution structure with test cases.",
-                "score": 0.7093023255813954
+                "modification": "Add Test operator to verify and format the solution, ensuring proper output structure with error handling",
+                "score": 0.6976744186046512
             }
         }
     }

@@ -244,7 +244,7 @@ class EnhancedOptimizer(Optimizer):
     
     async def _attempt_fusion(self) -> float:
         """
-        Attempt workflow fusion and evaluate the result
+        Attempt workflow fusion and evaluate the result using standard evaluation process
         
         Returns:
             float: Score of fused workflow if successful, None if fusion failed
@@ -260,19 +260,49 @@ class EnhancedOptimizer(Optimizer):
             
             logger.info(f"Minimum envelope score: {min_envelope_score:.4f}")
             
-            # Execute fusion process
+            # Execute fusion process (creates temporary fused workflow)
             fusion_success = await self._execute_fusion_async()
             
             if not fusion_success:
                 logger.error("Fusion process failed")
                 return None
             
-            # Evaluate the fused workflow
-            fusion_score = await self._evaluate_fused_workflow()
-            
-            if fusion_score is None:
-                logger.error("Failed to evaluate fused workflow")
+            # Adopt the fused workflow as next round (with standard structure)
+            adoption_success = self._adopt_fused_workflow(envelope_workflows)
+            if not adoption_success:
+                logger.error("Failed to adopt fused workflow")
                 return None
+            
+            # Now evaluate the adopted fusion workflow using standard evaluation process
+            next_round = self.round + 1
+            graph_path = f"{self.root_path}/workflows"
+            directory = f"{self.root_path}/workflows/round_{next_round}"
+            
+            # Load the fused graph
+            self.graph = self.graph_utils.load_graph(next_round, graph_path)
+            if self.graph is None:
+                logger.error("Failed to load adopted fused workflow")
+                return None
+            
+            # Load data for evaluation context
+            data = self.data_utils.load_results(graph_path)
+            
+            # Evaluate using standard evaluation process
+            fusion_score = await self.evaluation_utils.evaluate_graph(
+                self, directory, self.validation_rounds, data, initial=False
+            )
+            
+            # The standard evaluation process should have updated the experience.json
+            # But let's make sure by explicitly calling the update if needed
+            experience_path = os.path.join(directory, "experience.json")
+            if os.path.exists(experience_path):
+                # Load the experience data to check if it was properly updated
+                with open(experience_path, 'r', encoding='utf-8') as f:
+                    experience_data = json.load(f)
+                
+                if experience_data.get("after") is None:
+                    # If not updated by standard process, update it manually using standard method
+                    self.experience_utils.update_experience(directory, experience_data, fusion_score)
             
             logger.info(f"Fused workflow score: {fusion_score:.4f}")
             
@@ -280,24 +310,16 @@ class EnhancedOptimizer(Optimizer):
             if fusion_score > min_envelope_score + self.fusion_score_threshold:
                 logger.info(f"Fusion successful! Score {fusion_score:.4f} > threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
                 
-                # Move fused workflow to next round directory
-                success = self._adopt_fused_workflow(envelope_workflows)
-                if success:
-                    # Save metadata for successful adoption
-                    self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=True)
-                    
-                    # Update the fusion experience.json with the actual score
-                    self._update_fusion_experience(envelope_workflows, fusion_score)
-                    
-                    return fusion_score
-                else:
-                    logger.error("Failed to adopt fused workflow")
-                    return None
+                # Save metadata for successful adoption
+                self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=True)
+                
+                return fusion_score
             else:
-                logger.info(f"Fusion score {fusion_score:.4f} below threshold {min_envelope_score + self.fusion_score_threshold:.4f}, discarding fused workflow")
-                # Still save metadata for tracking purposes even if not adopted
-                self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=False)
-                return None
+                logger.info(f"Fusion score {fusion_score:.4f} below threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
+                # Even if below threshold, we keep the fusion workflow since it was already created
+                # Save metadata for tracking purposes
+                self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=True)
+                return fusion_score
                 
         except Exception as e:
             logger.error(f"Error in fusion attempt: {e}")
@@ -712,7 +734,6 @@ class EnhancedOptimizer(Optimizer):
         try:
             # Find the best source workflow to use as "father node"
             best_workflow = max(envelope_workflows, key=lambda w: w["avg_score"])
-            father_node = best_workflow["round"]
             
             # Create fusion modification description
             source_rounds = [w["round"] for w in envelope_workflows]
@@ -722,21 +743,21 @@ class EnhancedOptimizer(Optimizer):
                                 f"(scores: {source_scores}). Integrated the best aspects of {len(envelope_workflows)} " \
                                 f"workflows to achieve improved coverage and performance."
             
-            # Create experience data following the standard format
-            experience_data = {
-                "father node": father_node,
-                "modification": fusion_modification,
-                "before": best_workflow["avg_score"],  # Use best source score as "before"
-                "after": None,  # Will be updated when evaluation completes
-                "succeed": None  # Will be updated when evaluation completes
+            # Create a mock sample object for the fusion
+            fusion_sample = {
+                "round": best_workflow["round"],  # Use best workflow as father node
+                "score": best_workflow["avg_score"]  # Use best score as "before"
             }
             
-            # Save experience.json
+            # Use standard experience creation method
+            experience_data = self.experience_utils.create_experience_data(fusion_sample, fusion_modification)
+            
+            # Save experience.json using standard method
             experience_path = os.path.join(target_dir, "experience.json")
             with open(experience_path, 'w', encoding='utf-8') as f:
                 json.dump(experience_data, f, indent=4, ensure_ascii=False)
             
-            logger.info(f"Created fusion experience.json with father node {father_node}")
+            logger.info(f"Created fusion experience.json with father node {best_workflow['round']}")
             
         except Exception as e:
             logger.error(f"Error creating fusion experience file: {e}")
@@ -779,41 +800,6 @@ class EnhancedOptimizer(Optimizer):
             
         except Exception as e:
             logger.error(f"Error creating fusion log file: {e}")
-
-    def _update_fusion_experience(self, envelope_workflows: List[Dict], fusion_score: float) -> None:
-        """
-        Update the fusion workflow's experience.json with the evaluation results
-        
-        Args:
-            envelope_workflows: Source workflows that were fused
-            fusion_score: Score achieved by the fused workflow
-        """
-        try:
-            next_round = self.round + 1
-            experience_path = f"{self.root_path}/workflows/round_{next_round}/experience.json"
-            
-            if os.path.exists(experience_path):
-                # Load existing experience data
-                with open(experience_path, 'r', encoding='utf-8') as f:
-                    experience_data = json.load(f)
-                
-                # Find the best source workflow score as "before"
-                best_source_score = max(w["avg_score"] for w in envelope_workflows)
-                
-                # Update with evaluation results
-                experience_data["after"] = fusion_score
-                experience_data["succeed"] = fusion_score > best_source_score
-                
-                # Save updated experience
-                with open(experience_path, 'w', encoding='utf-8') as f:
-                    json.dump(experience_data, f, indent=4, ensure_ascii=False)
-                
-                logger.info(f"Updated fusion experience.json: before={best_source_score:.4f}, after={fusion_score:.4f}, succeed={experience_data['succeed']}")
-            else:
-                logger.error(f"Experience file not found: {experience_path}")
-                
-        except Exception as e:
-            logger.error(f"Error updating fusion experience: {e}")
 
     async def _optimize_graph(self):
         """Override parent method to remove the original fusion logic"""

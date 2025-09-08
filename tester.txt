@@ -605,3 +605,3007 @@ Find_Max_Length invalid syntax (<string>, line 2)
 subject_marks invalid syntax (<string>, line 2)
 test_error of Find_Max_Length
 is_majority invalid syntax (<string>, line 2)
+test_error of round_and_sum
+test_error of start_withp
+test_error of long_words
+test_error of sum_div
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of string_to_tuple
+test_error of angle_complex
+test_error of text_match_zero_one
+test_error of max_product_tuple
+test_error of k_smallest_pairs
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of is_polite
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of angle_complex
+test_error of max_product_tuple
+test_error of count_rotation
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of extract_freq
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of average_tuple
+test_error of is_undulating
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of count_rotation
+test_error of find_sum
+test_error of is_polite
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of find_sum
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of count_rotation
+test_error of eulerian_num
+test_error of is_polite
+test_error of find_sum
+test_error of harmonic_sum
+test_error of eulerian_num
+test_error of find_sum
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of string_to_tuple
+test_error of string_to_tuple
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of string_to_tuple
+long_words The 'words' parameter must be a list of strings.
+test_error of find_sum
+test_error of average_tuple
+test_error of start_withp
+test_error of string_to_tuple
+max_Abs_Diff Input must be a list.
+test_error of harmonic_sum
+test_error of max_product_tuple
+test_error of test_three_equal
+test_error of max_occurrences
+test_error of find_star_num
+long_words The 'words' parameter must be a list of strings.
+similar_elements Both inputs must be lists.
+test_error of start_withp
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of test_three_equal
+test_error of find_sum
+max_Abs_Diff Input must be a list.
+test_error of extract_freq
+test_error of max_occurrences
+long_words The 'words' parameter must be a list of strings.
+test_error of count_rotation
+similar_elements Both inputs must be lists.
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of jacobsthal_num
+max_Abs_Diff Input must be a list.
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of max_product_tuple
+test_error of extract_freq
+long_words The 'words' parameter must be a list of strings.
+test_error of max_occurrences
+test_error of count_rotation
+test_error of average_tuple
+test_error of find_star_num
+test_error of harmonic_sum
+max_Abs_Diff Input must be a list.
+test_error of surfacearea_cylinder
+test_error of test_three_equal
+test_error of find_sum
+test_error of max_occurrences
+test_error of max_product_tuple
+test_error of extract_freq
+test_error of average_tuple
+test_error of sum_div
+similar_elements Both inputs must be lists.
+test_error of test_three_equal
+test_error of extract_freq
+test_error of surfacearea_cylinder
+test_error of sum_div
+similar_elements Both inputs must be lists.
+test_error of sum_div
+test_error of sum_div
+test_error of rgb_to_hsv
+angle_complex Both a and b must be numbers (int or float).
+test_error of eulerian_num
+angle_complex Both a and b must be numbers (int or float).
+test_error of large_product
+test_error of is_polite
+angle_complex Both a and b must be numbers (int or float).
+test_error of eulerian_num
+test_error of is_polite
+angle_complex Both a and b must be numbers (int or float).
+test_error of is_polite
+test_error of eulerian_num
+test_error of is_polite
+test_error of eulerian_num
+max_Abs_Diff Input must be a list.
+test_error of sum_div
+test_error of harmonic_sum
+test_error of sum_div
+max_Abs_Diff Input must be a list.
+is_Diff unsupported operand type(s) for |: 'type' and 'type'
+test_error of string_to_tuple
+test_error of sum_div
+test_error of harmonic_sum
+max_Abs_Diff Input must be a list.
+test_error of string_to_tuple
+test_error of extract_freq
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of harmonic_sum
+test_error of is_undulating
+test_error of sum_div
+test_error of string_to_tuple
+max_Abs_Diff Input must be a list.
+test_error of Diff
+test_error of extract_freq
+test_error of find_sum
+test_error of string_to_tuple
+test_error of harmonic_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of is_undulating
+test_error of extract_freq
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of Diff
+test_error of is_undulating
+test_error of count_rotation
+test_error of extract_freq
+test_error of is_undulating
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of count_rotation
+test_error of Diff
+test_error of count_rotation
+test_error of Diff
+test_error of count_rotation
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+long_words Input must be a list of strings.
+test_error of start_withp
+test_error of find_star_num
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of start_withp
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of start_withp
+test_error of find_star_num
+test_error of surfacearea_cylinder
+test_error of start_withp
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of rgb_to_hsv
+test_error of average_tuple
+test_error of average_tuple
+test_error of average_tuple
+test_error of average_tuple
+max_Abs_Diff Input must be a list.
+test_error of Diff
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of start_withp
+is_Diff unsupported operand type(s) for |: 'type' and 'type'
+test_error of text_match_zero_one
+max_Abs_Diff Input must be a list.
+test_error of test_three_equal
+long_words Input must be a list or tuple of strings.
+test_error of Diff
+test_error of start_withp
+test_error of find_star_num
+test_error of harmonic_sum
+max_Abs_Diff Input must be a list.
+long_words Input must be a list or tuple of strings.
+test_error of Diff
+test_error of average_tuple
+angle_complex Both a and b must be numeric types (int or float).
+test_error of start_withp
+test_error of find_star_num
+test_error of harmonic_sum
+test_error of Diff
+long_words Input must be a list or tuple of strings.
+test_error of average_tuple
+angle_complex Both a and b must be numeric types (int or float).
+test_error of start_withp
+max_Abs_Diff Input must be a list.
+test_error of find_star_num
+angle_complex Both a and b must be numeric types (int or float).
+test_error of average_tuple
+test_error of harmonic_sum
+long_words Input must be a list or tuple of strings.
+test_error of average_tuple
+angle_complex Both a and b must be numeric types (int or float).
+test_error of string_to_tuple
+test_error of string_to_tuple
+test_error of eulerian_num
+test_error of string_to_tuple
+test_error of string_to_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of eulerian_num
+test_error of find_sum
+test_error of rgb_to_hsv
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of sum_div
+test_error of eulerian_num
+test_error of extract_freq
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of sum_div
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of sum_div
+test_error of surfacearea_cylinder
+test_error of extract_freq
+test_error of count_rotation
+test_error of sum_div
+test_error of extract_freq
+test_error of extract_freq
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+sequential_search invalid syntax (<string>, line 2)
+start_withp invalid syntax (<string>, line 2)
+remove_whitespaces invalid syntax (<string>, line 2)
+extract_freq invalid syntax (<string>, line 2)
+volume_cylinder invalid syntax (<string>, line 2)
+sum_digits invalid syntax (<string>, line 2)
+get_max_sum invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+round_and_sum invalid syntax (<string>, line 2)
+bell_number invalid syntax (<string>, line 2)
+test_error of extract_freq
+tuple_to_dict invalid syntax (<string>, line 2)
+test_error of start_withp
+pos_count invalid syntax (<string>, line 2)
+text_match_zero_one invalid syntax (<string>, line 2)
+large_product invalid syntax (<string>, line 2)
+volume_cube invalid syntax (<string>, line 2)
+last_Digit_Factorial invalid syntax (<string>, line 2)
+surfacearea_cylinder invalid syntax (<string>, line 2)
+hexagonal_num invalid syntax (<string>, line 2)
+Diff invalid syntax (<string>, line 2)
+test_error of extract_freq
+max_Abs_Diff Input must be a list.
+maximum invalid syntax (<string>, line 2)
+reverse_vowels invalid syntax (<string>, line 2)
+sum_list invalid syntax (<string>, line 2)
+long_words invalid syntax (<string>, line 2)
+test_error of start_withp
+test_error of harmonic_sum
+test_error of Diff
+Find_Max_Length invalid syntax (<string>, line 2)
+count_Substrings invalid syntax (<string>, line 2)
+test_error of extract_freq
+test_error of surfacearea_cylinder
+sum_div invalid syntax (<string>, line 2)
+_sum invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+average_tuple invalid syntax (<string>, line 2)
+second_smallest invalid syntax (<string>, line 2)
+find_Odd_Pair invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+test_error of Diff
+max_run_uppercase invalid syntax (<string>, line 2)
+check_answer invalid syntax (<string>, line 2)
+long_words words must be a list of strings
+find_sum invalid syntax (<string>, line 2)
+test_error of sum_div
+subject_marks invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of Diff
+test_error of average_tuple
+opposite_Signs invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+unique_product invalid syntax (<string>, line 2)
+freq_count invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+k_smallest_pairs invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of find_sum
+eulerian_num invalid syntax (<string>, line 2)
+long_words words must be a list of strings
+test_error of sum_div
+test_error of average_tuple
+test_three_equal invalid syntax (<string>, line 2)
+test_error of start_withp
+test_error of k_smallest_pairs
+test_error of sum_div
+left_insertion invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+test_error of find_sum
+test_error of average_tuple
+is_majority invalid syntax (<string>, line 2)
+long_words words must be a list of strings
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of test_three_equal
+is_undulating invalid syntax (<string>, line 2)
+angle_complex Both a and b must be numeric types (int or float).
+angle_complex Both a and b must be numeric types (int or float).
+max_occurrences invalid syntax (<string>, line 2)
+similar_elements invalid syntax (<string>, line 2)
+find_lucas invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+area_polygon invalid syntax (<string>, line 2)
+remove_nested invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+minimum invalid syntax (<string>, line 2)
+multiply_elements invalid syntax (<string>, line 2)
+sum_series invalid syntax (<string>, line 2)
+jacobsthal_num invalid syntax (<string>, line 2)
+string_to_tuple invalid syntax (<string>, line 2)
+empty_list invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+rear_extract invalid syntax (<string>, line 2)
+find_length invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+max_sum_list invalid syntax (<string>, line 2)
+multiply_int invalid syntax (<string>, line 2)
+count_X invalid syntax (<string>, line 2)
+is_polite invalid syntax (<string>, line 2)
+rgb_to_hsv invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+median_trapezium invalid syntax (<string>, line 2)
+max_subarray_product invalid syntax (<string>, line 2)
+extract_index_list invalid syntax (<string>, line 2)
+surfacearea_sphere invalid syntax (<string>, line 2)
+kth_element invalid syntax (<string>, line 2)
+find_star_num invalid syntax (<string>, line 2)
+magic_square_test invalid syntax (<string>, line 2)
+max_product_tuple invalid syntax (<string>, line 2)
+number_of_substrings invalid syntax (<string>, line 2)
+check_min_heap invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+find_Volume invalid syntax (<string>, line 2)
+find_Parity invalid syntax (<string>, line 2)
+test_error of rgb_to_hsv
+test_error of find_star_num
+count_rotation invalid syntax (<string>, line 2)
+find_Parity unsupported operand type(s) for |: 'type' and 'type'
+test_error of find_star_num
+divisible_by_digits invalid syntax (<string>, line 2)
+test_error of rgb_to_hsv
+test_error of find_star_num
+test_error of count_rotation
+validate invalid syntax (<string>, line 2)
+test_error of count_rotation
+left_rotate invalid syntax (<string>, line 2)
+test_error of count_rotation
+dif_Square invalid syntax (<string>, line 2)
+is_Diff invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+test_error of find_star_num
+max_Abs_Diff Input must be a list.
+test_error of string_to_tuple
+test_error of harmonic_sum
+test_error of string_to_tuple
+test_error of find_star_num
+max_Abs_Diff Input must be a list.
+test_error of sum_div
+test_error of Diff
+test_error of harmonic_sum
+test_error of string_to_tuple
+test_error of find_star_num
+test_error of sum_div
+max_Abs_Diff Input must be a list.
+test_error of rgb_to_hsv
+test_error of is_polite
+test_error of string_to_tuple
+test_error of sum_div
+test_error of Diff
+test_error of find_star_num
+test_error of harmonic_sum
+max_Abs_Diff Input must be a list.
+test_error of is_polite
+test_error of dif_Square
+test_error of rgb_to_hsv
+test_error of Diff
+angle_complex Inputs must be numeric (int or float)
+test_error of sum_div
+test_error of Diff
+angle_complex Inputs must be numeric (int or float)
+angle_complex Inputs must be numeric (int or float)
+test_error of is_polite
+test_error of is_polite
+angle_complex Inputs must be numeric (int or float)
+volume_cube 'int' object has no attribute 'is_integer'
+test_error of minimum
+test_error of find_sum
+long_words Input must be a list or tuple of strings.
+test_error of find_sum
+test_error of average_tuple
+test_error of extract_freq
+test_error of find_sum
+long_words Input must be a list or tuple of strings.
+test_error of average_tuple
+long_words Input must be a list or tuple of strings.
+test_error of extract_freq
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of extract_freq
+long_words Input must be a list or tuple of strings.
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of extract_freq
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of start_withp
+test_error of start_withp
+test_error of start_withp
+test_error of start_withp
+is_Diff unsupported operand type(s) for |: 'type' and 'type'
+text_match_zero_one invalid syntax (<string>, line 2)
+sum_digits invalid syntax (<string>, line 2)
+is_Diff invalid syntax (<string>, line 2)
+opposite_Signs invalid syntax (<string>, line 2)
+multiply_int invalid syntax (<string>, line 2)
+check_answer invalid syntax (<string>, line 2)
+number_of_substrings invalid syntax (<string>, line 2)
+find_Parity invalid syntax (<string>, line 2)
+find_lucas invalid syntax (<string>, line 2)
+is_Diff unsupported operand type(s) for |: 'type' and 'type'
+long_words invalid syntax (<string>, line 2)
+pos_count invalid syntax (<string>, line 2)
+sum_div invalid syntax (<string>, line 2)
+similar_elements invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+bell_number invalid syntax (<string>, line 2)
+left_insertion invalid syntax (<string>, line 2)
+reverse_vowels invalid syntax (<string>, line 2)
+unique_product invalid syntax (<string>, line 2)
+surfacearea_cylinder invalid syntax (<string>, line 2)
+volume_cube invalid syntax (<string>, line 2)
+freq_count invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+test_error of sum_div
+long_words words must be a list of strings
+remove_whitespaces invalid syntax (<string>, line 2)
+test_three_equal invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+Find_Max_Length invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+max_Abs_Diff Input must be a list.
+is_undulating invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of test_three_equal
+test_error of sum_div
+test_error of harmonic_sum
+second_smallest invalid syntax (<string>, line 2)
+extract_freq invalid syntax (<string>, line 2)
+large_product invalid syntax (<string>, line 2)
+dif_Square invalid syntax (<string>, line 2)
+last_Digit_Factorial invalid syntax (<string>, line 2)
+hexagonal_num invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+test_error of surfacearea_cylinder
+find_length invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+_sum invalid syntax (<string>, line 2)
+volume_cylinder invalid syntax (<string>, line 2)
+test_error of extract_freq
+jacobsthal_num invalid syntax (<string>, line 2)
+extract_index_list invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+is_majority invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+start_withp invalid syntax (<string>, line 2)
+test_error of sum_div
+max_product_tuple invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+get_max_sum invalid syntax (<string>, line 2)
+angle_complex Both a and b must be numeric types (int or float).
+area_polygon invalid syntax (<string>, line 2)
+max_occurrences invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+test_error of extract_freq
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+start_withp Invalid word found: Python PHP
+tuple_to_dict invalid syntax (<string>, line 2)
+angle_complex Both a and b must be numeric types (int or float).
+find_Odd_Pair invalid syntax (<string>, line 2)
+test_error of extract_freq
+Diff invalid syntax (<string>, line 2)
+angle_complex Both a and b must be numeric types (int or float).
+count_rotation invalid syntax (<string>, line 2)
+string_to_tuple invalid syntax (<string>, line 2)
+test_error of count_rotation
+test_error of start_withp
+test_error of Diff
+test_error of string_to_tuple
+empty_list invalid syntax (<string>, line 2)
+test_error of count_rotation
+test_error of Diff
+test_error of string_to_tuple
+test_error of start_withp
+test_error of string_to_tuple
+maximum invalid syntax (<string>, line 2)
+eulerian_num invalid syntax (<string>, line 2)
+test_error of Diff
+test_error of count_rotation
+test_error of eulerian_num
+validate invalid syntax (<string>, line 2)
+count_Substrings invalid syntax (<string>, line 2)
+check_min_heap invalid syntax (<string>, line 2)
+round_and_sum invalid syntax (<string>, line 2)
+sequential_search invalid syntax (<string>, line 2)
+max_run_uppercase invalid syntax (<string>, line 2)
+test_error of eulerian_num
+count_X invalid syntax (<string>, line 2)
+remove_nested invalid syntax (<string>, line 2)
+left_rotate invalid syntax (<string>, line 2)
+surfacearea_sphere invalid syntax (<string>, line 2)
+test_error of eulerian_num
+find_sum invalid syntax (<string>, line 2)
+subject_marks invalid syntax (<string>, line 2)
+divisible_by_digits invalid syntax (<string>, line 2)
+max_subarray_product invalid syntax (<string>, line 2)
+sum_list invalid syntax (<string>, line 2)
+multiply_elements invalid syntax (<string>, line 2)
+test_error of find_sum
+median_trapezium invalid syntax (<string>, line 2)
+max_sum_list invalid syntax (<string>, line 2)
+is_polite invalid syntax (<string>, line 2)
+test_error of find_sum
+sum_series invalid syntax (<string>, line 2)
+k_smallest_pairs invalid syntax (<string>, line 2)
+average_tuple invalid syntax (<string>, line 2)
+test_error of find_sum
+find_star_num invalid syntax (<string>, line 2)
+test_error of average_tuple
+test_error of is_polite
+find_Volume invalid syntax (<string>, line 2)
+rear_extract invalid syntax (<string>, line 2)
+test_error of find_star_num
+kth_element invalid syntax (<string>, line 2)
+test_error of average_tuple
+test_error of is_polite
+magic_square_test invalid syntax (<string>, line 2)
+test_error of find_star_num
+test_error of is_polite
+test_error of average_tuple
+test_error of find_star_num
+minimum invalid syntax (<string>, line 2)
+rgb_to_hsv invalid syntax (<string>, line 2)
+test_error of rgb_to_hsv
+test_error of rgb_to_hsv
+test_error of rgb_to_hsv
+test_error of harmonic_sum
+test_error of harmonic_sum
+test_error of harmonic_sum
+test_error of round_and_sum
+test_error of harmonic_sum
+test_error of extract_freq
+test_error of text_match_zero_one
+test_error of is_undulating
+test_error of find_star_num
+test_error of find_star_num
+test_error of long_words
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of eulerian_num
+test_error of start_withp
+similar_elements Both arguments must be lists.
+test_error of find_sum
+test_error of k_smallest_pairs
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of eulerian_num
+test_error of find_sum
+test_error of eulerian_num
+test_error of is_polite
+test_error of eulerian_num
+test_error of is_polite
+test_error of is_polite
+test_error of is_polite
+test_error of sum_div
+test_error of max_product_tuple
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of Find_Max_Length
+test_error of count_rotation
+test_error of average_tuple
+test_error of string_to_tuple
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of average_tuple
+test_error of count_rotation
+test_error of average_tuple
+test_error of angle_complex
+test_error of average_tuple
+test_error of string_to_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of string_to_tuple
+test_error of angle_complex
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+volume_cube invalid syntax (<string>, line 2)
+last_Digit_Factorial invalid syntax (<string>, line 2)
+empty_list invalid syntax (<string>, line 2)
+is_Diff invalid syntax (<string>, line 2)
+sum_digits invalid syntax (<string>, line 2)
+check_answer invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+sum_series invalid syntax (<string>, line 2)
+find_length invalid syntax (<string>, line 2)
+max_occurrences invalid syntax (<string>, line 2)
+volume_cylinder invalid syntax (<string>, line 2)
+find_sum invalid syntax (<string>, line 2)
+is_Diff unsupported operand type(s) for |: 'type' and 'type'
+max_subarray_product invalid syntax (<string>, line 2)
+long_words invalid syntax (<string>, line 2)
+string_to_tuple invalid syntax (<string>, line 2)
+median_trapezium invalid syntax (<string>, line 2)
+left_insertion invalid syntax (<string>, line 2)
+round_and_sum invalid syntax (<string>, line 2)
+area_polygon invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+jacobsthal_num invalid syntax (<string>, line 2)
+second_smallest invalid syntax (<string>, line 2)
+divisible_by_digits invalid syntax (<string>, line 2)
+extract_index_list invalid syntax (<string>, line 2)
+minimum invalid syntax (<string>, line 2)
+is_undulating invalid syntax (<string>, line 2)
+test_error of find_sum
+similar_elements invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+long_words words must be a list
+count_Substrings invalid syntax (<string>, line 2)
+rear_extract invalid syntax (<string>, line 2)
+remove_nested invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+test_error of find_sum
+sum_list invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+average_tuple invalid syntax (<string>, line 2)
+eulerian_num invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of string_to_tuple
+count_X invalid syntax (<string>, line 2)
+subject_marks invalid syntax (<string>, line 2)
+test_error of find_sum
+sequential_search invalid syntax (<string>, line 2)
+left_rotate invalid syntax (<string>, line 2)
+large_product invalid syntax (<string>, line 2)
+test_error of average_tuple
+test_error of average_tuple
+count_rotation invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of eulerian_num
+number_of_substrings invalid syntax (<string>, line 2)
+multiply_int invalid syntax (<string>, line 2)
+test_error of average_tuple
+k_smallest_pairs invalid syntax (<string>, line 2)
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+remove_whitespaces invalid syntax (<string>, line 2)
+test_error of eulerian_num
+max_run_uppercase invalid syntax (<string>, line 2)
+surfacearea_cylinder invalid syntax (<string>, line 2)
+check_min_heap invalid syntax (<string>, line 2)
+max_product_tuple invalid syntax (<string>, line 2)
+extract_freq invalid syntax (<string>, line 2)
+surfacearea_sphere invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+validate invalid syntax (<string>, line 2)
+test_error of count_rotation
+max_sum_list invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+find_Parity invalid syntax (<string>, line 2)
+test_error of extract_freq
+test_error of count_rotation
+test_three_equal invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+freq_count invalid syntax (<string>, line 2)
+test_error of extract_freq
+find_Parity unsupported operand type(s) for |: 'type' and 'type'
+is_majority invalid syntax (<string>, line 2)
+magic_square_test invalid syntax (<string>, line 2)
+Find_Max_Length invalid syntax (<string>, line 2)
+get_max_sum invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+find_Volume invalid syntax (<string>, line 2)
+test_error of extract_freq
+angle_complex Both inputs must be numeric (int or float)
+find_star_num invalid syntax (<string>, line 2)
+multiply_elements invalid syntax (<string>, line 2)
+start_withp invalid syntax (<string>, line 2)
+unique_product invalid syntax (<string>, line 2)
+angle_complex Both inputs must be numeric (int or float)
+pos_count invalid syntax (<string>, line 2)
+reverse_vowels invalid syntax (<string>, line 2)
+test_error of find_star_num
+text_match_zero_one invalid syntax (<string>, line 2)
+dif_Square invalid syntax (<string>, line 2)
+test_error of count_rotation
+angle_complex Both inputs must be numeric (int or float)
+sum_div invalid syntax (<string>, line 2)
+find_Odd_Pair invalid syntax (<string>, line 2)
+maximum invalid syntax (<string>, line 2)
+kth_element invalid syntax (<string>, line 2)
+tuple_to_dict invalid syntax (<string>, line 2)
+_sum invalid syntax (<string>, line 2)
+opposite_Signs invalid syntax (<string>, line 2)
+hexagonal_num invalid syntax (<string>, line 2)
+_sum 'int' object has no attribute 'is_integer'
+rgb_to_hsv invalid syntax (<string>, line 2)
+test_error of find_star_num
+is_polite invalid syntax (<string>, line 2)
+find_lucas invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+test_error of sum_div
+test_error of find_star_num
+test_error of is_polite
+test_error of rgb_to_hsv
+test_error of is_polite
+bell_number invalid syntax (<string>, line 2)
+test_error of sum_div
+test_error of is_polite
+test_error of sum_div
+Diff invalid syntax (<string>, line 2)
+test_error of otherside_rightangle
+test_error of combinations_list
+comb_sort local variable 'sorted' referenced before assignment
+test_error of combinations_list
+test_error of combinations_list
+common_in_nested_lists All elements of the outer list must be lists.
+test_error of even_bit_set_number
+test_error of combinations_list
+test_error of re_arrange_array
+test_error of comb_sort
+test_error of re_arrange_array
+common_in_nested_lists All elements of the outer list must be lists.
+test_error of comb_sort
+test_error of re_arrange_array
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of even_bit_set_number
+test_error of re_arrange_array
+test_error of comb_sort
+test_error of even_bit_set_number
+test_error of even_bit_set_number
+test_error of find_combinations
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of check_char
+common_in_nested_lists All elements of the outer list must be lists.
+test_error of find_combinations
+common_in_nested_lists All elements of the outer list must be lists.
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of count_element_in_list
+test_error of count_vowels
+test_error of find_combinations
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of count_vowels
+test_error of find_combinations
+test_error of remove_kth_element
+count_first_elements Elements in the tuple must be comparable.
+test_error of count_vowels
+test_error of remove_kth_element
+test_error of group_tuples
+test_error of count_vowels
+count_first_elements Elements in the tuple must be comparable.
+find_substring find_substring() missing 1 required positional argument: 'string_list'
+test_error of remove_kth_element
+test_error of group_tuples
+test_error of count_first_elements
+min_Jumps Both steps and d must be integers.
+test_error of max_length
+find_substring sub_str must be a string.
+test_error of count_first_elements
+test_error of group_tuples
+test_error of remove_kth_element
+min_Jumps Both steps and d must be integers.
+test_error of max_length
+find_substring sub_str must be a string.
+test_error of area_tetrahedron
+min_Jumps Both steps and d must be integers.
+test_error of group_tuples
+test_error of area_tetrahedron
+find_substring sub_str must be a string.
+test_error of union_elements
+test_error of max_length
+min_Jumps Both steps and d must be integers.
+test_error of area_tetrahedron
+test_error of area_tetrahedron
+test_error of max_length
+find_Element ranges must be a tuple of two integers.
+test_error of filter_oddnumbers
+find_Element ranges must be a tuple of two integers.
+test_error of max_aggregate
+test_error of parabola_directrix
+find_Element ranges must be a tuple of two integers.
+test_error of loss_amount
+last_Digit unsupported operand type(s) for |: 'type' and 'type'
+test_error of set_left_most_unset_bit
+last_Digit name 'last_Digit' is not defined
+test_error of parabola_directrix
+test_error of loss_amount
+test_error of tuple_intersection
+last_Digit name 'last_Digit' is not defined
+test_error of set_left_most_unset_bit
+last_Digit name 'last_Digit' is not defined
+test_error of loss_amount
+test_error of parabola_directrix
+test_error of tuple_intersection
+find_First_Missing All elements in the list must be natural numbers (positive integers).
+find_Element ranges must be a tuple of two integers.
+test_error of loss_amount
+test_error of parabola_directrix
+find_First_Missing All elements in the list must be natural numbers (positive integers).
+find_char_long Input must be a string.
+test_error of get_coordinates
+test_error of tuple_intersection
+find_char_long Input must be a string.
+test_error of set_left_most_unset_bit
+find_First_Missing All elements in the list must be natural numbers (positive integers).
+test_error of list_split
+test_error of tuple_intersection
+test_error of find_Max_Num
+find_char_long Input must be a string.
+test_error of get_coordinates
+find_First_Missing All elements in the list must be natural numbers (positive integers).
+test_error of surface_Area
+test_error of set_left_most_unset_bit
+find_char_long Input must be a string.
+my_dict Input must be a dictionary
+test_error of get_ludic
+test_error of get_coordinates
+my_dict Input must be a dictionary
+test_error of get_ludic
+my_dict Input must be a dictionary
+my_dict Input must be a dictionary, not None
+test_error of get_coordinates
+test_error of get_ludic
+test_error of find_Max_Num
+test_error of get_ludic
+test_error of surface_Area
+test_error of find_Max_Num
+test_error of positive_count
+test_error of surface_Area
+test_error of find_Max_Num
+two_unique_nums Each element of the input must be a list.
+test_error of positive_count
+test_error of surface_Area
+test_error of two_unique_nums
+test_error of positive_count
+convert Input must be a complex number or a list/tuple of complex numbers.
+filter_data w must be a positive float
+test_error of positive_count
+test_error of filter_data
+convert Input must be a complex number or a list/tuple of complex numbers.
+test_error of wind_chill
+test_error of wind_chill
+test_error of find_adverbs
+test_error of two_unique_nums
+test_error of wind_chill
+convert Input must be a complex number or a list/tuple of complex numbers.
+test_error of polar_rect
+test_error of count_Occurrence
+test_error of two_unique_nums
+test_error of convert_list_dictionary
+test_error of count_Occurrence
+test_error of polar_rect
+test_error of max_length_list
+test_error of lateralsurface_cone
+convert Input must be a complex number or a list/tuple of complex numbers.
+index_multiplication All elements in the tuples must be numeric (int or float).
+test_error of count_Occurrence
+test_error of polar_rect
+test_error of count_Occurrence
+index_multiplication All elements in the tuples must be numeric (int or float).
+test_error of polar_rect
+test_error of get_total_number_of_sequences
+index_multiplication All elements in the tuples must be numeric (int or float).
+index_multiplication All elements in the tuples must be numeric (int or float).
+test_error of get_total_number_of_sequences
+maximize_elements All elements must be numeric (int or float).
+test_error of check_occurences
+test_error of get_total_number_of_sequences
+test_error of occurance_substring
+test_error of check_occurences
+test_error of get_total_number_of_sequences
+test_error of occurance_substring
+maximize_elements All elements must be numeric (int or float).
+test_error of check_occurences
+test_error of occurance_substring
+test_error of trim_tuple
+maximize_elements All elements must be numeric (int or float).
+test_error of occurance_substring
+test_error of trim_tuple
+test_error of check_occurences
+test_error of trim_tuple
+test_error of geometric_sum
+test_error of get_Char
+maximize_elements All elements must be numeric (int or float).
+test_error of get_Char
+test_error of trim_tuple
+test_error of geometric_sum
+test_error of lcs_of_three
+test_error of get_Char
+test_error of upper_ctr
+test_error of geometric_sum
+test_error of get_Char
+list_to_float Each element of the input must be a list.
+remove_parenthesis Input must be a string.
+test_error of largest_neg
+test_error of geometric_sum
+test_error of find_adverb_position
+remove_parenthesis Input must be a string.
+test_error of lcs_of_three
+test_error of find_Index
+list_to_float Each element of the input must be a list.
+test_error of largest_neg
+test_error of upper_ctr
+test_error of and_tuples
+remove_parenthesis Input must be a string.
+test_error of find_Index
+test_error of find_adverb_position
+test_error of upper_ctr
+remove_parenthesis Input must be a string.
+list_to_float Each element of the input must be a list or None.
+test_error of largest_neg
+extract_singly Each element of the input must be a list.
+test_error of max_product
+test_error of find_adverb_position
+Find_Min unhashable type: 'list'
+test_error of lcs_of_three
+test_error of max_product
+colon_tuplex Indices are out of bounds.
+test_error of upper_ctr
+test_error of list_to_float
+test_error of find_adverb_position
+test_error of Find_Min
+test_error of max_product
+extract_singly Each element of the input must be a list.
+test_error of sort_numeric_strings
+test_error of max_product
+test_error of lcs_of_three
+colon_tuplex Indices are out of bounds.
+test_error of sort_numeric_strings
+colon_tuplex Indices are out of bounds.
+test_error of sort_numeric_strings
+extract_singly Each element of the input must be a list.
+test_error of sort_numeric_strings
+colon_tuplex Indices are out of bounds.
+test_error of sum_of_digits
+extract_singly Each element of the input must be a list.
+test_error of sum_of_digits
+test_error of sum_of_digits
+multiply_num Input must be a list.
+concatenate_tuple concatenate_tuple() missing 1 required positional argument: 'delimiter'
+test_error of max_sum_increasing_subseq
+multiply_num Input must be a list.
+test_error of sum_of_digits
+test_error of concatenate_tuple
+multiply_num Input must be a list.
+multiply_num Input must be a list.
+test_error of cal_sum
+triangle_area Radius must be a positive number.
+test_error of text_match_wordz
+test_error of find_solution
+triangle_area Radius must be a positive number.
+test_error of cal_sum
+test_error of find_solution
+triangle_area Radius must be a positive number.
+test_error of cal_sum
+test_error of find_solution
+triangle_area Radius must be a positive number.
+test_error of cal_sum
+count sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+test_error of find_solution
+count sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+max_Product unsupported operand type(s) for |: 'types.GenericAlias' and 'NoneType'
+count sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+test_error of max_Product
+count sum() missing 1 required positional argument: 'b'
+test_error of count_Pairs
+zero_count sum() missing 1 required positional argument: 'b'
+test_error of max_Product
+test_error of max_Product
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of sort_counter
+test_error of wind_chill
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of newman_prime
+test_error of check_value
+check_value check_value() takes 1 positional argument but 2 were given
+test_error of newman_prime
+check_value check_value() takes 1 positional argument but 2 were given
+test_error of tup_string
+check_value check_value() takes 1 positional argument but 2 were given
+test_error of newman_prime
+test_error of newman_prime
+test_error of find_sum
+test_error of string_to_tuple
+test_error of text_match_zero_one
+test_error of sum_div
+test_error of extract_freq
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of k_smallest_pairs
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of angle_complex
+test_error of start_withp
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of start_withp
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of surfacearea_cylinder
+test_error of eulerian_num
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of angle_complex
+test_error of max_product_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of harmonic_sum
+test_error of round_and_sum
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of find_star_num
+test_error of average_tuple
+test_error of count_rotation
+test_error of harmonic_sum
+test_error of long_words
+test_error of find_star_num
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of count_rotation
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of find_star_num
+test_error of is_polite
+test_error of is_polite
+test_error of eulerian_num
+test_error of is_polite
+test_error of eulerian_num
+test_error of is_polite
+test_error of sum_div
+test_error of average_tuple
+test_error of string_to_tuple
+test_error of average_tuple
+test_error of round_and_sum
+test_error of angle_complex
+test_error of string_to_tuple
+test_error of text_match_zero_one
+test_error of find_star_num
+test_error of average_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of max_product_tuple
+test_error of Find_Max_Length
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of find_star_num
+test_error of angle_complex
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of max_product_tuple
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of max_product_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of is_undulating
+test_error of count_rotation
+test_error of long_words
+test_error of count_rotation
+test_error of harmonic_sum
+test_error of extract_freq
+test_error of eulerian_num
+test_error of find_sum
+test_error of start_withp
+test_error of harmonic_sum
+test_error of k_smallest_pairs
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of find_sum
+test_error of harmonic_sum
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of surfacearea_cylinder
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of is_polite
+test_error of string_to_tuple
+test_error of average_tuple
+test_error of long_words
+test_error of average_tuple
+test_error of find_star_num
+test_error of round_and_sum
+test_error of sum_div
+test_error of angle_complex
+test_error of find_sum
+test_error of find_star_num
+test_error of average_tuple
+test_error of harmonic_sum
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of find_sum
+test_error of average_tuple
+test_error of find_star_num
+test_error of count_rotation
+test_error of divisible_by_digits
+test_error of harmonic_sum
+test_error of angle_complex
+test_error of find_sum
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of divisible_by_digits
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of find_sum
+test_error of is_polite
+test_error of divisible_by_digits
+test_error of is_polite
+test_error of count_rotation
+test_error of eulerian_num
+test_error of divisible_by_digits
+test_error of count_rotation
+test_error of is_polite
+test_error of text_match_zero_one
+test_error of start_withp
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of jacobsthal_num
+similar_elements Both arguments must be lists.
+test_error of surfacearea_cylinder
+test_error of extract_freq
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of max_product_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+test_error of k_smallest_pairs
+test_error of is_undulating
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of jacobsthal_num
+test_error of max_product_tuple
+test_error of Diff
+test_error of angle_complex
+test_error of extract_freq
+test_error of surfacearea_cylinder
+test_error of start_withp
+test_error of Diff
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of surfacearea_cylinder
+test_error of Diff
+test_error of angle_complex
+test_error of average_tuple
+test_error of Diff
+test_error of surfacearea_cylinder
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of average_tuple
+test_error of sum_div
+test_error of test_three_equal
+test_error of surfacearea_cylinder
+test_error of sum_div
+test_error of average_tuple
+test_error of sum_div
+test_error of average_tuple
+test_error of string_to_tuple
+test_error of harmonic_sum
+test_error of find_sum
+test_error of harmonic_sum
+test_error of find_sum
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of harmonic_sum
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of rgb_to_hsv
+test_error of k_smallest_pairs
+test_error of even_bit_set_number
+test_error of get_coordinates
+min_Jumps '<=' not supported between instances of 'tuple' and 'int'
+test_error of area_tetrahedron
+test_error of get_coordinates
+test_error of even_bit_set_number
+common_in_nested_lists 'int' object is not iterable
+min_Jumps Step length must be a positive number.
+test_error of even_bit_set_number
+test_error of common_in_nested_lists
+test_error of sum_range_list
+test_error of find_First_Missing
+test_error of area_tetrahedron
+test_error of get_coordinates
+min_Jumps Step length must be a positive number.
+test_error of even_bit_set_number
+test_error of find_First_Missing
+test_error of area_tetrahedron
+test_error of common_in_nested_lists
+check_K argument of type 'int' is not iterable
+test_error of area_tetrahedron
+test_error of common_in_nested_lists
+min_Jumps Step length must be a positive number.
+test_error of check_K
+test_error of positive_count
+test_error of get_coordinates
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+test_error of list_split
+test_error of combinations_list
+test_error of positive_count
+test_error of comb_sort
+test_error of combinations_list
+test_error of group_tuples
+test_error of combinations_list
+find_char_long expected string or bytes-like object
+test_error of positive_count
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+test_error of comb_sort
+find_char_long Input must be a string
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+test_error of positive_count
+test_error of group_tuples
+test_error of combinations_list
+find_char_long Input must be a string
+test_error of comb_sort
+test_error of sort_counter
+test_error of group_tuples
+find_char_long Input must be a string
+test_error of comb_sort
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+test_error of count_element_in_list
+test_error of find_Element
+test_error of filter_data
+convert 'int' object is not iterable
+test_error of first_Digit
+test_error of add_pairwise
+test_error of group_tuples
+convert Input must be a list or tuple of complex numbers.
+test_error of max_Product
+test_error of extract_rear
+convert Input must be a list or tuple of complex numbers.
+test_error of tup_string
+test_error of find_Element
+test_error of check_value
+test_error of set_left_most_unset_bit
+test_error of and_tuples
+test_error of sum_of_digits
+test_error of max_Product
+test_error of new_tuple
+test_error of check_value
+Find_Min Find_Min() missing 1 required positional argument: 'target'
+test_error of two_unique_nums
+test_error of set_left_most_unset_bit
+convert Input must be a list or tuple of complex numbers.
+test_error of and_tuples
+test_error of sum_of_digits
+test_error of loss_amount
+test_error of set_left_most_unset_bit
+Find_Min Find_Min() missing 1 required positional argument: 'target'
+test_error of loss_amount
+test_error of find_Element
+test_error of loss_amount
+Find_Min Find_Min() missing 1 required positional argument: 'target'
+test_error of loss_amount
+test_error of and_tuples
+test_error of cal_sum
+test_error of find_Element
+Find_Min Find_Min() missing 1 required positional argument: 'target'
+test_error of re_arrange_array
+test_error of set_left_most_unset_bit
+test_error of and_tuples
+find_Average_Of_Cube sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+test_error of surface_Area
+test_error of re_arrange_array
+find_Average_Of_Cube sum() missing 1 required positional argument: 'b'
+cal_sum sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+test_error of surface_Area
+concatenate_tuple concatenate_tuple() missing 1 required positional argument: 'delimiter'
+find_Average_Of_Cube sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+test_error of remove_kth_element
+test_error of re_arrange_array
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+concatenate_tuple concatenate_tuple() missing 1 required positional argument: 'delimiter'
+cal_sum sum() missing 1 required positional argument: 'b'
+test_error of surface_Area
+test_error of find_adverb_position
+count sum() missing 1 required positional argument: 'b'
+concatenate_tuple concatenate_tuple() missing 1 required positional argument: 'delimiter'
+test_error of remove_kth_element
+find_Average_Of_Cube sum() missing 1 required positional argument: 'b'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of find_adverb_position
+test_error of max_sum_increasing_subseq
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+test_error of surface_Area
+cal_sum sum() missing 1 required positional argument: 'b'
+concatenate_tuple concatenate_tuple() missing 1 required positional argument: 'delimiter'
+test_error of re_arrange_array
+test_error of remove_kth_element
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of find_adverb_position
+test_error of max_sum_increasing_subseq
+test_error of remove_kth_element
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+count_first_elements count_first_elements() missing 1 required positional argument: 'element'
+test_error of find_adverb_position
+test_error of max_sum_increasing_subseq
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+test_error of tuple_size
+count_first_elements count_first_elements() missing 1 required positional argument: 'element'
+test_error of max_sum_increasing_subseq
+test_error of occurance_substring
+tuple_size sum() missing 1 required positional argument: 'b'
+test_error of newman_prime
+count_first_elements count_first_elements() missing 1 required positional argument: 'element'
+tuple_size sum() missing 1 required positional argument: 'b'
+test_error of occurance_substring
+test_error of colon_tuplex
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+tuple_size sum() missing 1 required positional argument: 'b'
+count_first_elements count_first_elements() missing 1 required positional argument: 'element'
+test_error of occurance_substring
+test_error of find_solution
+test_error of colon_tuplex
+test_error of count_Occurrence
+test_error of sort_numeric_strings
+test_error of newman_prime
+test_error of maximize_elements
+test_error of occurance_substring
+test_error of find_solution
+count_Occurrence sum() missing 1 required positional argument: 'b'
+test_error of sort_numeric_strings
+sample_nam sum() missing 1 required positional argument: 'b'
+test_error of colon_tuplex
+count_Occurrence sum() missing 1 required positional argument: 'b'
+test_error of sort_numeric_strings
+test_error of max_length_list
+test_error of sort_numeric_strings
+count_Occurrence sum() missing 1 required positional argument: 'b'
+sample_nam sum() missing 1 required positional argument: 'b'
+test_error of polar_rect
+test_error of colon_tuplex
+test_error of geometric_sum
+test_error of find_solution
+sample_nam sum() missing 1 required positional argument: 'b'
+test_error of polar_rect
+test_error of trim_tuple
+test_error of newman_prime
+test_error of geometric_sum
+sample_nam sum() missing 1 required positional argument: 'b'
+test_error of check_occurences
+test_error of polar_rect
+test_error of triangle_area
+test_error of geometric_sum
+test_error of trim_tuple
+test_error of polar_rect
+test_error of count_Pairs
+test_error of check_occurences
+test_error of geometric_sum
+test_error of trim_tuple
+test_error of count_Pairs
+test_error of check_occurences
+test_error of find_solution
+test_error of trim_tuple
+remove_parenthesis expected string or bytes-like object
+test_error of find_adverbs
+test_error of max_aggregate
+test_error of check_occurences
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of count_Pairs
+remove_parenthesis Input must be a string
+remove_parenthesis Input must be a string
+test_error of is_samepatterns
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+remove_parenthesis Input must be a string
+test_error of find_Max_Num
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of convert_list_dictionary
+test_error of next_Perfect_Square
+test_error of largest_neg
+test_error of find_Max_Num
+test_error of find_Index
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of newman_prime
+test_error of find_Max_Num
+test_error of max_product
+test_error of find_Index
+test_error of get_Char
+test_error of find_Max_Num
+extract_singly 'int' object is not iterable
+test_error of list_to_float
+test_error of find_Index
+test_error of intersection_array
+test_error of count_vowels
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+armstrong_number sum() missing 1 required positional argument: 'b'
+test_error of get_Char
+test_error of extract_singly
+test_error of wind_chill
+test_error of find_Index
+test_error of count_vowels
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+get_Char sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+armstrong_number sum() missing 1 required positional argument: 'b'
+test_error of max_product
+test_error of wind_chill
+test_error of count_vowels
+get_Char sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+test_error of lcs_of_three
+test_error of add_tuple
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+test_error of wind_chill
+test_error of count_vowels
+test_error of upper_ctr
+armstrong_number sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+upper_ctr sum() missing 1 required positional argument: 'b'
+test_error of max_product
+power_base_sum sum() missing 1 required positional argument: 'b'
+test_error of wind_chill
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+armstrong_number sum() missing 1 required positional argument: 'b'
+test_error of union_elements
+upper_ctr sum() missing 1 required positional argument: 'b'
+power_base_sum sum() missing 1 required positional argument: 'b'
+test_error of check_char
+test_error of parabola_directrix
+upper_ctr sum() missing 1 required positional argument: 'b'
+power_base_sum sum() missing 1 required positional argument: 'b'
+test_error of tuple_intersection
+test_error of max_length
+power_base_sum sum() missing 1 required positional argument: 'b'
+test_error of lcs_of_three
+test_error of reverse_Array_Upto_K
+amicable_numbers_sum sum() missing 1 required positional argument: 'b'
+test_error of max_length
+test_error of max_product
+test_error of reverse_Array_Upto_K
+test_error of reverse_Array_Upto_K
+amicable_numbers_sum sum() missing 1 required positional argument: 'b'
+test_error of reverse_Array_Upto_K
+amicable_numbers_sum sum() missing 1 required positional argument: 'b'
+test_error of max_length
+test_error of max_length
+amicable_numbers_sum sum() missing 1 required positional argument: 'b'
+test_error of start_withp
+test_error of text_match_zero_one
+harmonic_sum name 'math' is not defined
+test_error of extract_freq
+test_error of string_to_tuple
+test_error of find_star_num
+test_error of find_sum
+test_error of max_product_tuple
+test_error of divisible_by_digits
+harmonic_sum name 'math' is not defined
+area_polygon name 'math' is not defined
+test_error of find_star_num
+test_error of find_sum
+test_error of is_undulating
+area_polygon name 'math' is not defined
+test_error of find_star_num
+harmonic_sum name 'math' is not defined
+test_error of eulerian_num
+test_error of find_sum
+test_error of divisible_by_digits
+harmonic_sum name 'math' is not defined
+test_error of long_words
+area_polygon name 'math' is not defined
+test_error of find_sum
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of divisible_by_digits
+area_polygon name 'math' is not defined
+test_error of round_and_sum
+test_error of eulerian_num
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of divisible_by_digits
+test_error of max_product_tuple
+test_error of Find_Max_Length
+test_error of k_smallest_pairs
+similar_elements Both arguments must be lists.
+test_error of count_rotation
+test_error of sum_div
+test_error of max_product_tuple
+test_error of is_polite
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of angle_complex
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of count_rotation
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of angle_complex
+test_error of average_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of is_polite
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of is_polite
+sum_digits invalid syntax (<string>, line 2)
+number_of_substrings invalid syntax (<string>, line 2)
+subject_marks invalid syntax (<string>, line 2)
+minimum invalid syntax (<string>, line 2)
+volume_cube invalid syntax (<string>, line 2)
+large_product invalid syntax (<string>, line 2)
+rear_extract invalid syntax (<string>, line 2)
+remove_whitespaces invalid syntax (<string>, line 2)
+empty_list invalid syntax (<string>, line 2)
+sum_div invalid syntax (<string>, line 2)
+text_match_zero_one invalid syntax (<string>, line 2)
+median_trapezium invalid syntax (<string>, line 2)
+validate invalid syntax (<string>, line 2)
+find_sum invalid syntax (<string>, line 2)
+remove_nested invalid syntax (<string>, line 2)
+find_Parity invalid syntax (<string>, line 2)
+kth_element invalid syntax (<string>, line 2)
+multiply_elements invalid syntax (<string>, line 2)
+max_product_tuple invalid syntax (<string>, line 2)
+get_max_sum invalid syntax (<string>, line 2)
+_sum invalid syntax (<string>, line 2)
+last_Digit_Factorial invalid syntax (<string>, line 2)
+pos_count invalid syntax (<string>, line 2)
+check_min_heap invalid syntax (<string>, line 2)
+surfacearea_cylinder invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+left_rotate invalid syntax (<string>, line 2)
+maximum invalid syntax (<string>, line 2)
+test_three_equal invalid syntax (<string>, line 2)
+max_subarray_product invalid syntax (<string>, line 2)
+Diff invalid syntax (<string>, line 2)
+count_X invalid syntax (<string>, line 2)
+long_words invalid syntax (<string>, line 2)
+is_majority invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+tuple_to_dict invalid syntax (<string>, line 2)
+second_smallest invalid syntax (<string>, line 2)
+find_lucas invalid syntax (<string>, line 2)
+test_error of sum_div
+is_undulating invalid syntax (<string>, line 2)
+jacobsthal_num invalid syntax (<string>, line 2)
+area_polygon invalid syntax (<string>, line 2)
+sequential_search invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+is_polite invalid syntax (<string>, line 2)
+test_error of find_sum
+test_error of harmonic_sum
+angle_complex Both a and b must be numbers.
+long_words The second parameter must be a list of words.
+test_error of max_product_tuple
+find_Volume invalid syntax (<string>, line 2)
+divisible_by_digits invalid syntax (<string>, line 2)
+eulerian_num invalid syntax (<string>, line 2)
+test_error of find_sum
+multiply_int invalid syntax (<string>, line 2)
+string_to_tuple invalid syntax (<string>, line 2)
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of surfacearea_cylinder
+rgb_to_hsv invalid syntax (<string>, line 2)
+max_sum_list invalid syntax (<string>, line 2)
+test_error of is_undulating
+test_error of harmonic_sum
+long_words The second parameter must be a list of words.
+check_answer invalid syntax (<string>, line 2)
+dif_Square invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+sum_series invalid syntax (<string>, line 2)
+test_error of angle_complex
+opposite_Signs invalid syntax (<string>, line 2)
+extract_freq invalid syntax (<string>, line 2)
+test_error of divisible_by_digits
+count_rotation invalid syntax (<string>, line 2)
+magic_square_test invalid syntax (<string>, line 2)
+similar_elements invalid syntax (<string>, line 2)
+test_error of is_polite
+sum_list invalid syntax (<string>, line 2)
+extract_index_list invalid syntax (<string>, line 2)
+freq_count invalid syntax (<string>, line 2)
+left_insertion invalid syntax (<string>, line 2)
+average_tuple invalid syntax (<string>, line 2)
+test_error of find_sum
+k_smallest_pairs invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+volume_cylinder invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+max_run_uppercase invalid syntax (<string>, line 2)
+count_Substrings invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+bell_number invalid syntax (<string>, line 2)
+find_Odd_Pair invalid syntax (<string>, line 2)
+max_occurrences invalid syntax (<string>, line 2)
+find_star_num invalid syntax (<string>, line 2)
+long_words The second parameter must be a list or tuple of words.
+start_withp invalid syntax (<string>, line 2)
+hexagonal_num invalid syntax (<string>, line 2)
+find_length invalid syntax (<string>, line 2)
+test_error of extract_freq
+is_Diff invalid syntax (<string>, line 2)
+reverse_vowels invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+test_error of divisible_by_digits
+unique_product invalid syntax (<string>, line 2)
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of average_tuple
+test_error of max_product_tuple
+max_Abs_Diff Input must be a list.
+Find_Max_Length invalid syntax (<string>, line 2)
+test_error of find_star_num
+surfacearea_sphere invalid syntax (<string>, line 2)
+test_error of count_rotation
+test_error of find_length
+round_and_sum invalid syntax (<string>, line 2)
+test_error of extract_freq
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of start_withp
+test_error of k_smallest_pairs
+test_error of Find_Max_Length
+test_error of is_polite
+test_error of average_tuple
+test_error of divisible_by_digits
+max_Abs_Diff Input must be a list.
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+max_Abs_Diff Input must be a list.
+test_error of count_rotation
+test_error of average_tuple
+test_error of eulerian_num
+test_error of find_length
+test_error of count_rotation
+test_error of find_length
+test_error of eulerian_num
+volume_cube invalid syntax (<string>, line 2)
+maximum invalid syntax (<string>, line 2)
+sum_digits invalid syntax (<string>, line 2)
+average_tuple invalid syntax (<string>, line 2)
+hexagonal_num invalid syntax (<string>, line 2)
+is_Diff invalid syntax (<string>, line 2)
+get_max_sum invalid syntax (<string>, line 2)
+unique_product invalid syntax (<string>, line 2)
+volume_cylinder invalid syntax (<string>, line 2)
+sum_series invalid syntax (<string>, line 2)
+number_of_substrings invalid syntax (<string>, line 2)
+tuple_to_dict invalid syntax (<string>, line 2)
+opposite_Signs invalid syntax (<string>, line 2)
+long_words invalid syntax (<string>, line 2)
+start_withp invalid syntax (<string>, line 2)
+_sum invalid syntax (<string>, line 2)
+text_match_zero_one invalid syntax (<string>, line 2)
+test_error of average_tuple
+remove_whitespaces invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+pos_count invalid syntax (<string>, line 2)
+check_answer invalid syntax (<string>, line 2)
+freq_count invalid syntax (<string>, line 2)
+extract_freq invalid syntax (<string>, line 2)
+long_words The second parameter must be a list of words.
+harmonic_sum invalid syntax (<string>, line 2)
+max_occurrences invalid syntax (<string>, line 2)
+test_error of extract_freq
+count_Substrings invalid syntax (<string>, line 2)
+is_majority invalid syntax (<string>, line 2)
+max_sum_list invalid syntax (<string>, line 2)
+test_error of start_withp
+test_error of average_tuple
+test_three_equal invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+Diff invalid syntax (<string>, line 2)
+find_lucas invalid syntax (<string>, line 2)
+area_polygon invalid syntax (<string>, line 2)
+test_error of extract_freq
+last_Digit_Factorial invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+long_words The second parameter must be a list of words.
+sum_list invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+subject_marks invalid syntax (<string>, line 2)
+second_smallest invalid syntax (<string>, line 2)
+is_undulating invalid syntax (<string>, line 2)
+test_error of Diff
+extract_index_list invalid syntax (<string>, line 2)
+test_error of average_tuple
+test_error of harmonic_sum
+max_run_uppercase invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+long_words The second parameter must be a list or tuple of words.
+round_and_sum invalid syntax (<string>, line 2)
+test_error of Diff
+test_error of is_undulating
+max_Abs_Diff Input must be a list.
+find_length invalid syntax (<string>, line 2)
+reverse_vowels invalid syntax (<string>, line 2)
+test_error of Diff
+find_Odd_Pair invalid syntax (<string>, line 2)
+average_tuple invalid syntax (<string>, line 2)
+k_smallest_pairs invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+long_words invalid syntax (<string>, line 2)
+remove_nested invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+test_error of average_tuple
+similar_elements invalid syntax (<string>, line 2)
+eulerian_num invalid syntax (<string>, line 2)
+find_sum invalid syntax (<string>, line 2)
+long_words The second parameter must be a list of words.
+multiply_int invalid syntax (<string>, line 2)
+Diff invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+surfacearea_sphere invalid syntax (<string>, line 2)
+multiply_elements invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+string_to_tuple invalid syntax (<string>, line 2)
+test_error of k_smallest_pairs
+find_star_num invalid syntax (<string>, line 2)
+count_X invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+max_Abs_Diff Input must be a list.
+test_error of harmonic_sum
+large_product invalid syntax (<string>, line 2)
+bell_number invalid syntax (<string>, line 2)
+test_error of Diff
+test_error of eulerian_num
+test_error of find_sum
+test_error of average_tuple
+median_trapezium invalid syntax (<string>, line 2)
+test_error of find_star_num
+surfacearea_cylinder invalid syntax (<string>, line 2)
+test_error of find_sum
+test_error of string_to_tuple
+dif_Square invalid syntax (<string>, line 2)
+test_error of Diff
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+magic_square_test invalid syntax (<string>, line 2)
+find_Parity invalid syntax (<string>, line 2)
+test_error of find_star_num
+max_Abs_Diff Input must be a list.
+minimum invalid syntax (<string>, line 2)
+find_Volume invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+empty_list invalid syntax (<string>, line 2)
+test_error of find_sum
+divisible_by_digits invalid syntax (<string>, line 2)
+jacobsthal_num invalid syntax (<string>, line 2)
+test_error of find_star_num
+test_error of surfacearea_cylinder
+kth_element invalid syntax (<string>, line 2)
+test_error of eulerian_num
+sequential_search invalid syntax (<string>, line 2)
+left_insertion invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+max_subarray_product invalid syntax (<string>, line 2)
+Find_Max_Length invalid syntax (<string>, line 2)
+is_polite invalid syntax (<string>, line 2)
+string_to_tuple invalid syntax (<string>, line 2)
+test_error of divisible_by_digits
+max_product_tuple invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+check_min_heap invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+left_rotate invalid syntax (<string>, line 2)
+rear_extract invalid syntax (<string>, line 2)
+similar_elements invalid syntax (<string>, line 2)
+find_star_num invalid syntax (<string>, line 2)
+sum_div invalid syntax (<string>, line 2)
+test_error of eulerian_num
+count_rotation invalid syntax (<string>, line 2)
+find_sum invalid syntax (<string>, line 2)
+angle_complex Both a and b must be numbers.
+test_error of string_to_tuple
+test_error of is_polite
+test_error of surfacearea_cylinder
+test_error of sum_div
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of string_to_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+validate invalid syntax (<string>, line 2)
+test_error of find_sum
+test_error of string_to_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of divisible_by_digits
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of angle_complex
+test_error of count_rotation
+test_error of is_polite
+surfacearea_cylinder invalid syntax (<string>, line 2)
+test_error of find_sum
+test_error of divisible_by_digits
+test_error of max_product_tuple
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of count_rotation
+is_polite invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+divisible_by_digits invalid syntax (<string>, line 2)
+test_error of is_polite
+rgb_to_hsv invalid syntax (<string>, line 2)
+test_error of divisible_by_digits
+max_product_tuple invalid syntax (<string>, line 2)
+test_error of is_polite
+count_rotation invalid syntax (<string>, line 2)
+eulerian_num EOL while scanning string literal (<string>, line 2)
+test_error of is_polite
+test_error of max_product_tuple
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of count_rotation
+test_error of eulerian_num
+test_error of count_rotation
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of max_product_tuple
+volume_cube invalid syntax (<string>, line 2)
+max_Abs_Diff invalid syntax (<string>, line 2)
+volume_cylinder invalid syntax (<string>, line 2)
+empty_list invalid syntax (<string>, line 2)
+freq_count invalid syntax (<string>, line 2)
+maximum invalid syntax (<string>, line 2)
+is_Diff invalid syntax (<string>, line 2)
+rear_extract invalid syntax (<string>, line 2)
+multiply_int invalid syntax (<string>, line 2)
+start_withp invalid syntax (<string>, line 2)
+surfacearea_sphere invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+tuple_to_dict invalid syntax (<string>, line 2)
+count_X invalid syntax (<string>, line 2)
+sum_div invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+remove_nested invalid syntax (<string>, line 2)
+max_sum_list invalid syntax (<string>, line 2)
+pos_count invalid syntax (<string>, line 2)
+long_words invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+remove_whitespaces invalid syntax (<string>, line 2)
+number_of_substrings invalid syntax (<string>, line 2)
+area_polygon invalid syntax (<string>, line 2)
+extract_freq invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+large_product invalid syntax (<string>, line 2)
+surfacearea_cylinder invalid syntax (<string>, line 2)
+angle_complex Both a and b must be numbers.
+test_error of sum_div
+long_words The second parameter must be a list of words.
+test_error of extract_freq
+max_Abs_Diff Input must be a list.
+test_error of harmonic_sum
+find_sum invalid syntax (<string>, line 2)
+find_length invalid syntax (<string>, line 2)
+sequential_search invalid syntax (<string>, line 2)
+sum_digits invalid syntax (<string>, line 2)
+is_polite invalid syntax (<string>, line 2)
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+long_words The second parameter must be a list or tuple of words.
+second_smallest invalid syntax (<string>, line 2)
+divisible_by_digits invalid syntax (<string>, line 2)
+test_error of extract_freq
+left_rotate invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of harmonic_sum
+max_Abs_Diff Input must be a list.
+max_occurrences invalid syntax (<string>, line 2)
+test_error of start_withp
+test_error of angle_complex
+test_error of find_sum
+test_three_equal invalid syntax (<string>, line 2)
+test_error of find_length
+test_error of is_polite
+jacobsthal_num invalid syntax (<string>, line 2)
+find_Parity invalid syntax (<string>, line 2)
+max_product_tuple invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of find_sum
+count_rotation invalid syntax (<string>, line 2)
+test_error of extract_freq
+is_undulating invalid syntax (<string>, line 2)
+find_Odd_Pair invalid syntax (<string>, line 2)
+unique_product invalid syntax (<string>, line 2)
+test_error of divisible_by_digits
+long_words The second parameter must be a list or tuple of words.
+test_error of is_polite
+k_smallest_pairs invalid syntax (<string>, line 2)
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of surfacearea_cylinder
+max_Abs_Diff invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+test_error of is_polite
+check_answer invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+test_error of k_smallest_pairs
+extract_freq invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+long_words EOL while scanning string literal (<string>, line 2)
+find_sum invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+test_error of divisible_by_digits
+test_error of extract_freq
+kth_element invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+long_words The second parameter must be a list of words.
+test_error of divisible_by_digits
+test_error of find_sum
+string_to_tuple invalid syntax (<string>, line 2)
+is_polite invalid syntax (<string>, line 2)
+max_Abs_Diff Input must be a list.
+sum_series invalid syntax (<string>, line 2)
+find_star_num invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+test_error of max_product_tuple
+surfacearea_cylinder invalid syntax (<string>, line 2)
+test_error of extract_freq
+test_error of count_rotation
+angle_complex Parameter 'b' must be an int or float.
+similar_elements invalid syntax (<string>, line 2)
+multiply_elements invalid syntax (<string>, line 2)
+sum_list invalid syntax (<string>, line 2)
+hexagonal_num invalid syntax (<string>, line 2)
+test_error of find_sum
+max_Abs_Diff Input must be a list.
+max_run_uppercase invalid syntax (<string>, line 2)
+opposite_Signs invalid syntax (<string>, line 2)
+eulerian_num invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+test_error of surfacearea_cylinder
+test_error of find_star_num
+median_trapezium invalid syntax (<string>, line 2)
+test_error of is_polite
+test_error of string_to_tuple
+Find_Max_Length invalid syntax (<string>, line 2)
+Diff invalid syntax (<string>, line 2)
+minimum invalid syntax (<string>, line 2)
+test_error of extract_freq
+test_error of count_rotation
+divisible_by_digits invalid syntax (<string>, line 2)
+reverse_vowels invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex Parameter 'b' must be an int or float.
+test_error of find_star_num
+test_error of surfacearea_cylinder
+round_and_sum invalid syntax (<string>, line 2)
+max_product_tuple invalid syntax (<string>, line 2)
+test_error of is_polite
+test_error of Diff
+test_error of find_sum
+test_error of Find_Max_Length
+average_tuple invalid syntax (<string>, line 2)
+test_error of find_star_num
+find_Volume invalid syntax (<string>, line 2)
+subject_marks invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+max_subarray_product invalid syntax (<string>, line 2)
+test_error of Diff
+left_insertion invalid syntax (<string>, line 2)
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of divisible_by_digits
+angle_complex Parameter 'b' must be an int or float.
+test_error of average_tuple
+dif_Square invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+test_error of eulerian_num
+last_Digit_Factorial invalid syntax (<string>, line 2)
+extract_index_list invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+find_lucas invalid syntax (<string>, line 2)
+test_error of Diff
+test_error of is_polite
+test_error of average_tuple
+get_max_sum invalid syntax (<string>, line 2)
+bell_number invalid syntax (<string>, line 2)
+_sum invalid syntax (<string>, line 2)
+find_star_num invalid syntax (<string>, line 2)
+test_error of eulerian_num
+test_error of average_tuple
+string_to_tuple invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+is_majority invalid syntax (<string>, line 2)
+check_min_heap invalid syntax (<string>, line 2)
+test_error of find_star_num
+count_Substrings invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+validate invalid syntax (<string>, line 2)
+rgb_to_hsv invalid syntax (<string>, line 2)
+similar_elements invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+count_rotation invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+text_match_zero_one invalid syntax (<string>, line 2)
+test_error of string_to_tuple
+test_error of find_star_num
+test_error of eulerian_num
+magic_square_test invalid syntax (<string>, line 2)
+Diff invalid syntax (<string>, line 2)
+average_tuple invalid syntax (<string>, line 2)
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of count_rotation
+test_error of Diff
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of Diff
+test_error of count_rotation
+eulerian_num invalid syntax (<string>, line 2)
+test_error of Diff
+test_error of average_tuple
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of eulerian_num
+find_lists invalid syntax (<string>, line 2)
+count_charac invalid syntax (<string>, line 2)
+split invalid syntax (<string>, line 2)
+surfacearea_cube invalid syntax (<string>, line 2)
+text_match_two_three invalid syntax (<string>, line 2)
+add_string invalid syntax (<string>, line 2)
+unique_Element invalid syntax (<string>, line 2)
+even_Power_Sum invalid syntax (<string>, line 2)
+loss_amount invalid syntax (<string>, line 2)
+string_to_list invalid syntax (<string>, line 2)
+find_Average_Of_Cube invalid syntax (<string>, line 2)
+get_Char invalid syntax (<string>, line 2)
+overlapping invalid syntax (<string>, line 2)
+concatenate_tuple invalid syntax (<string>, line 2)
+Extract invalid syntax (<string>, line 2)
+recursive_list_sum invalid syntax (<string>, line 2)
+unique_Element name 'unique_Element' is not defined
+text_match_three invalid syntax (<string>, line 2)
+sub_list invalid syntax (<string>, line 2)
+all_Bits_Set_In_The_Given_Range invalid syntax (<string>, line 2)
+find_remainder invalid syntax (<string>, line 2)
+flatten_list invalid syntax (<string>, line 2)
+consecutive_duplicates invalid syntax (<string>, line 2)
+remove_lowercase invalid syntax (<string>, line 2)
+test_error of loss_amount
+cube_Sum invalid syntax (<string>, line 2)
+unique_Element name 'unique_Element' is not defined
+largest_neg invalid syntax (<string>, line 2)
+find_Average_Of_Cube name 'find_Average_Of_Cube' is not defined
+surface_Area invalid syntax (<string>, line 2)
+sum invalid syntax (<string>, line 2)
+test_error of get_Char
+count_divisors invalid syntax (<string>, line 2)
+replace_list invalid syntax (<string>, line 2)
+interleave_lists invalid syntax (<string>, line 2)
+extract_nth_element invalid syntax (<string>, line 2)
+all_unique invalid syntax (<string>, line 2)
+test_error of all_Bits_Set_In_The_Given_Range
+concatenate_tuple concatenate_tuple() missing 1 required positional argument: 'delimiter'
+test_error of remove_lowercase
+unique_Element name 'unique_Element' is not defined
+test_error of loss_amount
+remove_Occ invalid syntax (<string>, line 2)
+cube_Sum name 'cube_Sum' is not defined
+merge invalid syntax (<string>, line 2)
+re_arrange_array invalid syntax (<string>, line 2)
+test_error of largest_neg
+test_error of get_Char
+zero_count invalid syntax (<string>, line 2)
+test_error of concatenate_tuple
+find_Average_Of_Cube name 'find_Average_Of_Cube' is not defined
+mul_even_odd invalid syntax (<string>, line 2)
+test_error of remove_lowercase
+test_error of replace_list
+test_error of loss_amount
+find_combinations invalid syntax (<string>, line 2)
+is_Monotonic invalid syntax (<string>, line 2)
+cube_Sum name 'cube_Sum' is not defined
+test_error of re_arrange_array
+sum 'int' object is not iterable
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of surface_Area
+find_Average_Of_Cube name 'find_Average_Of_Cube' is not defined
+test_error of get_Char
+test_error of remove_lowercase
+babylonian_squareroot invalid syntax (<string>, line 2)
+cube_Sum name 'cube_Sum' is not defined
+test_error of all_Bits_Set_In_The_Given_Range
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+test_error of surface_Area
+search invalid syntax (<string>, line 2)
+otherside_rightangle invalid syntax (<string>, line 2)
+sum 'int' object is not iterable
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+find_first_occurrence invalid syntax (<string>, line 2)
+find_Average_Of_Cube invalid syntax (<string>, line 2)
+test_error of surface_Area
+test_error of re_arrange_array
+remove_lowercase invalid syntax (<string>, line 2)
+unique_Element invalid syntax (<string>, line 2)
+sum 'int' object is not iterable
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+get_Char invalid syntax (<string>, line 2)
+all_Bits_Set_In_The_Given_Range invalid syntax (<string>, line 2)
+check_tuplex invalid syntax (<string>, line 2)
+perimeter_pentagon invalid syntax (<string>, line 2)
+find_Average_Of_Cube name 'find_Average_Of_Cube' is not defined
+remove_uppercase invalid syntax (<string>, line 2)
+min_Swaps invalid syntax (<string>, line 2)
+highest_Power_of_2 invalid syntax (<string>, line 2)
+test_error of re_arrange_array
+test_error of all_Bits_Set_In_The_Given_Range
+cube_Sum invalid syntax (<string>, line 2)
+find_Average_Of_Cube name 'find_Average_Of_Cube' is not defined
+Find_Min invalid syntax (<string>, line 2)
+check_K invalid syntax (<string>, line 2)
+odd_length_sum invalid syntax (<string>, line 2)
+unique_Element name 'unique_Element' is not defined
+test_error of remove_uppercase
+highest_Power_of_2 name 'highest_Power_of_2' is not defined
+loss_amount invalid syntax (<string>, line 2)
+add_nested_tuples invalid syntax (<string>, line 2)
+test_error of remove_lowercase
+test_error of get_Char
+Find_Min_Length invalid syntax (<string>, line 2)
+surface_Area invalid syntax (<string>, line 2)
+tup_string invalid syntax (<string>, line 2)
+test_error of all_Bits_Set_In_The_Given_Range
+even_bit_set_number invalid syntax (<string>, line 2)
+sum_even_and_even_index invalid syntax (<string>, line 2)
+unique_Element name 'unique_Element' is not defined
+highest_Power_of_2 name 'highest_Power_of_2' is not defined
+find_combinations invalid syntax (<string>, line 2)
+find_Average_Of_Cube name 'find_Average_Of_Cube' is not defined
+test_error of loss_amount
+test_error of get_Char
+remove_elements invalid syntax (<string>, line 2)
+cube_Sum name 'cube_Sum' is not defined
+test_error of even_bit_set_number
+test_error of remove_lowercase
+test_error of surface_Area
+test_error of Find_Min
+check_none invalid syntax (<string>, line 2)
+test_error of min_Swaps
+highest_Power_of_2 name 'highest_Power_of_2' is not defined
+heap_queue_largest invalid syntax (<string>, line 2)
+even_binomial_Coeff_Sum invalid syntax (<string>, line 2)
+unique_Element name 'unique_Element' is not defined
+count_char_position invalid syntax (<string>, line 2)
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of even_bit_set_number
+word_len invalid syntax (<string>, line 2)
+test_error of remove_lowercase
+find_even_pair invalid syntax (<string>, line 2)
+test_error of get_Char
+test_error of surface_Area
+cube_Sum name 'cube_Sum' is not defined
+removezero_ip invalid syntax (<string>, line 2)
+first_Digit invalid syntax (<string>, line 2)
+test_error of loss_amount
+sample_nam invalid syntax (<string>, line 2)
+test_error of even_bit_set_number
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+comb_sort invalid syntax (<string>, line 2)
+first_Digit name 'first_Digit' is not defined
+min_product_tuple invalid syntax (<string>, line 2)
+sum invalid syntax (<string>, line 2)
+min_Jumps invalid syntax (<string>, line 2)
+test_error of min_Swaps
+test_error of loss_amount
+test_error of surface_Area
+text_match_wordz invalid syntax (<string>, line 2)
+cube_Sum name 'cube_Sum' is not defined
+first_Digit name 'first_Digit' is not defined
+highest_Power_of_2 invalid syntax (<string>, line 2)
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+get_median invalid syntax (<string>, line 2)
+test_error of text_match_wordz
+test_error of min_product_tuple
+multiply_num invalid syntax (<string>, line 2)
+test_error of comb_sort
+text_match_wordz_middle invalid syntax (<string>, line 2)
+max_Product invalid syntax (<string>, line 2)
+min_Jumps '<=' not supported between instances of 'tuple' and 'int'
+find_substring invalid syntax (<string>, line 2)
+sum 'int' object is not iterable
+re_arrange_array invalid syntax (<string>, line 2)
+first_Digit name 'first_Digit' is not defined
+multiply_num Input must be a list.
+highest_Power_of_2 name 'highest_Power_of_2' is not defined
+test_error of max_Product
+min_Jumps Steps must be a positive number.
+find_combinations find_combinations() missing 1 required positional argument: 'target_sum'
+test_error of comb_sort
+test_duplicate invalid syntax (<string>, line 2)
+test_error of min_product_tuple
+get_median get_median() takes 2 positional arguments but 3 were given
+highest_Power_of_2 name 'highest_Power_of_2' is not defined
+multiply_num Input must be a list.
+min_Jumps Steps must be a positive number.
+test_error of comb_sort
+square_nums invalid syntax (<string>, line 2)
+test_error of min_Swaps
+dog_age invalid syntax (<string>, line 2)
+add_lists invalid syntax (<string>, line 2)
+sum 'int' object is not iterable
+test_error of min_product_tuple
+max_of_nth invalid syntax (<string>, line 2)
+find_solution invalid syntax (<string>, line 2)
+multiply_num Input must be a list.
+first_Digit invalid syntax (<string>, line 2)
+count_list invalid syntax (<string>, line 2)
+count_Pairs invalid syntax (<string>, line 2)
+test_error of max_Product
+highest_Power_of_2 name 'highest_Power_of_2' is not defined
+get_median get_median() takes 2 positional arguments but 3 were given
+sector_area invalid syntax (<string>, line 2)
+triangle_area invalid syntax (<string>, line 2)
+even_bit_set_number invalid syntax (<string>, line 2)
+sum 'int' object is not iterable
+is_perfect_square invalid syntax (<string>, line 2)
+reverse_string_list invalid syntax (<string>, line 2)
+sum_average invalid syntax (<string>, line 2)
+test_error of find_solution
+test_error of dog_age
+test_error of re_arrange_array
+count_samepair invalid syntax (<string>, line 2)
+triangle_area The radius must be a positive number.
+min_Jumps invalid syntax (<string>, line 2)
+first_Digit name 'first_Digit' is not defined
+test_error of count_Pairs
+triangle_area The radius must be a positive number.
+multiply_num invalid syntax (<string>, line 2)
+is_Even invalid syntax (<string>, line 2)
+min_Swaps EOL while scanning string literal (<string>, line 2)
+combinations_list invalid syntax (<string>, line 2)
+next_smallest_palindrome invalid syntax (<string>, line 2)
+lps invalid syntax (<string>, line 2)
+test_error of dog_age
+median_numbers invalid syntax (<string>, line 2)
+test_error of even_bit_set_number
+triangle_area The radius must be a positive number.
+test_error of find_solution
+first_Digit name 'first_Digit' is not defined
+comb_sort invalid syntax (<string>, line 2)
+area_tetrahedron invalid syntax (<string>, line 2)
+is_Even name 'is_Even' is not defined
+divisor invalid syntax (<string>, line 2)
+test_error of even_bit_set_number
+multiply_num Input must be a list.
+test_error of combinations_list
+test_error of area_tetrahedron
+is_Even name 'is_Even' is not defined
+test_error of dog_age
+count_vowels invalid syntax (<string>, line 2)
+get_median get_median() takes 2 positional arguments but 3 were given
+test_error of find_solution
+min_Jumps Steps must be a positive number.
+test_error of re_arrange_array
+is_octagonal invalid syntax (<string>, line 2)
+min_product_tuple invalid syntax (<string>, line 2)
+test_error of combinations_list
+maxAverageOfPath invalid syntax (<string>, line 2)
+test_error of even_bit_set_number
+tuple_modulo invalid syntax (<string>, line 2)
+test_error of area_tetrahedron
+first_Digit name 'first_Digit' is not defined
+triangle_area invalid syntax (<string>, line 2)
+is_Even name 'is_Even' is not defined
+test_error of comb_sort
+count_Primes_nums invalid syntax (<string>, line 2)
+multiply_num Input must be a list.
+test_error of is_octagonal
+first_odd invalid syntax (<string>, line 2)
+all_Characters_Same invalid syntax (<string>, line 2)
+test_error of area_tetrahedron
+test_error of count_vowels
+min_Jumps Steps must be a positive number.
+triangle_area The radius must be a positive number.
+test_error of is_octagonal
+differ_At_One_Bit_Pos invalid syntax (<string>, line 2)
+swap_numbers invalid syntax (<string>, line 2)
+find_Max_Num invalid syntax (<string>, line 2)
+test_error of min_product_tuple
+test_error of combinations_list
+find_First_Missing invalid syntax (<string>, line 2)
+count_Primes_nums name 'count_Primes_nums' is not defined
+multiply_num Input must be a list.
+common_in_nested_lists invalid syntax (<string>, line 2)
+test_error of min_Swaps
+test_error of re_arrange_array
+colon_tuplex invalid syntax (<string>, line 2)
+test_error of is_octagonal
+dog_age invalid syntax (<string>, line 2)
+test_error of comb_sort
+min_Jumps Steps must be a positive number.
+max_aggregate invalid syntax (<string>, line 2)
+count_Primes_nums name 'count_Primes_nums' is not defined
+test_error of common_in_nested_lists
+test_error of find_First_Missing
+test_error of colon_tuplex
+newman_prime invalid syntax (<string>, line 2)
+test_error of differ_At_One_Bit_Pos
+first_non_repeating_character invalid syntax (<string>, line 2)
+combinations_list invalid syntax (<string>, line 2)
+is_Even invalid syntax (<string>, line 2)
+test_error of common_in_nested_lists
+test_error of max_aggregate
+count_Primes_nums name 'count_Primes_nums' is not defined
+test_error of dog_age
+heap_sort invalid syntax (<string>, line 2)
+sum_Of_product invalid syntax (<string>, line 2)
+last_Digit invalid syntax (<string>, line 2)
+tuple_to_int invalid syntax (<string>, line 2)
+test_error of min_Swaps
+triangle_area The radius must be a positive number.
+test_error of min_product_tuple
+test_error of count_vowels
+area_tetrahedron invalid syntax (<string>, line 2)
+is_Sum_Of_Powers_Of_Two invalid syntax (<string>, line 2)
+find_solution invalid syntax (<string>, line 2)
+test_error of combinations_list
+test_error of find_First_Missing
+test_error of common_in_nested_lists
+is_Even name 'is_Even' is not defined
+is_octagonal invalid syntax (<string>, line 2)
+test_error of colon_tuplex
+test_error of dog_age
+return_sum invalid syntax (<string>, line 2)
+test_error of newman_prime
+test_error of count_vowels
+is_Even name 'is_Even' is not defined
+triangle_area The radius must be a positive number.
+is_woodall invalid syntax (<string>, line 2)
+test_error of colon_tuplex
+test_error of min_Swaps
+check_element invalid syntax (<string>, line 2)
+sum_Of_Subarray_Prod invalid syntax (<string>, line 2)
+centered_hexagonal_number invalid syntax (<string>, line 2)
+test_error of is_octagonal
+test_error of dog_age
+move_num invalid syntax (<string>, line 2)
+test_error of combinations_list
+is_Even name 'is_Even' is not defined
+check_occurences invalid syntax (<string>, line 2)
+common_in_nested_lists invalid syntax (<string>, line 2)
+test_error of is_octagonal
+count_vowels invalid syntax (<string>, line 2)
+sum_Of_Subarray_Prod name 'sum_Of_Subarray_Prod' is not defined
+test_error of find_solution
+parabola_directrix invalid syntax (<string>, line 2)
+replace_char invalid syntax (<string>, line 2)
+test_error of check_occurences
+get_Inv_Count invalid syntax (<string>, line 2)
+prime_num invalid syntax (<string>, line 2)
+test_error of is_octagonal
+is_samepatterns invalid syntax (<string>, line 2)
+test_error of combinations_list
+common_in_nested_lists Input must be a list of lists.
+sum_Of_Subarray_Prod name 'sum_Of_Subarray_Prod' is not defined
+test_error of check_occurences
+two_unique_nums invalid syntax (<string>, line 2)
+get_median invalid syntax (<string>, line 2)
+digit_distance_nums invalid syntax (<string>, line 2)
+capital_words_spaces invalid syntax (<string>, line 2)
+test_error of parabola_directrix
+test_error of count_vowels
+count_Primes_nums invalid syntax (<string>, line 2)
+colon_tuplex invalid syntax (<string>, line 2)
+test_error of two_unique_nums
+test_error of find_solution
+sum_Of_Subarray_Prod name 'sum_Of_Subarray_Prod' is not defined
+noprofit_noloss invalid syntax (<string>, line 2)
+trim_tuple invalid syntax (<string>, line 2)
+test_error of check_occurences
+insert_element invalid syntax (<string>, line 2)
+filter_data invalid syntax (<string>, line 2)
+common_in_nested_lists Input must be a list of lists.
+test_error of trim_tuple
+test_error of count_vowels
+count_Primes_nums name 'count_Primes_nums' is not defined
+test_error of parabola_directrix
+diff_even_odd invalid syntax (<string>, line 2)
+odd_position invalid syntax (<string>, line 2)
+extract_rear invalid syntax (<string>, line 2)
+test_error of min_product_tuple
+test_error of filter_data
+min_of_three invalid syntax (<string>, line 2)
+common_in_nested_lists Input must be a list of lists.
+Find_Max invalid syntax (<string>, line 2)
+get_median get_median() takes 2 positional arguments but 3 were given
+test_error of extract_rear
+cal_sum invalid syntax (<string>, line 2)
+remove_all_spaces invalid syntax (<string>, line 2)
+count_Primes_nums name 'count_Primes_nums' is not defined
+lateralsurface_cone invalid syntax (<string>, line 2)
+odd_num_sum invalid syntax (<string>, line 2)
+sum_Of_Subarray_Prod invalid syntax (<string>, line 2)
+colon_tuplex 'int' object is not subscriptable
+next_Perfect_Square invalid syntax (<string>, line 2)
+test_error of parabola_directrix
+remove_length invalid syntax (<string>, line 2)
+test_error of count_vowels
+test_error of filter_data
+neg_nos invalid syntax (<string>, line 2)
+polar_rect invalid syntax (<string>, line 2)
+test_error of trim_tuple
+split_two_parts invalid syntax (<string>, line 2)
+perfect_squares invalid syntax (<string>, line 2)
+shell_sort invalid syntax (<string>, line 2)
+first_repeated_char invalid syntax (<string>, line 2)
+is_lower invalid syntax (<string>, line 2)
+count_Primes_nums name 'count_Primes_nums' is not defined
+test_error of polar_rect
+test_error of colon_tuplex
+test_error of trim_tuple
+check_value invalid syntax (<string>, line 2)
+max_sub_array_sum invalid syntax (<string>, line 2)
+test_error of cal_sum
+check_occurences invalid syntax (<string>, line 2)
+test_error of filter_data
+test_error of find_solution
+test_error of check_value
+test_error of newman_prime
+sum_Of_Subarray_Prod name 'sum_Of_Subarray_Prod' is not defined
+test_error of polar_rect
+test_error of colon_tuplex
+get_total_number_of_sequences invalid syntax (<string>, line 2)
+closest_num invalid syntax (<string>, line 2)
+test_error of check_occurences
+test_error of check_value
+index_multiplication invalid syntax (<string>, line 2)
+max_sub_array_sum max_sub_array_sum() takes 1 positional argument but 2 were given
+test_error of polar_rect
+parabola_directrix invalid syntax (<string>, line 2)
+last invalid syntax (<string>, line 2)
+sum_Of_Subarray_Prod name 'sum_Of_Subarray_Prod' is not defined
+test_error of check_value
+test_error of comb_sort
+test_error of newman_prime
+max_sub_array_sum max_sub_array_sum() takes 1 positional argument but 2 were given
+test_error of check_occurences
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of cal_sum
+test_error of get_total_number_of_sequences
+get_median get_median() takes 2 positional arguments but 3 were given
+div_list invalid syntax (<string>, line 2)
+reverse_words invalid syntax (<string>, line 2)
+max_sub_array_sum max_sub_array_sum() takes 1 positional argument but 2 were given
+sum_in_range invalid syntax (<string>, line 2)
+sum_Of_Subarray_Prod name 'sum_Of_Subarray_Prod' is not defined
+trim_tuple invalid syntax (<string>, line 2)
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+sort_numeric_strings invalid syntax (<string>, line 2)
+extract_even invalid syntax (<string>, line 2)
+test_error of cal_sum
+polar_rect invalid syntax (<string>, line 2)
+count_no_of_ways invalid syntax (<string>, line 2)
+sort_counter invalid syntax (<string>, line 2)
+test_error of check_occurences
+test_error of parabola_directrix
+sum_of_digits invalid syntax (<string>, line 2)
+find_kth invalid syntax (<string>, line 2)
+filter_data EOL while scanning string literal (<string>, line 2)
+check_expression invalid syntax (<string>, line 2)
+check_value invalid syntax (<string>, line 2)
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of sum_of_digits
+count_binary_seq invalid syntax (<string>, line 2)
+test_error of get_total_number_of_sequences
+lateralsuface_cylinder invalid syntax (<string>, line 2)
+test_error of sort_counter
+volume_cone invalid syntax (<string>, line 2)
+test_error of sort_numeric_strings
+test_error of trim_tuple
+remove_kth_element invalid syntax (<string>, line 2)
+lateralsuface_cylinder name 'lateralsuface_cylinder' is not defined
+replace_blank invalid syntax (<string>, line 2)
+test_error of sum_of_digits
+test_error of polar_rect
+check_value check_value() takes 1 positional argument but 2 were given
+max_sub_array_sum invalid syntax (<string>, line 2)
+substract_elements invalid syntax (<string>, line 2)
+count_Set_Bits invalid syntax (<string>, line 2)
+test_error of sort_numeric_strings
+count_Set_Bits name 'count_Set_Bits' is not defined
+test_error of get_total_number_of_sequences
+lateralsuface_cylinder name 'lateralsuface_cylinder' is not defined
+test_error of parabola_directrix
+test_error of filter_data
+test_error of polar_rect
+test_error of trim_tuple
+check_value check_value() takes 1 positional argument but 2 were given
+substract_elements name 'substract_elements' is not defined
+test_error of max_sub_array_sum
+test_error of remove_kth_element
+max_val invalid syntax (<string>, line 2)
+pack_consecutive_duplicates invalid syntax (<string>, line 2)
+test_error of sort_numeric_strings
+test_error of sum_of_digits
+is_not_prime invalid syntax (<string>, line 2)
+check_value check_value() takes 1 positional argument but 2 were given
+lateralsuface_cylinder name 'lateralsuface_cylinder' is not defined
+decimal_to_binary invalid syntax (<string>, line 2)
+rearrange_bigger invalid syntax (<string>, line 2)
+get_pairs_count invalid syntax (<string>, line 2)
+get_median get_median() takes 2 positional arguments but 3 were given
+empty_dit invalid syntax (<string>, line 2)
+count_Set_Bits name 'count_Set_Bits' is not defined
+test_error of remove_kth_element
+cal_sum invalid syntax (<string>, line 2)
+find_literals invalid syntax (<string>, line 2)
+common_element invalid syntax (<string>, line 2)
+test_error of trim_tuple
+test_error of parabola_directrix
+and_tuples invalid syntax (<string>, line 2)
+max_sub_array_sum max_sub_array_sum() takes 1 positional argument but 2 were given
+text_starta_endb invalid syntax (<string>, line 2)
+test_error of polar_rect
+test_error of filter_data
+count_Set_Bits name 'count_Set_Bits' is not defined
+test_error of remove_kth_element
+frequency_lists invalid syntax (<string>, line 2)
+new_tuple invalid syntax (<string>, line 2)
+empty_dit name 'empty_dit' is not defined
+substract_elements name 'substract_elements' is not defined
+volume_sphere invalid syntax (<string>, line 2)
+test_error of and_tuples
+max_sub_array_sum max_sub_array_sum() takes 1 positional argument but 2 were given
+test_error of cal_sum
+empty_dit name 'empty_dit' is not defined
+index_minimum invalid syntax (<string>, line 2)
+lateralsuface_cylinder invalid syntax (<string>, line 2)
+substract_elements name 'substract_elements' is not defined
+expensive_items invalid syntax (<string>, line 2)
+empty_dit name 'empty_dit' is not defined
+newman_prime invalid syntax (<string>, line 2)
+add_dict_to_tuple invalid syntax (<string>, line 2)
+test_error of and_tuples
+wind_chill invalid syntax (<string>, line 2)
+sort_numeric_strings invalid syntax (<string>, line 2)
+list_to_float invalid syntax (<string>, line 2)
+lateralsuface_cylinder name 'lateralsuface_cylinder' is not defined
+test_error of filter_data
+cube_nums invalid syntax (<string>, line 2)
+get_total_number_of_sequences invalid syntax (<string>, line 2)
+test_error of wind_chill
+test_error of and_tuples
+list_to_float Each item in the input list must be a list.
+test_error of cal_sum
+big_diff invalid syntax (<string>, line 2)
+test_error of wind_chill
+test_error of sort_numeric_strings
+lateralsuface_cylinder name 'lateralsuface_cylinder' is not defined
+drop_empty invalid syntax (<string>, line 2)
+index_multiplication invalid syntax (<string>, line 2)
+empty_dit invalid syntax (<string>, line 2)
+test_error of list_to_float
+largest_subset invalid syntax (<string>, line 2)
+sum_of_digits invalid syntax (<string>, line 2)
+count_Set_Bits invalid syntax (<string>, line 2)
+test_error of newman_prime
+remove_kth_element invalid syntax (<string>, line 2)
+rectangle_area invalid syntax (<string>, line 2)
+test_error of wind_chill
+lateralsuface_cylinder name 'lateralsuface_cylinder' is not defined
+count_Occurrence invalid syntax (<string>, line 2)
+intersection_array invalid syntax (<string>, line 2)
+test_error of cal_sum
+test_error of list_to_float
+empty_dit name 'empty_dit' is not defined
+count_Set_Bits name 'count_Set_Bits' is not defined
+and_tuples EOL while scanning string literal (<string>, line 2)
+index_multiplication All elements in the tuples must be numeric (int or float)
+max_product invalid syntax (<string>, line 2)
+test_error of sum_of_digits
+count invalid syntax (<string>, line 2)
+test_error of get_total_number_of_sequences
+is_nonagonal invalid syntax (<string>, line 2)
+text_match_one invalid syntax (<string>, line 2)
+upper_ctr invalid syntax (<string>, line 2)
+test_error of intersection_array
+remove_parenthesis invalid syntax (<string>, line 2)
+test_error of newman_prime
+test_error of remove_kth_element
+count_reverse_pairs invalid syntax (<string>, line 2)
+substract_elements invalid syntax (<string>, line 2)
+max_difference invalid syntax (<string>, line 2)
+merge_dictionaries_three invalid syntax (<string>, line 2)
+test_error of upper_ctr
+issort_list invalid syntax (<string>, line 2)
+count_Set_Bits name 'count_Set_Bits' is not defined
+is_nonagonal name 'is_nonagonal' is not defined
+number_ctr invalid syntax (<string>, line 2)
+test_error of sum_of_digits
+set_left_most_unset_bit invalid syntax (<string>, line 2)
+test_error of count_Occurrence
+group_tuples invalid syntax (<string>, line 2)
+remove_parenthesis Input must be a string.
+empty_dit name 'empty_dit' is not defined
+test_error of count_reverse_pairs
+remove_dirty_chars invalid syntax (<string>, line 2)
+test_error of upper_ctr
+max_difference unsupported operand type(s) for -: 'tuple' and 'tuple'
+test_error of max_product
+is_nonagonal name 'is_nonagonal' is not defined
+count_Set_Bits name 'count_Set_Bits' is not defined
+max_length_list invalid syntax (<string>, line 2)
+test_error of set_left_most_unset_bit
+test_error of remove_kth_element
+remove_parenthesis Input must be a string.
+test_error of get_total_number_of_sequences
+bitwise_xor invalid syntax (<string>, line 2)
+test_error of group_tuples
+test_error of count_Occurrence
+empty_dit name 'empty_dit' is not defined
+test_error of and_tuples
+test_error of max_difference
+get_equal invalid syntax (<string>, line 2)
+is_nonagonal name 'is_nonagonal' is not defined
+test_error of sum_of_digits
+extract_singly invalid syntax (<string>, line 2)
+max_length invalid syntax (<string>, line 2)
+remove_parenthesis Input must be a string.
+test_error of upper_ctr
+test_error of max_length_list
+count_same_pair invalid syntax (<string>, line 2)
+sumofFactors invalid syntax (<string>, line 2)
+test_error of set_left_most_unset_bit
+test_error of remove_kth_element
+index_multiplication All elements in the tuples must be numeric (int or float)
+test_error of max_difference
+wind_chill invalid syntax (<string>, line 2)
+find_adverb_position invalid syntax (<string>, line 2)
+extract_singly All elements of the input list must be lists.
+test_error of get_total_number_of_sequences
+list_tuple invalid syntax (<string>, line 2)
+list_to_float invalid syntax (<string>, line 2)
+test_error of max_length
+test_error of max_product
+test_error of and_tuples
+extract_singly All elements of the input list must be lists.
+bell_Number invalid syntax (<string>, line 2)
+test_error of set_left_most_unset_bit
+test_error of group_tuples
+test_error of find_adverb_position
+substract_elements name 'substract_elements' is not defined
+right_insertion invalid syntax (<string>, line 2)
+test_error of max_length
+index_multiplication All elements in the tuples must be numeric (int or float)
+sumofFactors name 'sumofFactors' is not defined
+test_error of max_product
+find_min_diff invalid syntax (<string>, line 2)
+list_to_float Each item in the input list must be a list.
+test_error of wind_chill
+upper_ctr invalid syntax (<string>, line 2)
+test_error of and_tuples
+extract_singly All elements of the input list must be lists.
+test_error of max_length
+pair_xor_Sum invalid syntax (<string>, line 2)
+test_error of group_tuples
+toggle_middle_bits invalid syntax (<string>, line 2)
+tetrahedral_number invalid syntax (<string>, line 2)
+sumofFactors name 'sumofFactors' is not defined
+test_error of upper_ctr
+remove_parenthesis invalid syntax (<string>, line 2)
+test_error of find_adverb_position
+set_left_most_unset_bit invalid syntax (<string>, line 2)
+is_nonagonal invalid syntax (<string>, line 2)
+tuple_intersection invalid syntax (<string>, line 2)
+pair_xor_Sum name 'pair_xor_Sum' is not defined
+list_to_float Each item in the input list must be a list.
+substract_elements name 'substract_elements' is not defined
+count_integer invalid syntax (<string>, line 2)
+test_error of upper_ctr
+replace_specialchar invalid syntax (<string>, line 2)
+test_error of wind_chill
+sumofFactors name 'sumofFactors' is not defined
+test_error of set_left_most_unset_bit
+test_error of find_adverb_position
+find_Rotations invalid syntax (<string>, line 2)
+test_error of upper_ctr
+even_position invalid syntax (<string>, line 2)
+max_length invalid syntax (<string>, line 2)
+remove_parenthesis Input must be a string.
+nth_nums invalid syntax (<string>, line 2)
+combinations_colors invalid syntax (<string>, line 2)
+test_error of is_nonagonal
+list_to_float Each item in the input list must be a list.
+test_error of wind_chill
+extract_singly invalid syntax (<string>, line 2)
+max_difference invalid syntax (<string>, line 2)
+test_error of tuple_intersection
+cummulative_sum invalid syntax (<string>, line 2)
+remove_parenthesis Input must be a string.
+test_error of set_left_most_unset_bit
+dict_filter invalid syntax (<string>, line 2)
+get_coordinates invalid syntax (<string>, line 2)
+pair_xor_Sum name 'pair_xor_Sum' is not defined
+substract_elements name 'substract_elements' is not defined
+test_error of is_nonagonal
+group_tuples invalid syntax (<string>, line 2)
+extract_values invalid syntax (<string>, line 2)
+text_lowercase_underscore invalid syntax (<string>, line 2)
+test_error of max_length
+remove_parenthesis Input must be a string.
+test_error of tuple_intersection
+max_difference All elements in the list must be numeric.
+pair_xor_Sum name 'pair_xor_Sum' is not defined
+extract_string invalid syntax (<string>, line 2)
+check_str invalid syntax (<string>, line 2)
+multiple_to_single invalid syntax (<string>, line 2)
+test_error of set_left_most_unset_bit
+test_error of is_nonagonal
+is_num_decagonal invalid syntax (<string>, line 2)
+check_distinct invalid syntax (<string>, line 2)
+test_error of get_coordinates
+tuple_size invalid syntax (<string>, line 2)
+sequence invalid syntax (<string>, line 2)
+test_error of group_tuples
+max_product invalid syntax (<string>, line 2)
+extract_singly All elements of the input list must be lists.
+add_tuple invalid syntax (<string>, line 2)
+is_num_decagonal name 'is_num_decagonal' is not defined
+test_error of tuple_intersection
+is_Sub_Array invalid syntax (<string>, line 2)
+frequency invalid syntax (<string>, line 2)
+get_ludic invalid syntax (<string>, line 2)
+find_dissimilar invalid syntax (<string>, line 2)
+find_adverb_position invalid syntax (<string>, line 2)
+is_num_decagonal name 'is_num_decagonal' is not defined
+sumofFactors invalid syntax (<string>, line 2)
+test_error of add_tuple
+reverse_Array_Upto_K invalid syntax (<string>, line 2)
+test_error of max_product
+test_error of get_ludic
+pair_xor_Sum invalid syntax (<string>, line 2)
+test_error of newman_prime
+test_error of find_adverb_position
+catalan_number invalid syntax (<string>, line 2)
+ascii_value invalid syntax (<string>, line 2)
+is_num_decagonal name 'is_num_decagonal' is not defined
+sumofFactors name 'sumofFactors' is not defined
+are_equivalent invalid syntax (<string>, line 2)
+test_error of get_ludic
+sum_negativenum invalid syntax (<string>, line 2)
+test_error of max_product
+pair_xor_Sum name 'pair_xor_Sum' is not defined
+tuple_intersection invalid syntax (<string>, line 2)
+circle_circumference invalid syntax (<string>, line 2)
+sumofFactors name 'sumofFactors' is not defined
+len_log invalid syntax (<string>, line 2)
+maximize_elements invalid syntax (<string>, line 2)
+filter_oddnumbers invalid syntax (<string>, line 2)
+test_error of get_ludic
+test_error of max_length
+extract_quotation invalid syntax (<string>, line 2)
+lcs_of_three invalid syntax (<string>, line 2)
+test_error of max_product
+sumofFactors name 'sumofFactors' is not defined
+is_num_decagonal invalid syntax (<string>, line 2)
+test_error of tuple_intersection
+pair_xor_Sum name 'pair_xor_Sum' is not defined
+extract_singly All elements of the input list must be lists.
+test_error of maximize_elements
+add_pairwise invalid syntax (<string>, line 2)
+difference invalid syntax (<string>, line 2)
+armstrong_number invalid syntax (<string>, line 2)
+is_num_decagonal name 'is_num_decagonal' is not defined
+test_error of tuple_intersection
+convert_list_dictionary invalid syntax (<string>, line 2)
+pair_xor_Sum name 'pair_xor_Sum' is not defined
+extract_singly All elements of the input list must be lists.
+square_perimeter invalid syntax (<string>, line 2)
+lateralsurface_cube invalid syntax (<string>, line 2)
+radian_degree invalid syntax (<string>, line 2)
+find_adverbs invalid syntax (<string>, line 2)
+is_num_decagonal name 'is_num_decagonal' is not defined
+test_error of max_length
+test_error of tuple_intersection
+check_smaller invalid syntax (<string>, line 2)
+min_k invalid syntax (<string>, line 2)
+test_error of convert_list_dictionary
+check_monthnumb_number invalid syntax (<string>, line 2)
+smallest_num invalid syntax (<string>, line 2)
+check_greater invalid syntax (<string>, line 2)
+test_error of find_adverbs
+larg_nnum invalid syntax (<string>, line 2)
+pancake_sort invalid syntax (<string>, line 2)
+check_type invalid syntax (<string>, line 2)
+geometric_sum invalid syntax (<string>, line 2)
+is_num_decagonal name 'is_num_decagonal' is not defined
+max_sub_array_sum_repeated invalid syntax (<string>, line 2)
+find_char_long invalid syntax (<string>, line 2)
+odd_values_string invalid syntax (<string>, line 2)
+is_product_even invalid syntax (<string>, line 2)
+get_ludic invalid syntax (<string>, line 2)
+min_k All elements in the list must be numbers.
+check_char invalid syntax (<string>, line 2)
+test_error of geometric_sum
+find_char_long Input must be a string.
+test_error of odd_values_string
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+check_Consecutive invalid syntax (<string>, line 2)
+find_char_long Input must be a string.
+next_power_of_2 invalid syntax (<string>, line 2)
+tuple_str_int invalid syntax (<string>, line 2)
+test_error of check_char
+min_k All elements in the list must be non-empty tuples of numbers.
+count_first_elements invalid syntax (<string>, line 2)
+find_Index invalid syntax (<string>, line 2)
+test_error of geometric_sum
+occurance_substring invalid syntax (<string>, line 2)
+count_bidirectional invalid syntax (<string>, line 2)
+test_error of get_ludic
+power invalid syntax (<string>, line 2)
+find_char_long Input must be a string.
+split_Arr invalid syntax (<string>, line 2)
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+count_first_elements '<' not supported between instances of 'int' and 'tuple'
+test_error of occurance_substring
+rotate_right invalid syntax (<string>, line 2)
+test_error of count_first_elements
+sum_range_list invalid syntax (<string>, line 2)
+min_k All elements in the list must be non-empty tuples of numbers.
+test_error of occurance_substring
+count_element_in_list invalid syntax (<string>, line 2)
+find_char_long invalid syntax (<string>, line 2)
+test_error of get_ludic
+max_sum invalid syntax (<string>, line 2)
+find_Element invalid syntax (<string>, line 2)
+change_date_format invalid syntax (<string>, line 2)
+test_error of occurance_substring
+test_error of count_first_elements
+my_dict invalid syntax (<string>, line 2)
+find_tuples invalid syntax (<string>, line 2)
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+check_monthnumber_number invalid syntax (<string>, line 2)
+amicable_numbers_sum invalid syntax (<string>, line 2)
+move_zero invalid syntax (<string>, line 2)
+find_char_long Input must be a string.
+my_dict Input must be a dictionary.
+big_sum invalid syntax (<string>, line 2)
+list_split invalid syntax (<string>, line 2)
+check_integer invalid syntax (<string>, line 2)
+find_Element name 'find_Element' is not defined
+is_sublist invalid syntax (<string>, line 2)
+count_occurance invalid syntax (<string>, line 2)
+positive_count invalid syntax (<string>, line 2)
+find_char_long Input must be a string.
+test_error of get_ludic
+my_dict Input must be a dictionary.
+merge_sorted_list invalid syntax (<string>, line 2)
+pair_wise invalid syntax (<string>, line 2)
+find invalid syntax (<string>, line 2)
+is_decimal invalid syntax (<string>, line 2)
+power_base_sum invalid syntax (<string>, line 2)
+find_char_long Input must be a string.
+odd_Equivalent invalid syntax (<string>, line 2)
+convert invalid syntax (<string>, line 2)
+my_dict Input must be a dictionary.
+test_error of merge_sorted_list
+test_error of positive_count
+find_Element name 'find_Element' is not defined
+min_val invalid syntax (<string>, line 2)
+test_error of list_split
+occurance_substring invalid syntax (<string>, line 2)
+is_upper invalid syntax (<string>, line 2)
+convert Input must be a list or tuple of complex numbers.
+find_Element name 'find_Element' is not defined
+count_first_elements invalid syntax (<string>, line 2)
+larg_nnum invalid syntax (<string>, line 2)
+test_error of is_upper
+test_error of occurance_substring
+union_elements invalid syntax (<string>, line 2)
+convert Input must be a list or tuple of complex numbers.
+sort_matrix invalid syntax (<string>, line 2)
+my_dict invalid syntax (<string>, line 2)
+min_k invalid syntax (<string>, line 2)
+test_error of positive_count
+count_first_elements All elements in the tuple must be comparable (int, float, or str).
+test_error of occurance_substring
+my_dict Input must be a dictionary.
+convert Input must be a list or tuple of complex numbers.
+find_Element invalid syntax (<string>, line 2)
+test_error of positive_count
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+division_elements invalid syntax (<string>, line 2)
+test_error of occurance_substring
+my_dict Input must be a dictionary.
+count_first_elements '<' not supported between instances of 'int' and 'tuple'
+my_dict Input must be a dictionary.
+find_Element name 'find_Element' is not defined
+convert invalid syntax (<string>, line 2)
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of count_first_elements
+find_Element name 'find_Element' is not defined
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+min_k All elements in the list must be numbers.
+find_Element name 'find_Element' is not defined
+positive_count invalid syntax (<string>, line 2)
+convert Input must be a list or tuple of complex numbers.
+min_k All elements in the list must be tuples of numbers.
+convert Input must be a list or tuple of complex numbers.
+min_k All elements in the list must be tuples of numbers.
+convert Input must be a list or tuple of complex numbers.
+test_error of positive_count
+test_error of positive_count
+test_error of positive_count
+toggle_string invalid syntax (<string>, line 2)
+max_sum_increasing_subseq invalid syntax (<string>, line 2)
