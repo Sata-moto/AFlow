@@ -285,8 +285,10 @@ class EnhancedOptimizer(Optimizer):
                 if success:
                     # Save metadata for successful adoption
                     self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=True)
-                    # Add fused workflow to processed_experience.json
-                    self._add_fusion_to_experience(envelope_workflows, fusion_score)
+                    
+                    # Update the fusion experience.json with the actual score
+                    self._update_fusion_experience(envelope_workflows, fusion_score)
+                    
                     return fusion_score
                 else:
                     logger.error("Failed to adopt fused workflow")
@@ -581,7 +583,7 @@ class EnhancedOptimizer(Optimizer):
     
     def _adopt_fused_workflow(self, envelope_workflows: List[Dict]) -> bool:
         """
-        Adopt the fused workflow as the next round's workflow
+        Adopt the fused workflow as the next round's workflow with standard directory structure
         
         Args:
             envelope_workflows: Original envelope workflows used for fusion
@@ -595,7 +597,7 @@ class EnhancedOptimizer(Optimizer):
             # Source: fused workflow directory
             fusion_dir = f"{self.root_path}/workflows/round_fused"
             
-            # Target: next round directory
+            # Target: next round directory (standard round_X format)
             next_round = self.round + 1
             target_dir = f"{self.root_path}/workflows/round_{next_round}"
             
@@ -620,10 +622,16 @@ class EnhancedOptimizer(Optimizer):
             with open(init_file, 'w') as f:
                 f.write("")
             
+            # Create experience.json for fusion workflow
+            self._create_fusion_experience_file(target_dir, envelope_workflows, next_round)
+            
+            # Create log.json for fusion workflow
+            self._create_fusion_log_file(target_dir, envelope_workflows)
+            
             # Update the current graph to the fused one
             self.graph = self.graph_utils.load_graph(next_round, f"{self.root_path}/workflows")
             
-            logger.info(f"Successfully adopted fused workflow as round_{next_round}")
+            logger.info(f"Successfully adopted fused workflow as round_{next_round} with standard structure")
             return True
             
         except Exception as e:
@@ -672,53 +680,6 @@ class EnhancedOptimizer(Optimizer):
         except Exception as e:
             logger.error(f"Error saving fusion metadata: {e}")
     
-    def _add_fusion_to_experience(self, envelope_workflows: List[Dict], fusion_score: float) -> None:
-        """
-        Add fused workflow information to processed_experience.json
-        
-        Args:
-            envelope_workflows: Original envelope workflows used for fusion
-            fusion_score: Score achieved by fused workflow
-        """
-        try:
-            # Create fusion modification description
-            source_rounds = [w["round"] for w in envelope_workflows]
-            source_scores = [f"{w['avg_score']:.4f}" for w in envelope_workflows]
-            
-            fusion_modification = f"Fused from rounds {source_rounds} (scores: {source_scores}). " \
-                                f"Combined the best aspects of {len(envelope_workflows)} high-performing workflows " \
-                                f"to achieve improved coverage and performance."
-            
-            # Load current processed experience
-            experience_path = f"{self.root_path}/workflows/processed_experience.json"
-            processed_experience = {}
-            
-            if os.path.exists(experience_path):
-                with open(experience_path, 'r', encoding='utf-8') as f:
-                    processed_experience = json.load(f)
-            
-            # Add entry for the new fused round
-            next_round = self.round + 1
-            processed_experience[str(next_round)] = {
-                "score": fusion_score,
-                "success": {},
-                "failure": {},
-                "fusion_info": {
-                    "is_fusion": True,
-                    "source_rounds": source_rounds,
-                    "fusion_modification": fusion_modification
-                }
-            }
-            
-            # Save updated experience
-            with open(experience_path, 'w', encoding='utf-8') as f:
-                json.dump(processed_experience, f, indent=4, ensure_ascii=False)
-            
-            logger.info(f"Added fusion workflow to processed_experience.json for round {next_round}")
-            
-        except Exception as e:
-            logger.error(f"Error adding fusion to experience: {e}")
-    
     def _cleanup_fusion_directories(self) -> None:
         """
         Clean up temporary fusion directories (round_fused and round_fused_eval)
@@ -738,6 +699,121 @@ class EnhancedOptimizer(Optimizer):
             
         except Exception as e:
             logger.error(f"Error cleaning up fusion directories: {e}")
+
+    def _create_fusion_experience_file(self, target_dir: str, envelope_workflows: List[Dict], fusion_round: int) -> None:
+        """
+        Create experience.json file for fusion workflow following the standard format
+        
+        Args:
+            target_dir: Target directory for the fusion round
+            envelope_workflows: Source workflows that were fused
+            fusion_round: The round number of this fusion
+        """
+        try:
+            # Find the best source workflow to use as "father node"
+            best_workflow = max(envelope_workflows, key=lambda w: w["avg_score"])
+            father_node = best_workflow["round"]
+            
+            # Create fusion modification description
+            source_rounds = [w["round"] for w in envelope_workflows]
+            source_scores = [f"{w['avg_score']:.4f}" for w in envelope_workflows]
+            
+            fusion_modification = f"Workflow Fusion: Combined high-performing workflows from rounds {source_rounds} " \
+                                f"(scores: {source_scores}). Integrated the best aspects of {len(envelope_workflows)} " \
+                                f"workflows to achieve improved coverage and performance."
+            
+            # Create experience data following the standard format
+            experience_data = {
+                "father node": father_node,
+                "modification": fusion_modification,
+                "before": best_workflow["avg_score"],  # Use best source score as "before"
+                "after": None,  # Will be updated when evaluation completes
+                "succeed": None  # Will be updated when evaluation completes
+            }
+            
+            # Save experience.json
+            experience_path = os.path.join(target_dir, "experience.json")
+            with open(experience_path, 'w', encoding='utf-8') as f:
+                json.dump(experience_data, f, indent=4, ensure_ascii=False)
+            
+            logger.info(f"Created fusion experience.json with father node {father_node}")
+            
+        except Exception as e:
+            logger.error(f"Error creating fusion experience file: {e}")
+    
+    def _create_fusion_log_file(self, target_dir: str, envelope_workflows: List[Dict]) -> None:
+        """
+        Create log.json file for fusion workflow
+        
+        Args:
+            target_dir: Target directory for the fusion round
+            envelope_workflows: Source workflows that were fused
+        """
+        try:
+            # Create a comprehensive log entry for fusion
+            log_data = {
+                "fusion_metadata": {
+                    "timestamp": time.time(),
+                    "fusion_type": "envelope_fusion",
+                    "source_workflows": [
+                        {
+                            "round": w["round"],
+                            "score": w["avg_score"],
+                            "solved_problems": len(w["solved_problems"])
+                        }
+                        for w in envelope_workflows
+                    ],
+                    "total_unique_problems": len(set().union(*[set(w["solved_problems"]) for w in envelope_workflows])),
+                    "fusion_strategy": "Combined best aspects of envelope workflows using LLM-guided fusion"
+                },
+                # Initialize empty list for actual execution logs (will be populated during evaluation)
+                "execution_logs": []
+            }
+            
+            # Save log.json
+            log_path = os.path.join(target_dir, "log.json")
+            with open(log_path, 'w', encoding='utf-8') as f:
+                json.dump(log_data, f, indent=4, ensure_ascii=False)
+            
+            logger.info(f"Created fusion log.json with metadata for {len(envelope_workflows)} source workflows")
+            
+        except Exception as e:
+            logger.error(f"Error creating fusion log file: {e}")
+
+    def _update_fusion_experience(self, envelope_workflows: List[Dict], fusion_score: float) -> None:
+        """
+        Update the fusion workflow's experience.json with the evaluation results
+        
+        Args:
+            envelope_workflows: Source workflows that were fused
+            fusion_score: Score achieved by the fused workflow
+        """
+        try:
+            next_round = self.round + 1
+            experience_path = f"{self.root_path}/workflows/round_{next_round}/experience.json"
+            
+            if os.path.exists(experience_path):
+                # Load existing experience data
+                with open(experience_path, 'r', encoding='utf-8') as f:
+                    experience_data = json.load(f)
+                
+                # Find the best source workflow score as "before"
+                best_source_score = max(w["avg_score"] for w in envelope_workflows)
+                
+                # Update with evaluation results
+                experience_data["after"] = fusion_score
+                experience_data["succeed"] = fusion_score > best_source_score
+                
+                # Save updated experience
+                with open(experience_path, 'w', encoding='utf-8') as f:
+                    json.dump(experience_data, f, indent=4, ensure_ascii=False)
+                
+                logger.info(f"Updated fusion experience.json: before={best_source_score:.4f}, after={fusion_score:.4f}, succeed={experience_data['succeed']}")
+            else:
+                logger.error(f"Experience file not found: {experience_path}")
+                
+        except Exception as e:
+            logger.error(f"Error updating fusion experience: {e}")
 
     async def _optimize_graph(self):
         """Override parent method to remove the original fusion logic"""
