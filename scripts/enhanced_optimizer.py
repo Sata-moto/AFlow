@@ -260,17 +260,11 @@ class EnhancedOptimizer(Optimizer):
             
             logger.info(f"Minimum envelope score: {min_envelope_score:.4f}")
             
-            # Execute fusion process (creates temporary fused workflow)
+            # Execute fusion process (creates workflow directly in next round directory)
             fusion_success = await self._execute_fusion_async()
             
             if not fusion_success:
                 logger.error("Fusion process failed")
-                return None
-            
-            # Adopt the fused workflow as next round (with standard structure)
-            adoption_success = self._adopt_fused_workflow(envelope_workflows)
-            if not adoption_success:
-                logger.error("Failed to adopt fused workflow")
                 return None
             
             # Now evaluate the adopted fusion workflow using standard evaluation process
@@ -374,8 +368,8 @@ class EnhancedOptimizer(Optimizer):
             if not fusion_response:
                 return False
             
-            # Save fused workflow
-            return self._save_fused_workflow(fusion_response, envelope_workflows)
+            # Save fused workflow directly to next round directory
+            return self._save_fused_workflow_direct(fusion_response, envelope_workflows)
             
         except Exception as e:
             logger.error(f"Error executing fusion: {e}")
@@ -528,9 +522,9 @@ class EnhancedOptimizer(Optimizer):
         
         return content
     
-    def _save_fused_workflow(self, fusion_response: Dict[str, str], envelope_workflows: List[Dict]) -> bool:
+    def _save_fused_workflow_direct(self, fusion_response: Dict[str, str], envelope_workflows: List[Dict]) -> bool:
         """
-        Save the fused workflow to appropriate location
+        Save the fused workflow directly to the next round directory
         
         Args:
             fusion_response: Response from fusion LLM
@@ -540,43 +534,55 @@ class EnhancedOptimizer(Optimizer):
             bool: True if save successful
         """
         try:
-            # Create fusion directory in workflows (not workflows_fusion)
-            fusion_dir = f"{self.root_path}/workflows"
-            os.makedirs(fusion_dir, exist_ok=True)
+            # Calculate next round number
+            next_round = self.round + 1
             
-            # Create round directory for fused workflow
-            fusion_round_dir = os.path.join(fusion_dir, "round_fused")
-            os.makedirs(fusion_round_dir, exist_ok=True)
+            # Create next round directory directly
+            workflows_dir = f"{self.root_path}/workflows"
+            target_dir = os.path.join(workflows_dir, f"round_{next_round}")
+            os.makedirs(target_dir, exist_ok=True)
             
             # Save fused workflow files using graph_utils pattern
             self.graph_utils.write_graph_files(
-                fusion_round_dir,
+                target_dir,
                 fusion_response,
-                "fused",  # Use "fused" as round identifier
+                next_round,  # Use actual round number
                 self.dataset
             )
             
-            logger.info(f"Fused workflow saved to {fusion_dir}")
+            # Create __init__.py
+            init_file = os.path.join(target_dir, "__init__.py")
+            with open(init_file, 'w') as f:
+                f.write("")
+            
+            # Create experience.json for fusion workflow
+            self._create_fusion_experience_file(target_dir, envelope_workflows, next_round)
+            
+            # Create log.json for fusion workflow
+            self._create_fusion_log_file(target_dir, envelope_workflows)
+            
+            logger.info(f"Fused workflow saved directly to round_{next_round}")
             return True
             
         except Exception as e:
-            logger.error(f"Error saving fused workflow: {e}")
+            logger.error(f"Error saving fused workflow directly: {e}")
             return False
     
     async def _evaluate_fused_workflow(self) -> float:
         """
-        Evaluate the fused workflow and return its score
+        Evaluate the fused workflow from the next round directory and return its score
         
         Returns:
             float: Average score of fused workflow, None if evaluation failed
         """
         try:
-            # Load fused workflow
+            # Load fused workflow from next round directory
+            next_round = self.round + 1
             fusion_path = f"{self.root_path}/workflows"
-            fused_graph = self.graph_utils.load_graph("fused", fusion_path)
+            fused_graph = self.graph_utils.load_graph(next_round, fusion_path)
             
             if fused_graph is None:
-                logger.error("Failed to load fused workflow")
+                logger.error("Failed to load fused workflow from next round directory")
                 return None
             
             # Create temporary evaluation directory
@@ -602,63 +608,6 @@ class EnhancedOptimizer(Optimizer):
         except Exception as e:
             logger.error(f"Error evaluating fused workflow: {e}")
             return None
-    
-    def _adopt_fused_workflow(self, envelope_workflows: List[Dict]) -> bool:
-        """
-        Adopt the fused workflow as the next round's workflow with standard directory structure
-        
-        Args:
-            envelope_workflows: Original envelope workflows used for fusion
-            
-        Returns:
-            bool: True if adoption successful
-        """
-        try:
-            import shutil
-            
-            # Source: fused workflow directory
-            fusion_dir = f"{self.root_path}/workflows/round_fused"
-            
-            # Target: next round directory (standard round_X format)
-            next_round = self.round + 1
-            target_dir = f"{self.root_path}/workflows/round_{next_round}"
-            
-            # Ensure target directory exists
-            os.makedirs(target_dir, exist_ok=True)
-            
-            # Copy fused workflow files to next round
-            if os.path.exists(os.path.join(fusion_dir, "graph.py")):
-                shutil.copy2(
-                    os.path.join(fusion_dir, "graph.py"),
-                    os.path.join(target_dir, "graph.py")
-                )
-            
-            if os.path.exists(os.path.join(fusion_dir, "prompt.py")):
-                shutil.copy2(
-                    os.path.join(fusion_dir, "prompt.py"),
-                    os.path.join(target_dir, "prompt.py")
-                )
-            
-            # Create __init__.py
-            init_file = os.path.join(target_dir, "__init__.py")
-            with open(init_file, 'w') as f:
-                f.write("")
-            
-            # Create experience.json for fusion workflow
-            self._create_fusion_experience_file(target_dir, envelope_workflows, next_round)
-            
-            # Create log.json for fusion workflow
-            self._create_fusion_log_file(target_dir, envelope_workflows)
-            
-            # Update the current graph to the fused one
-            self.graph = self.graph_utils.load_graph(next_round, f"{self.root_path}/workflows")
-            
-            logger.info(f"Successfully adopted fused workflow as round_{next_round} with standard structure")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error adopting fused workflow: {e}")
-            return False
 
     def _save_fusion_metadata(self, envelope_workflows: List[Dict], fusion_score: float, adopted: bool = True) -> None:
         """
@@ -704,13 +653,13 @@ class EnhancedOptimizer(Optimizer):
     
     def _cleanup_fusion_directories(self) -> None:
         """
-        Clean up temporary fusion directories (round_fused and round_fused_eval)
+        Clean up temporary fusion evaluation directories
         """
         try:
             import shutil
             
+            # Only clean up temporary evaluation directories
             fusion_dirs = [
-                f"{self.root_path}/workflows/round_fused",
                 f"{self.root_path}/workflows/round_fused_eval"
             ]
             
