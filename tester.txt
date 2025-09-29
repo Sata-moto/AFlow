@@ -3689,3 +3689,1445 @@ test_error of jacobsthal_num
 test_error of find_sum
 similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
 angle_complex Inputs must be integers or floats.
+test_error of surfacearea_cylinder
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of is_polite
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+angle_complex Inputs must be integers or floats.
+angle_complex Inputs must be integers or floats.
+test_error of is_polite
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of count_rotation
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+angle_complex Inputs must be integers or floats.
+test_error of is_polite
+test_error of count_rotation
+test_error of eulerian_num
+test_error of count_rotation
+test_error of eulerian_num
+test_error of is_polite
+test_error of count_rotation
+test_error of is_polite
+test_error of count_rotation
+test_error of eulerian_num
+test_error of count_rotation
+test_error of is_polite
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of is_polite
+test_error of is_polite
+test_error of find_star_num
+test_error of find_star_num
+test_error of find_sum
+test_error of is_undulating
+test_error of sum_div
+test_error of surfacearea_cylinder
+test_error of get_max_sum
+test_error of angle_complex
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of sum_div
+test_error of k_smallest_pairs
+test_error of get_max_sum
+test_error of find_star_num
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of max_product_tuple
+test_error of angle_complex
+test_error of string_to_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of string_to_tuple
+test_error of get_max_sum
+test_error of max_product_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of extract_freq
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of start_withp
+test_error of surfacearea_cylinder
+test_error of extract_freq
+test_error of start_withp
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of long_words
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of get_max_sum
+test_error of max_product_tuple
+test_error of eulerian_num
+test_error of average_tuple
+test_error of divisible_by_digits
+test_error of Find_Max_Length
+test_error of find_sum
+test_error of average_tuple
+test_error of harmonic_sum
+test_error of eulerian_num
+test_error of divisible_by_digits
+test_error of text_match_zero_one
+test_error of jacobsthal_num
+test_error of average_tuple
+test_error of find_star_num
+test_error of find_sum
+test_error of harmonic_sum
+test_error of jacobsthal_num
+test_error of divisible_by_digits
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of find_sum
+test_error of harmonic_sum
+test_error of jacobsthal_num
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex Inputs must be numeric (int or float).
+test_error of divisible_by_digits
+test_error of find_sum
+test_error of count_rotation
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of angle_complex
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of max_product_tuple
+test_error of angle_complex
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of angle_complex
+test_error of average_tuple
+test_error of harmonic_sum
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of divisible_by_digits
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of divisible_by_digits
+test_error of average_tuple
+test_error of divisible_by_digits
+test_error of divisible_by_digits
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of long_words
+test_error of extract_freq
+test_error of Find_Max_Length
+test_error of max_product_tuple
+test_error of text_match_zero_one
+test_error of is_undulating
+test_error of is_polite
+test_error of max_product_tuple
+test_error of angle_complex
+test_error of surfacearea_cylinder
+test_error of start_withp
+test_error of average_tuple
+test_error of test_three_equal
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of string_to_tuple
+test_error of angle_complex
+test_error of is_polite
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of find_Parity
+test_error of count_rotation
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of max_product_tuple
+test_error of find_sum
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of sum_div
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of find_sum
+test_error of divisible_by_digits
+test_error of find_star_num
+test_error of harmonic_sum
+test_error of sum_div
+test_error of find_sum
+test_error of is_polite
+test_error of divisible_by_digits
+test_error of harmonic_sum
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of count_rotation
+test_error of harmonic_sum
+test_error of eulerian_num
+similar_elements Both arguments must be lists.
+test_error of find_star_num
+test_error of k_smallest_pairs
+test_error of angle_complex
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of eulerian_num
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of jacobsthal_num
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of angle_complex
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of divisible_by_digits
+test_error of find_sum
+test_error of jacobsthal_num
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of divisible_by_digits
+test_error of is_polite
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of harmonic_sum
+test_error of jacobsthal_num
+test_error of surfacearea_cylinder
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of max_product_tuple
+test_error of jacobsthal_num
+test_error of harmonic_sum
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of angle_complex
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of max_product_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of is_polite
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of average_tuple
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of find_star_num
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of is_polite
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of divisible_by_digits
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of find_star_num
+test_error of is_polite
+test_error of max_product_tuple
+test_error of eulerian_num
+test_error of angle_complex
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of count_rotation
+test_error of divisible_by_digits
+test_error of find_sum
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of find_sum
+test_error of find_star_num
+test_error of divisible_by_digits
+test_error of count_rotation
+test_error of find_sum
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of find_star_num
+test_error of divisible_by_digits
+test_error of count_rotation
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of find_star_num
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of count_rotation
+test_error of eulerian_num
+test_error of find_star_num
+test_error of jacobsthal_num
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of count_rotation
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of string_to_tuple
+test_error of average_tuple
+test_error of long_words
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of angle_complex
+test_error of find_sum
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of k_smallest_pairs
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+test_error of eulerian_num
+test_error of angle_complex
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of count_rotation
+test_error of harmonic_sum
+test_error of find_sum
+test_error of find_star_num
+test_error of eulerian_num
+test_error of extract_freq
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of sum_div
+test_error of Find_Max_Length
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of is_undulating
+test_error of eulerian_num
+test_error of divisible_by_digits
+test_error of sum_div
+test_error of start_withp
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of count_rotation
+test_error of jacobsthal_num
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex Both a and b must be numeric types (int or float).
+test_error of jacobsthal_num
+test_error of count_rotation
+test_error of max_product_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of count_rotation
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of surfacearea_cylinder
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of average_tuple
+test_error of is_polite
+test_error of harmonic_sum
+test_error of find_star_num
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex Both a and b must be numeric types (int or float).
+test_error of find_star_num
+test_error of is_polite
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of harmonic_sum
+test_error of find_sum
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+angle_complex Both a and b must be numeric types (int or float).
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of find_star_num
+test_error of max_product_tuple
+angle_complex Both a and b must be numeric types (int or float).
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of find_star_num
+test_error of find_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of find_star_num
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of surfacearea_cylinder
+angle_complex Both a and b must be numeric types (int or float).
+test_error of find_sum
+test_error of eulerian_num
+test_error of average_tuple
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of jacobsthal_num
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of max_product_tuple
+test_error of eulerian_num
+test_error of is_polite
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of is_polite
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of is_polite
+test_error of count_rotation
+test_error of count_rotation
+test_error of is_polite
+test_error of is_polite
+test_error of count_rotation
+test_error of text_match_zero_one
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of string_to_tuple
+test_error of angle_complex
+test_error of find_star_num
+test_error of sum_div
+test_error of surfacearea_cylinder
+test_error of max_product_tuple
+test_error of average_tuple
+test_error of divisible_by_digits
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of sum_div
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of average_tuple
+test_error of divisible_by_digits
+test_error of extract_freq
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of angle_complex
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of is_polite
+test_error of extract_freq
+test_error of average_tuple
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of divisible_by_digits
+test_error of find_star_num
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of count_rotation
+test_error of harmonic_sum
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of divisible_by_digits
+test_error of find_star_num
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of eulerian_num
+test_error of harmonic_sum
+test_error of is_polite
+test_error of harmonic_sum
+test_error of is_undulating
+test_error of start_withp
+test_error of find_sum
+test_error of is_polite
+test_error of k_smallest_pairs
+test_error of max_product_tuple
+test_error of long_words
+test_error of is_undulating
+test_error of find_sum
+test_error of count_rotation
+test_error of find_sum
+test_error of jacobsthal_num
+test_error of eulerian_num
+angle_complex Both a and b must be numeric types (int or float).
+test_error of find_sum
+test_error of count_rotation
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of angle_complex
+test_error of jacobsthal_num
+test_error of average_tuple
+test_error of find_star_num
+angle_complex Both a and b must be numeric types (int or float).
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of average_tuple
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of harmonic_sum
+test_error of is_polite
+angle_complex Both a and b must be numeric types (int or float).
+test_error of find_star_num
+test_error of average_tuple
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of average_tuple
+test_error of harmonic_sum
+test_error of is_polite
+test_error of max_product_tuple
+angle_complex Both a and b must be numeric types (int or float).
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of angle_complex
+test_error of is_polite
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of angle_complex
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of is_polite
+test_error of harmonic_sum
+angle_complex Both a and b must be numeric types (int or float).
+test_error of jacobsthal_num
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of max_product_tuple
+test_error of average_tuple
+test_error of find_sum
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of harmonic_sum
+test_error of is_polite
+test_error of jacobsthal_num
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of average_tuple
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of max_product_tuple
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_polite
+test_error of surfacearea_cylinder
+test_error of find_star_num
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of max_product_tuple
+test_error of find_sum
+test_error of eulerian_num
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+test_error of max_product_tuple
+test_error of find_sum
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of eulerian_num
+test_error of max_product_tuple
+test_error of find_sum
+test_error of jacobsthal_num
+test_error of eulerian_num
+test_error of find_sum
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+test_error of find_sum
+test_error of Find_Max_Length
+test_error of string_to_tuple
+test_error of angle_complex
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of harmonic_sum
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of find_star_num
+test_error of find_sum
+test_error of harmonic_sum
+test_error of eulerian_num
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of k_smallest_pairs
+test_error of max_product_tuple
+test_error of sum_div
+test_error of find_star_num
+test_error of angle_complex
+test_error of sum_div
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of find_star_num
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of eulerian_num
+test_error of harmonic_sum
+test_error of get_max_sum
+test_error of surfacearea_cylinder
+test_error of text_match_zero_one
+test_error of long_words
+test_error of max_product_tuple
+test_error of count_rotation
+test_error of round_and_sum
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+test_error of eulerian_num
+test_error of extract_freq
+test_error of is_polite
+test_error of average_tuple
+test_error of jacobsthal_num
+test_error of get_max_sum
+test_error of start_withp
+test_error of max_occurrences
+test_error of average_tuple
+test_error of is_polite
+test_error of eulerian_num
+test_error of jacobsthal_num
+test_error of get_max_sum
+test_error of count_rotation
+test_error of is_undulating
+test_error of average_tuple
+test_error of jacobsthal_num
+test_error of is_undulating
+test_error of get_max_sum
+test_error of jacobsthal_num
+test_error of is_polite
+test_error of is_polite
+test_error of string_to_tuple
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of extract_freq
+test_error of harmonic_sum
+test_error of angle_complex
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_undulating
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of sum_div
+test_error of find_star_num
+test_error of max_product_tuple
+test_error of Find_Max_Length
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of angle_complex
+test_error of long_words
+test_error of max_product_tuple
+test_error of k_smallest_pairs
+test_error of text_match_zero_one
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of sum_div
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of find_star_num
+test_error of start_withp
+test_error of eulerian_num
+test_error of find_star_num
+test_error of start_withp
+test_error of eulerian_num
+test_error of max_product_tuple
+test_error of count_rotation
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of divisible_by_digits
+test_error of find_sum
+test_error of eulerian_num
+test_error of average_tuple
+test_error of find_sum
+test_error of divisible_by_digits
+test_error of average_tuple
+test_error of jacobsthal_num
+similar_elements invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+test_error of eulerian_num
+test_error of find_sum
+test_error of count_rotation
+test_error of average_tuple
+test_error of jacobsthal_num
+find_star_num invalid syntax (<string>, line 2)
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of find_sum
+test_error of harmonic_sum
+test_error of divisible_by_digits
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of jacobsthal_num
+test_error of divisible_by_digits
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+max_product_tuple invalid syntax (<string>, line 2)
+angle_complex invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of jacobsthal_num
+test_error of surfacearea_cylinder
+similar_elements invalid syntax (<string>, line 2)
+harmonic_sum invalid syntax (<string>, line 2)
+test_error of angle_complex
+test_error of max_product_tuple
+test_error of surfacearea_cylinder
+eulerian_num invalid syntax (<string>, line 2)
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of harmonic_sum
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of angle_complex
+test_error of harmonic_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+average_tuple invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+angle_complex invalid syntax (<string>, line 2)
+divisible_by_digits invalid syntax (<string>, line 2)
+test_error of average_tuple
+surfacearea_cylinder invalid syntax (<string>, line 2)
+find_sum invalid syntax (<string>, line 2)
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+count_rotation invalid syntax (<string>, line 2)
+test_error of angle_complex
+test_error of average_tuple
+test_error of surfacearea_cylinder
+test_error of find_sum
+jacobsthal_num invalid syntax (<string>, line 2)
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+max_product_tuple invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of count_rotation
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of average_tuple
+test_error of find_sum
+test_error of surfacearea_cylinder
+test_error of angle_complex
+test_error of max_product_tuple
+surfacearea_cylinder invalid syntax (<string>, line 2)
+test_error of count_rotation
+average_tuple invalid syntax (<string>, line 2)
+test_error of max_product_tuple
+find_sum invalid syntax (<string>, line 2)
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of find_sum
+test_error of average_tuple
+test_error of surfacearea_cylinder
+count_rotation invalid syntax (<string>, line 2)
+test_error of find_sum
+test_error of average_tuple
+test_error of find_sum
+test_error of count_rotation
+test_error of count_rotation
+test_error of count_rotation
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of extract_freq
+test_error of start_withp
+test_error of k_smallest_pairs
+test_error of long_words
+test_error of extract_freq
+test_error of text_match_zero_one
+similar_elements Both inputs must be lists.
+test_error of get_max_sum
+test_error of is_undulating
+test_error of jacobsthal_num
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of is_undulating
+test_error of surfacearea_cylinder
+test_error of get_max_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of count_rotation
+test_error of max_product_tuple
+test_error of find_sum
+test_error of get_max_sum
+test_error of jacobsthal_num
+test_error of surfacearea_cylinder
+test_error of harmonic_sum
+test_error of find_sum
+test_error of eulerian_num
+test_error of max_product_tuple
+test_error of count_rotation
+test_error of get_max_sum
+test_error of harmonic_sum
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of average_tuple
+test_error of string_to_tuple
+test_error of max_product_tuple
+test_error of harmonic_sum
+test_error of count_rotation
+test_error of surfacearea_cylinder
+test_error of jacobsthal_num
+test_error of find_star_num
+test_error of eulerian_num
+test_error of average_tuple
+test_error of divisible_by_digits
+test_error of angle_complex
+test_error of find_star_num
+test_error of surfacearea_cylinder
+test_error of harmonic_sum
+test_error of max_product_tuple
+test_error of average_tuple
+test_error of sum_div
+test_error of eulerian_num
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of is_polite
+test_error of find_star_num
+test_error of angle_complex
+test_error of average_tuple
+test_error of count_rotation
+test_error of divisible_by_digits
+test_error of sum_div
+test_error of find_star_num
+test_error of is_polite
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of divisible_by_digits
+test_error of divisible_by_digits
+test_error of is_polite
+test_error of find_sum
+test_error of is_polite
+test_error of eulerian_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of jacobsthal_num
+test_error of find_sum
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of get_max_sum
+test_error of jacobsthal_num
+test_error of find_sum
+test_error of surfacearea_cylinder
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of get_max_sum
+test_error of angle_complex
+test_error of jacobsthal_num
+test_error of count_rotation
+test_error of harmonic_sum
+test_error of find_star_num
+similar_elements similar_elements() missing 1 required positional argument: 'test_tup2'
+test_error of surfacearea_cylinder
+test_error of get_max_sum
+test_error of find_sum
+test_error of harmonic_sum
+test_error of average_tuple
+test_error of find_star_num
+test_error of angle_complex
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of max_product_tuple
+test_error of find_star_num
+test_error of get_max_sum
+test_error of count_rotation
+angle_complex angle_complex() takes 1 positional argument but 2 were given
+test_error of harmonic_sum
+test_error of surfacearea_cylinder
+test_error of average_tuple
+test_error of find_star_num
+test_error of angle_complex
+test_error of max_product_tuple
+test_error of average_tuple
+test_error of count_rotation
+test_error of is_polite
+test_error of max_product_tuple
+test_error of count_rotation
+test_error of eulerian_num
+test_error of is_polite
+test_error of max_product_tuple
+test_error of eulerian_num
+test_error of is_polite
+test_error of eulerian_num
+test_error of eulerian_num
+test_error of is_polite
+test_error of check_char
+test_error of sort_counter
+test_error of sum_of_digits
+find_char_long expected string or bytes-like object
+test_error of and_tuples
+test_error of sum_of_digits
+test_error of group_tuples
+test_error of max_Product
+find_char_long Input must be a string
+test_error of is_num_decagonal
+test_error of filter_oddnumbers
+test_error of sum_of_digits
+test_error of get_coordinates
+test_error of and_tuples
+test_error of max_Product
+test_error of add_tuple
+find_char_long Input must be a string
+test_error of group_tuples
+test_error of set_left_most_unset_bit
+test_error of is_num_decagonal
+test_error of sum_of_digits
+test_error of and_tuples
+test_error of set_left_most_unset_bit
+test_error of is_num_decagonal
+find_char_long Input must be a string
+test_error of group_tuples
+test_error of and_tuples
+test_error of set_left_most_unset_bit
+test_error of is_num_decagonal
+test_error of text_match_wordz
+test_error of count_element_in_list
+test_error of group_tuples
+test_error of set_left_most_unset_bit
+test_error of count_Pairs
+test_error of find_Element
+test_error of find_solution
+test_error of triangle_area
+test_error of merge_sorted_list
+test_error of find_Element
+test_error of count_Pairs
+test_error of sum_of_digits
+test_error of dog_age
+test_error of find_char_long
+test_error of sum_of_digits
+test_error of area_tetrahedron
+test_error of is_num_decagonal
+test_error of find_Element
+test_error of find_solution
+test_error of count_Pairs
+test_error of find_char_long
+test_error of comb_sort
+test_error of sum_of_digits
+test_error of and_tuples
+test_error of dog_age
+test_error of find_Element
+test_error of is_num_decagonal
+test_error of count_Pairs
+test_error of sum_of_digits
+test_error of find_char_long
+test_error of comb_sort
+test_error of is_num_decagonal
+test_error of newman_prime
+test_error of dog_age
+test_error of find_char_long
+test_error of is_num_decagonal
+test_error of set_left_most_unset_bit
+test_error of comb_sort
+test_error of min_product_tuple
+test_error of and_tuples
+test_error of colon_tuplex
+test_error of dog_age
+test_error of find_solution
+find_combinations unsupported operand type(s) for +: 'int' and 'tuple'
+index_minimum name 'itemgetter' is not defined
+test_error of combinations_list
+test_error of even_bit_set_number
+common_in_nested_lists 'int' object is not iterable
+test_error of set_left_most_unset_bit
+test_error of min_product_tuple
+test_error of comb_sort
+test_error of colon_tuplex
+test_error of find_combinations
+test_error of newman_prime
+max_difference unsupported operand type(s) for -: 'tuple' and 'tuple'
+test_error of combinations_list
+test_error of even_bit_set_number
+test_error of and_tuples
+test_error of common_in_nested_lists
+test_error of colon_tuplex
+test_error of set_left_most_unset_bit
+test_error of max_length
+test_error of min_product_tuple
+test_error of combinations_list
+test_error of max_difference
+test_error of group_tuples
+test_error of find_combinations
+count_Pairs count_Pairs() takes 1 positional argument but 2 were given
+test_error of find_solution
+test_error of even_bit_set_number
+test_error of is_octagonal
+test_error of newman_prime
+test_error of colon_tuplex
+test_error of tuple_intersection
+test_error of set_left_most_unset_bit
+test_error of find_combinations
+test_error of max_difference
+test_error of is_octagonal
+test_error of min_product_tuple
+test_error of max_length
+count_Pairs count_Pairs() takes 1 positional argument but 2 were given
+test_error of even_bit_set_number
+test_error of combinations_list
+test_error of and_tuples
+test_error of min_Jumps
+test_error of group_tuples
+test_error of tuple_intersection
+test_error of find_First_Missing
+test_error of find_Element
+test_error of newman_prime
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of max_length
+test_error of common_in_nested_lists
+test_error of is_octagonal
+test_error of max_difference
+count_Pairs count_Pairs() takes 1 positional argument but 2 were given
+test_error of get_ludic
+test_error of min_Jumps
+test_error of find_First_Missing
+test_error of is_octagonal
+test_error of find_Element
+test_error of tuple_intersection
+test_error of group_tuples
+count_Pairs count_Pairs() takes 1 positional argument but 2 were given
+test_error of max_length
+test_error of common_in_nested_lists
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of dog_age
+test_error of comb_sort
+test_error of get_total_number_of_sequences
+test_error of get_ludic
+test_error of group_tuples
+test_error of min_Jumps
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of sequence
+test_error of find_Element
+test_error of tuple_intersection
+test_error of count_Occurrence
+test_error of dog_age
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+wind_chill Wind velocity must be non-negative and temperature must be between -50 and 10 degrees Celsius.
+test_error of max_length_list
+test_error of colon_tuplex
+test_error of all_Bits_Set_In_The_Given_Range
+index_multiplication can't multiply sequence by non-int of type 'tuple'
+test_error of polar_rect
+test_error of geometric_sum
+test_error of colon_tuplex
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of sequence
+test_error of get_ludic
+test_error of dog_age
+test_error of comb_sort
+test_error of min_Jumps
+test_error of even_bit_set_number
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of geometric_sum
+test_error of polar_rect
+test_error of sequence
+test_error of max_length
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of geometric_sum
+test_error of list_to_float
+test_error of get_total_number_of_sequences
+test_error of min_product_tuple
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of colon_tuplex
+test_error of polar_rect
+test_error of largest_neg
+test_error of combinations_list
+test_error of convert_list_dictionary
+test_error of find_combinations
+test_error of dog_age
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of even_bit_set_number
+test_error of get_ludic
+test_error of find_adverbs
+test_error of list_to_float
+test_error of polar_rect
+test_error of max_length
+test_error of colon_tuplex
+test_error of comb_sort
+test_error of geometric_sum
+test_error of is_octagonal
+test_error of min_product_tuple
+test_error of remove_uppercase
+test_error of combinations_list
+test_error of sequence
+test_error of find_combinations
+test_error of is_octagonal
+test_error of even_bit_set_number
+test_error of get_total_number_of_sequences
+test_error of comb_sort
+test_error of max_length
+test_error of common_in_nested_lists
+test_error of is_octagonal
+test_error of find_combinations
+test_error of max_product
+test_error of even_bit_set_number
+test_error of newman_prime
+extract_singly 'int' object is not iterable
+test_error of is_octagonal
+test_error of max_length
+test_error of combinations_list
+test_error of max_difference
+remove_parenthesis expected string or bytes-like object
+test_error of common_in_nested_lists
+test_error of upper_ctr
+test_error of max_product
+tuple_intersection Both inputs must be tuples.
+test_error of extract_singly
+remove_parenthesis Input must be a string
+test_error of min_product_tuple
+test_error of combinations_list
+test_error of get_Char
+test_error of newman_prime
+test_error of get_total_number_of_sequences
+test_error of get_Char
+test_error of find_combinations
+test_error of max_difference
+test_error of max_product
+test_error of tuple_intersection
+test_error of index_multiplication
+remove_parenthesis Input must be a string
+test_error of common_in_nested_lists
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of get_Char
+test_error of polar_rect
+test_error of intersection_array
+test_error of min_product_tuple
+test_error of find_solution
+test_error of min_Jumps
+test_error of upper_ctr
+test_error of common_in_nested_lists
+test_error of tuple_intersection
+test_error of max_difference
+remove_parenthesis Input must be a string
+test_error of get_Char
+test_error of newman_prime
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of upper_ctr
+test_error of max_difference
+test_error of upper_ctr
+test_error of min_Jumps
+test_error of get_ludic
+test_error of occurance_substring
+test_error of newman_prime
+test_error of sequence
+test_error of find_solution
+test_error of positive_count
+test_error of max_product
+test_error of occurance_substring
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of tuple_intersection
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of polar_rect
+test_error of geometric_sum
+test_error of occurance_substring
+test_error of all_Bits_Set_In_The_Given_Range
+test_error of remove_parenthesis
+test_error of get_total_number_of_sequences
+test_error of get_Char
+test_error of sequence
+test_error of polar_rect
+test_error of positive_count
+test_error of all_Bits_Set_In_The_Given_Range
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of remove_parenthesis
+test_error of min_Jumps
+test_error of find_solution
+concatenate_tuple sequence item 2: expected str instance, int found
+test_error of positive_count
+test_error of occurance_substring
+test_error of sequence
+test_error of get_total_number_of_sequences
+test_error of geometric_sum
+test_error of polar_rect
+test_error of get_Char
+test_error of remove_parenthesis
+test_error of sort_numeric_strings
+wind_chill Temperature must be between -50 and 10 degrees Celsius.
+test_error of min_Jumps
+test_error of concatenate_tuple
+test_error of positive_count
+test_error of geometric_sum
+test_error of remove_parenthesis
+test_error of get_Char
+test_error of sort_numeric_strings
+convert 'int' object is not iterable
+test_error of check_occurences
+test_error of geometric_sum
+test_error of convert
+test_error of find_solution
+test_error of sequence
+test_error of sort_numeric_strings
+test_error of convert
+test_error of upper_ctr
+test_error of get_ludic
+test_error of sort_numeric_strings
+test_error of get_ludic
+test_error of list_split
+test_error of max_product
+test_error of trim_tuple
+test_error of filter_data
+test_error of re_arrange_array
+test_error of trim_tuple
+get_Char sum() missing 1 required positional argument: 'b'
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+positive_count sum() missing 1 required positional argument: 'b'
+upper_ctr sum() missing 1 required positional argument: 'b'
+test_error of trim_tuple
+test_error of occurance_substring
+positive_count sum() missing 1 required positional argument: 'b'
+test_error of re_arrange_array
+upper_ctr sum() missing 1 required positional argument: 'b'
+test_error of convert
+cal_sum sum() missing 1 required positional argument: 'b'
+consecutive_duplicates name 'groupby' is not defined
+test_error of get_ludic
+positive_count sum() missing 1 required positional argument: 'b'
+upper_ctr sum() missing 1 required positional argument: 'b'
+test_error of sort_numeric_strings
+test_error of re_arrange_array
+test_error of max_product
+two_unique_nums 'int' object is not iterable
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+odd_num_sum sum() missing 1 required positional argument: 'b'
+test_error of sort_numeric_strings
+test_error of trim_tuple
+test_error of Find_Min
+test_error of maximize_elements
+test_error of re_arrange_array
+test_error of two_unique_nums
+test_error of max_product
+odd_num_sum sum() missing 1 required positional argument: 'b'
+test_error of sort_numeric_strings
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+test_error of sort_numeric_strings
+test_error of two_unique_nums
+odd_num_sum sum() missing 1 required positional argument: 'b'
+test_error of extract_even
+zero_count sum() missing 1 required positional argument: 'b'
+convert Input must be a list of complex numbers.
+positive_count sum() missing 1 required positional argument: 'b'
+test_error of remove_kth_element
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+cal_sum sum() missing 1 required positional argument: 'b'
+test_error of is_nonagonal
+test_error of extract_rear
+odd_num_sum sum() missing 1 required positional argument: 'b'
+test_error of occurance_substring
+test_error of is_nonagonal
+zero_count sum() missing 1 required positional argument: 'b'
+convert Input must be a list of complex numbers.
+test_error of occurance_substring
+test_error of surface_Area
+cal_sum sum() missing 1 required positional argument: 'b'
+test_error of is_nonagonal
+test_error of find_Max_Num
+zero_count sum() missing 1 required positional argument: 'b'
+test_error of trim_tuple
+test_error of surface_Area
+test_error of loss_amount
+test_error of find_Max_Num
+test_error of is_nonagonal
+zero_count sum() missing 1 required positional argument: 'b'
+test_error of trim_tuple
+test_error of loss_amount
+test_error of surface_Area
+cal_sum sum() missing 1 required positional argument: 'b'
+test_error of loss_amount
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+test_error of re_arrange_array
+test_error of max_product
+check_value check_value() takes 1 positional argument but 2 were given
+odd_num_sum sum() missing 1 required positional argument: 'b'
+test_error of trim_tuple
+test_error of surface_Area
+cummulative_sum sum() missing 1 required positional argument: 'b'
+test_error of loss_amount
+test_error of find_Max_Num
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+count_first_elements sum() missing 1 required positional argument: 'b'
+test_error of two_unique_nums
+test_error of remove_kth_element
+check_value check_value() takes 1 positional argument but 2 were given
+odd_num_sum sum() missing 1 required positional argument: 'b'
+test_error of re_arrange_array
+test_error of occurance_substring
+convert Input must be a list of complex numbers.
+count_first_elements sum() missing 1 required positional argument: 'b'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of find_Max_Num
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+odd_num_sum sum() missing 1 required positional argument: 'b'
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+test_error of remove_kth_element
+check_value check_value() takes 1 positional argument but 2 were given
+odd_num_sum sum() missing 1 required positional argument: 'b'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+count sum() missing 1 required positional argument: 'b'
+count_first_elements sum() missing 1 required positional argument: 'b'
+convert Input must be a list of complex numbers.
+test_error of re_arrange_array
+check_value check_value() takes 1 positional argument but 2 were given
+count sum() missing 1 required positional argument: 'b'
+test_error of count_vowels
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+test_error of remove_kth_element
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of re_arrange_array
+sum_negativenum sum() missing 1 required positional argument: 'b'
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+test_error of is_nonagonal
+sum_negativenum sum() missing 1 required positional argument: 'b'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+test_error of count_vowels
+test_error of trim_tuple
+return_sum sum() missing 1 required positional argument: 'b'
+test_error of is_nonagonal
+sum_negativenum sum() missing 1 required positional argument: 'b'
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+cummulative_sum sum() missing 1 required positional argument: 'b'
+sum_negativenum sum() missing 1 required positional argument: 'b'
+cummulative_sum sum() missing 1 required positional argument: 'b'
+return_sum sum() missing 1 required positional argument: 'b'
+test_error of is_nonagonal
+test_error of sum_Of_Subarray_Prod
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+pair_xor_Sum sum() missing 1 required positional argument: 'b'
+test_error of count_vowels
+two_unique_nums 'int' object is not iterable
+cummulative_sum sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+return_sum sum() missing 1 required positional argument: 'b'
+test_error of is_nonagonal
+test_error of count_vowels
+test_error of find_Max_Num
+check_value check_value() takes 1 positional argument but 2 were given
+return_sum sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+test_error of two_unique_nums
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+check_value check_value() takes 1 positional argument but 2 were given
+count sum() missing 1 required positional argument: 'b'
+count_first_elements sum() missing 1 required positional argument: 'b'
+test_error of two_unique_nums
+test_error of find_Max_Num
+test_error of max_aggregate
+test_error of surface_Area
+sum_negativenum sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+test_error of loss_amount
+check_value check_value() takes 1 positional argument but 2 were given
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+sum_negativenum sum() missing 1 required positional argument: 'b'
+count sum() missing 1 required positional argument: 'b'
+zero_count sum() missing 1 required positional argument: 'b'
+cal_sum sum() missing 1 required positional argument: 'b'
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+test_error of find_Max_Num
+test_error of loss_amount
+sum_negativenum sum() missing 1 required positional argument: 'b'
+check_value check_value() takes 1 positional argument but 2 were given
+test_error of remove_kth_element
+test_error of surface_Area
+test_error of loss_amount
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+test_error of find_Max_Num
+count sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+cal_sum sum() missing 1 required positional argument: 'b'
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+test_error of surface_Area
+test_error of loss_amount
+test_error of find_adverb_position
+test_error of remove_kth_element
+cal_sum sum() missing 1 required positional argument: 'b'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+count_Primes_nums sum() missing 1 required positional argument: 'b'
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+test_error of remove_kth_element
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of surface_Area
+test_error of count_vowels
+cal_sum sum() missing 1 required positional argument: 'b'
+test_error of count_first_elements
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+test_error of count_vowels
+larg_nnum larg_nnum() missing 1 required positional argument: 'n'
+digit_distance_nums sum() missing 1 required positional argument: 'b'
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+test_error of count_first_elements
+sum_negativenum sum() missing 1 required positional argument: 'b'
+test_error of count_vowels
+test_error of remove_kth_element
+test_error of count_vowels
+test_error of count_first_elements
+test_error of parabola_directrix
+count_first_elements sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+test_error of parabola_directrix
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+test_error of parabola_directrix
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'
+max_sub_array_sum_repeated sum() missing 1 required positional argument: 'b'

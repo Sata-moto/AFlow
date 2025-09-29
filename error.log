@@ -57996,3 +57996,2670 @@ def surfacearea_cylinder(r: float, h: float) -> float:
     assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
     assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
 
+2025-09-29 10:43:42 - Error: .
+ Solution: def max_product_tuple(list1):
+    if len(list1) < 2:
+        return None
+    max_a = max_b = float('-inf')
+    min_a = min_b = float('inf')
+    for (a, b) in list1:
+        max_a = max(max_a, a)
+        min_a = min(min_a, a)
+        max_b = max(max_b, b)
+        min_b = min(min_b, b)
+    return max(abs(max_a * max_b), abs(max_a * min_b), abs(min_a * max_b), abs(min_a * min_b)).
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:43:44 - Error: .
+ Solution: def find_sum(arr):
+    return sum((x for x in arr if arr.count(x) == 1)).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:43:46 - Error: name 'cmath' is not defined.
+ Solution: def angle_complex(a, b):
+    z = complex(a, b)
+    return cmath.phase(z).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:43:47 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    import math
+    if r < 0 or h < 0:
+        return 0
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r * r
+    total_area = lateral_area + 2 * base_area
+    return total_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:44:02 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(0, i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1] if j > 0 else (i - j) * A[i - 1][j]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:44:03 - Error: .
+ Solution: def is_polite(n):
+    if n < 1:
+        return False
+    if n == 1:
+        return True
+    if n % 2 == 1:
+        return True
+    count = 0
+    while n % 2 == 0:
+        n //= 2
+    for i in range(3, int(n ** 0.5) + 1, 2):
+        while n % i == 0:
+            count += 1
+            n //= i
+    if n > 1:
+        count += 1
+    return count < 2.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-29 10:44:51 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:44:58 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:44:59 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    equal_count = 0
+    if x == y:
+        equal_count += 1
+    if y == z:
+        equal_count += 1
+    if x == z:
+        equal_count += 1
+    return equal_count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:44:59 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:45:02 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.fullmatch(pattern, text):
+        return True
+    else:
+        return False.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-29 10:45:07 - Error: .
+ Solution: def find_sum(arr):
+    if not arr:
+        return 0
+    unique_sum = 0
+    seen = set()
+    repeated = set()
+    for num in arr:
+        if isinstance(num, (int, float)):
+            if num in seen:
+                repeated.add(num)
+            else:
+                seen.add(num)
+    unique_sum = sum((num for num in seen if num not in repeated))
+    return unique_sum.
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:45:08 - Error: .
+ Solution: def find_star_num(n):
+    if not isinstance(n, int) or n < 1:
+        raise ValueError('Input must be a positive integer.')
+    return n * (2 * n - 1).
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-29 10:45:13 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    if not isinstance(r, (int, float)) or not isinstance(h, (int, float)):
+        raise TypeError('Radius and height must be numeric values.')
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_surface_area = lateral_area + 2 * base_area
+    return total_surface_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:45:15 - Error: Inputs must be numeric (int or float)..
+ Solution: import cmath
+def angle_complex(a, b):
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError('Inputs must be numeric (int or float).')
+    complex_number = complex(a, b)
+    if complex_number == 0:
+        raise ValueError('The angle is undefined for the complex number 0 + 0j.')
+    return cmath.phase(complex_number).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:45:17 - Error: .
+ Solution: def max_product_tuple(list1):
+    if len(list1) < 2:
+        return 0
+    max_product = 0
+    valid_tuples = []
+    for tup in list1:
+        if len(tup) >= 2:
+            try:
+                (a, b) = (float(tup[0]), float(tup[1]))
+                valid_tuples.append((a, b))
+            except (ValueError, TypeError):
+                continue
+    n = len(valid_tuples)
+    if n < 2:
+        return 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            product = abs(valid_tuples[i][0] * valid_tuples[i][1] * valid_tuples[j][0] * valid_tuples[j][1])
+            max_product = max(max_product, product)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:45:19 - Error: .
+ Solution: def harmonic_sum(n):
+    if not isinstance(n, int) or n < 1:
+        raise ValueError('Input must be a positive integer.')
+    harmonic = 0.0
+    for i in range(1, n):
+        harmonic += 1.0 / i
+    return harmonic.
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:45:24 - Error: .
+ Solution: def average_tuple(nums):
+    if not isinstance(nums, tuple) or not all((isinstance(t, tuple) for t in nums)):
+        raise ValueError('Input must be a tuple of tuples.')
+    averages = []
+    for t in nums:
+        if len(t) == 0:
+            averages.append(None)
+        elif all((isinstance(x, (int, float)) for x in t)):
+            avg = sum(t) / len(t)
+            averages.append(avg)
+        else:
+            raise ValueError('All elements in the tuples must be numeric.')
+    return averages.
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:45:27 - Error: .
+ Solution: def divisible_by_digits(startnum, endnum):
+    if not (isinstance(startnum, int) and isinstance(endnum, int)):
+        raise ValueError('Both startnum and endnum must be integers.')
+    if startnum > endnum:
+        return []
+    result = []
+    for num in range(startnum, endnum + 1):
+        digits = [int(d) for d in str(num) if d != '0']
+        if all((num % d == 0 for d in digits)):
+            result.append(num)
+    return result.
+ Test: def check():
+    assert divisible_by_digits(1,22)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+    assert divisible_by_digits(1,15)==[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15]
+    assert divisible_by_digits(20,25)==[22, 24]
+
+2025-09-29 10:45:36 - Error: .
+ Solution: def count_rotation(arr):
+    if not arr:
+        return 0
+    (low, high) = (0, len(arr) - 1)
+    if arr[low] < arr[high]:
+        return 0
+    while low <= high:
+        mid = (low + high) // 2
+        if mid < high and arr[mid] > arr[mid + 1]:
+            return mid + 1
+        if mid > low and arr[mid] < arr[mid - 1]:
+            return mid
+        if arr[low] <= arr[mid]:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return 0.
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-29 10:46:36 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:46:41 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.fullmatch(pattern, text):
+        return True
+    else:
+        return False.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-29 10:46:42 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    return sum([x == y, y == z, x == z]).
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:46:45 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:46:48 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:47:12 - Error: .
+ Solution: def average_tuple(nums):
+    result = []
+    for t in nums:
+        total = 0
+        count = 0
+        for value in t:
+            if isinstance(value, (int, float)):
+                total += value
+                count += 1
+        if count > 0:
+            result.append(total / count)
+        else:
+            result.append(None)
+    return result.
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:47:16 - Error: .
+ Solution: def max_product_tuple(list1):
+    if len(list1) < 2:
+        return 0
+    max_product = float('-inf')
+    n = len(list1)
+    abs_products = [tuple((abs(x) for x in t)) for t in list1]
+    for i in range(n):
+        for j in range(i + 1, n):
+            if len(abs_products[i]) != len(abs_products[j]):
+                continue
+            product = 1
+            for k in range(len(abs_products[i])):
+                product *= abs_products[i][k] * abs_products[j][k]
+            max_product = max(max_product, product)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:47:17 - Error: can't convert complex to float.
+ Solution: import math
+def angle_complex(a, b):
+    if a == 0 and b == 0:
+        raise ValueError('The angle is undefined for the complex number 0 + 0j.')
+    return math.atan2(b, a).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:47:17 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0.0
+    harmonic = 0.0
+    i = 1
+    while i < n:
+        harmonic += 1.0 / i
+        i += 1
+    return harmonic.
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:47:17 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    if not isinstance(r, (int, float)) or not isinstance(h, (int, float)):
+        raise TypeError('Radius and height must be numeric values.')
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    pi = 3.141592653589793
+    lateral_area = 0
+    base_area = 0
+    for i in range(1):
+        lateral_area = 2 * pi * r * h
+    for i in range(2):
+        base_area += pi * r * r
+    total_area = lateral_area + base_area + base_area
+    return total_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:47:21 - Error: Function is_polite is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-29 10:47:25 - Error: .
+ Solution: def find_sum(arr):
+    unique_elements = []
+    for num in arr:
+        if arr.count(num) == 1:
+            unique_elements.append(num)
+    return sum(unique_elements).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:47:25 - Error: .
+ Solution: def find_star_num(n):
+    if n < 1:
+        return 0
+    star_number = 0
+    for i in range(1, n + 1):
+        star_number = i * (6 * i - 6) // 2 + 1
+    return star_number.
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-29 10:47:28 - Error: .
+ Solution: def count_rotation(arr):
+    if not arr:
+        return 0
+    n = len(arr)
+    min_index = 0
+    for i in range(1, n):
+        if arr[i] < arr[min_index]:
+            min_index = i
+    return min_index.
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-29 10:47:39 - Error: .
+ Solution: def eulerian_num(n, m):
+    if not isinstance(n, int) or not isinstance(m, int):
+        raise ValueError('Both n and m must be integers.')
+    if n < 0 or m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    A = [0] * (n + 1)
+    A[0] = 1
+    for i in range(1, n + 1):
+        for j in range(i, 0, -1):
+            A[j] = (i - j) * A[j] + (j + 1) * A[j - 1]
+    return A[m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:48:40 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    return bool(re.fullmatch(pattern, text)).
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-29 10:48:41 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    equal_count = 0
+    if x == y:
+        equal_count += 1
+    if y == z:
+        equal_count += 1
+    if x == z:
+        equal_count += 1
+    return equal_count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:48:45 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:48:48 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:48:49 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:49:09 - Error: .
+ Solution: def find_sum(arr):
+    return sum((num for num in set(arr) if arr.count(num) == 1)).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:49:09 - Error: .
+ Solution: def harmonic_sum(n):
+    if not isinstance(n, int):
+        raise ValueError('Input must be an integer.')
+    if n <= 1:
+        return 0.0
+
+    def recursive_harmonic(k):
+        if k == 1:
+            return 1.0
+        return 1.0 / k + recursive_harmonic(k - 1)
+    return recursive_harmonic(n - 1).
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:49:09 - Error: Both a and b must be numeric types (int or float)..
+ Solution: def angle_complex(a, b):
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError('Both a and b must be numeric types (int or float).')
+    if a == 0 and b == 0:
+        raise ValueError('The angle of the complex number 0 + 0j is undefined.')
+    return 180 / 3.141592653589793 * (2 * (b >= 0) - 1) * (1 - (a == 0)) * (abs(b) / (abs(a) + abs(b))) if a != 0 else 90 if b > 0 else -90.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:49:11 - Error: .
+ Solution: def average_tuple(nums):
+    return [sum(t) / len(t) if t else None for t in nums].
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:49:11 - Error: .
+ Solution: def find_star_num(n):
+    if n < 1:
+        return 0
+    return sum((2 * i - 1 for i in range(1, n + 1))).
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-29 10:49:20 - Error: .
+ Solution: def eulerian_num(n, m):
+    if n < 0 or m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1:
+        return 1 if m == 0 else 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        A[i][0] = 0
+        for j in range(1, i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:49:26 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    if not isinstance(r, (int, float)) or not isinstance(h, (int, float)):
+        raise TypeError('Radius and height must be numeric values.')
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    pi = 3.141592653589793
+    areas = {'lateral': 2 * pi * r * h, 'top': pi * r ** 2}
+    total_surface_area = areas['lateral'] + 2 * areas['top']
+    return total_surface_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:49:27 - Error: .
+ Solution: def max_product_tuple(list1):
+    from itertools import combinations
+    if len(list1) < 2:
+        return None
+    max_product = max((abs(a[0] * b[0]) * abs(a[1] * b[1]) for (a, b) in combinations(list1, 2) if isinstance(a, tuple) and isinstance(b, tuple) and (len(a) == 2) and (len(b) == 2)))
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:49:35 - Error: .
+ Solution: def count_rotation(arr):
+    if not arr:
+        return 0
+    return len(arr) - arr.index(min(arr)).
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-29 10:49:35 - Error: Function is_polite is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-29 10:50:41 - Error: name 'defaultdict' is not defined.
+ Solution: def max_occurrences(nums):
+    frequency = defaultdict(int)
+    for num in nums:
+        frequency[num] += 1
+    max_freq = 0
+    max_item = None
+    for (num, freq) in frequency.items():
+        if freq > max_freq:
+            max_freq = freq
+            max_item = num
+    return max_item.
+ Test: def check():
+    assert max_occurrences([2,3,8,4,7,9,8,2,6,5,1,6,1,2,3,2,4,6,9,1,2])==2
+    assert max_occurrences([2,3,8,4,7,9,8,7,9,15,14,10,12,13,16,18])==8
+    assert max_occurrences([10,20,20,30,40,90,80,50,30,20,50,10])==20
+
+2025-09-29 10:50:41 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:50:42 - Error: name 'bisect' is not defined.
+ Solution: def left_insertion(a, x):
+    return bisect.bisect_left(a, x).
+ Test: def check():
+    assert left_insertion([1,2,4,5],6)==4
+    assert left_insertion([1,2,4,5],3)==2
+    assert left_insertion([1,2,4,5],7)==4
+
+2025-09-29 10:50:42 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.fullmatch(pattern, text):
+        return True
+    else:
+        return False.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-29 10:50:43 - Error: name 'heapq' is not defined.
+ Solution: def large_product(nums1, nums2, N):
+    if N <= 0 or not nums1 or (not nums2):
+        return []
+    max_heap = []
+    for num1 in nums1:
+        for num2 in nums2:
+            product = num1 * num2
+            if len(max_heap) < N:
+                heapq.heappush(max_heap, product)
+            else:
+                heapq.heappushpop(max_heap, product)
+    return sorted(max_heap, reverse=True).
+ Test: def check():
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],3)==[60, 54, 50]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],4)==[60, 54, 50, 48]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],5)==[60, 54, 50, 48, 45]
+
+2025-09-29 10:50:49 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:50:50 - Error: name 'collections' is not defined.
+ Solution: def freq_count(list1):
+    return dict(collections.Counter(list1)).
+ Test: def check():
+    assert freq_count([10,10,10,10,20,20,20,20,40,40,50,50,30])==({10: 4, 20: 4, 40: 2, 50: 2, 30: 1})
+    assert freq_count([1,2,3,4,3,2,4,1,3,1,4])==({1:3, 2:2,3:3,4:3})
+    assert freq_count([5,6,7,4,9,10,4,5,6,7,9,5])==({10:1,5:3,6:2,7:2,4:2,9:2})
+
+2025-09-29 10:50:50 - Error: name 'tan' is not defined.
+ Solution: def area_polygon(s, l):
+    if s < 3 or l <= 0:
+        return 0
+    return s * l ** 2 / (4 * tan(pi / s)).
+ Test: def check():
+    assert math.isclose(area_polygon(4, 20), 400., rel_tol=0.001)
+    assert math.isclose(area_polygon(10, 15), 1731.197, rel_tol=0.001)
+    assert math.isclose(area_polygon(9, 7), 302.909, rel_tol=0.001)
+
+2025-09-29 10:50:50 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    equal_count = 0
+    if x == y:
+        equal_count += 1
+    if y == z:
+        equal_count += 1
+    if x == z:
+        equal_count += 1
+    return equal_count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:50:51 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:51:14 - Error: Both a and b must be numeric types (int or float)..
+ Solution: def angle_complex(a, b):
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError('Both a and b must be numeric types (int or float).')
+    if a == 0 and b == 0:
+        raise ValueError('The angle of the complex number 0 + 0j is undefined.')
+    return math.atan2(b, a).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:51:16 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0.0
+    return harmonic_sum(n - 1) + 1.0 / (n - 1).
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:51:19 - Error: .
+ Solution: def average_tuple(nums):
+    if not isinstance(nums, tuple) or not all((isinstance(t, tuple) for t in nums)):
+        raise ValueError('Input must be a tuple of tuples.')
+
+    def calculate_average(t):
+        if len(t) == 0:
+            return None
+        return sum(t) / len(t)
+    averages = []
+    for t in nums:
+        averages.append(calculate_average(t))
+    return averages.
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:51:19 - Error: Function is_polite is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-29 10:51:21 - Error: .
+ Solution: def find_star_num(n):
+    if n < 1:
+        return 1
+    star_number = 1
+    for i in range(1, n + 1):
+        star_number += 6 * (i - 1)
+    return star_number.
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-29 10:51:24 - Error: .
+ Solution: def surfacearea_cylinder(r, h):
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+
+    def calculate_area(radius, height):
+        if radius == 0 or height == 0:
+            return 0.0
+        lateral_area = 2 * 3.141592653589793 * radius * height
+        base_area = 3.141592653589793 * radius ** 2
+        return lateral_area + 2 * base_area
+    return calculate_area(r, h).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:51:26 - Error: .
+ Solution: def max_product_tuple(list1):
+    if len(list1) < 2:
+        return None
+    max_product = float('-inf')
+
+    def calculate_product(i, j):
+        return abs(list1[i][0] * list1[j][0]) * abs(list1[i][1] * list1[j][1])
+
+    def find_max_product(index1, index2):
+        nonlocal max_product
+        if index1 >= len(list1) - 1:
+            return
+        if index2 >= len(list1):
+            find_max_product(index1 + 1, index1 + 2)
+            return
+        product = calculate_product(index1, index2)
+        max_product = max(max_product, product)
+        find_max_product(index1, index2 + 1)
+    find_max_product(0, 1)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:51:28 - Error: .
+ Solution: def find_sum(arr):
+    unique_elements = []
+    for num in arr:
+        if arr.count(num) == 1:
+            unique_elements.append(num)
+    return sum(unique_elements).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:51:28 - Error: .
+ Solution: def jacobsthal_num(n):
+    if n < 0:
+        return None
+    elif n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    memo = {}
+
+    def recursive_jacobsthal(k):
+        if k in memo:
+            return memo[k]
+        if k == 0:
+            return 0
+        elif k == 1:
+            return 1
+        memo[k] = recursive_jacobsthal(k - 2) + 2 * recursive_jacobsthal(k - 1)
+        return memo[k]
+    return recursive_jacobsthal(n).
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-29 10:51:35 - Error: .
+ Solution: def eulerian_num(n, m):
+    if n < 0 or m < 0:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if m > n:
+        return 0
+
+    def eulerian_recursive(n, m):
+        if m == 0 and n > 0:
+            return 1
+        if n == 0 or m > n:
+            return 0
+        return (n - m) * eulerian_recursive(n - 1, m) + (m + 1) * eulerian_recursive(n - 1, m - 1)
+    return eulerian_recursive(n, m).
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:53:46 - Error: .
+ Solution: def snake_to_camel(word):
+    if not word:
+        return ''
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:53:46 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:53:47 - Error: .
+ Solution: def string_to_tuple(str1):
+    return tuple(str1).
+ Test: def check():
+    assert string_to_tuple("python 3.0")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')
+    assert string_to_tuple("item1")==('i', 't', 'e', 'm', '1')
+    assert string_to_tuple("15.10")==('1', '5', '.', '1', '0')
+
+2025-09-29 10:53:49 - Error: .
+ Solution: def find_sum(arr):
+    from collections import Counter
+    element_count = Counter(arr)
+    return sum((key for (key, count) in element_count.items() if count == 1)).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:53:50 - Error: angle_complex() takes 1 positional argument but 2 were given.
+ Solution: import cmath
+def angle_complex(z):
+    return cmath.phase(z).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:53:51 - Error: .
+ Solution: def find_star_num(n):
+    if n < 1:
+        return 0
+    return n * (2 * n - 1) * (n - 1) // 3 + 1.
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-29 10:53:52 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0.0
+    return sum((1.0 / i for i in range(1, n))).
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:53:54 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    lateral_area = 2 * math.pi * r * h
+    base_area = math.pi * r ** 2
+    total_area = lateral_area + 2 * base_area
+    return round(total_area, 2).
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:53:54 - Error: .
+ Solution: def max_product_tuple(list1):
+    max_product = 0
+    for i in range(len(list1)):
+        for j in range(i + 1, len(list1)):
+            product = abs(list1[i][0] * list1[i][1] * list1[j][0] * list1[j][1])
+            max_product = max(max_product, product)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:53:54 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:53:55 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    equal_count = 0
+    if x == y:
+        equal_count += 1
+    if y == z:
+        equal_count += 1
+    if x == z:
+        equal_count += 1
+    return equal_count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:53:57 - Error: .
+ Solution: def eulerian_num(n, m):
+    if m < 0 or m > n:
+        return 0
+    if n == 0 and m == 0:
+        return 1
+    if n == 1 and m == 0:
+        return 1
+    if n == 1 and m == 1:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(i + 1):
+            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:53:57 - Error: Function count_rotation is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-29 10:53:57 - Error: .
+ Solution: def average_tuple(nums):
+    return [sum(t) / len(t) if len(t) > 0 else 0 for t in nums].
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:53:58 - Error: .
+ Solution: from collections import defaultdict
+def max_occurrences(nums):
+    frequency = defaultdict(int)
+    for num in nums:
+        frequency[num] += 1
+    max_freq = max(frequency.values(), default=0)
+    max_items = [num for (num, freq) in frequency.items() if freq == max_freq]
+    return min(max_items) if max_items else None.
+ Test: def check():
+    assert max_occurrences([2,3,8,4,7,9,8,2,6,5,1,6,1,2,3,2,4,6,9,1,2])==2
+    assert max_occurrences([2,3,8,4,7,9,8,7,9,15,14,10,12,13,16,18])==8
+    assert max_occurrences([10,20,20,30,40,90,80,50,30,20,50,10])==20
+
+2025-09-29 10:54:00 - Error: .
+ Solution: def jacobsthal_num(n):
+    if n < 0:
+        return None
+    elif n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        jacobsthal = [0, 1]
+        for i in range(2, n + 1):
+            next_value = jacobsthal[i - 2] + 2 * jacobsthal[i - 1]
+            jacobsthal.append(next_value)
+        return jacobsthal[n].
+ Test: def check():
+    assert jacobsthal_num(5) == 11
+    assert jacobsthal_num(2) == 1
+    assert jacobsthal_num(4) == 5
+    assert jacobsthal_num(13) == 2731
+
+2025-09-29 10:54:00 - Error: .
+ Solution: def get_max_sum(n):
+    memo = {}
+
+    def helper(x):
+        if x in memo:
+            return memo[x]
+        if x < 12:
+            return x
+        result = max(helper(x // 2) + helper(x // 3) + helper(x // 4) + helper(x // 5), x)
+        memo[x] = result
+        return result
+    return helper(n).
+ Test: def check():
+    assert get_max_sum(60) == 106
+    assert get_max_sum(10) == 12
+    assert get_max_sum(2) == 2
+
+2025-09-29 10:54:04 - Error: .
+ Solution: def is_polite(n):
+    if n < 1:
+        return False
+    if n == 1:
+        return True
+    if n % 2 == 0:
+        return True
+    for i in range(1, n // 2 + 1):
+        if (n - i * (i + 1) // 2) % (i + 1) == 0:
+            return True
+    return False.
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-29 10:55:02 - Error: name 'collections' is not defined.
+ Solution: def freq_count(list1):
+    return dict(collections.Counter(list1)).
+ Test: def check():
+    assert freq_count([10,10,10,10,20,20,20,20,40,40,50,50,30])==({10: 4, 20: 4, 40: 2, 50: 2, 30: 1})
+    assert freq_count([1,2,3,4,3,2,4,1,3,1,4])==({1:3, 2:2,3:3,4:3})
+    assert freq_count([5,6,7,4,9,10,4,5,6,7,9,5])==({10:1,5:3,6:2,7:2,4:2,9:2})
+
+2025-09-29 10:55:04 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    count = 0
+    if x == y:
+        count += 1
+    if y == z:
+        count += 1
+    if x == z:
+        count += 1
+    return count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:55:06 - Error: name 'bisect' is not defined.
+ Solution: def left_insertion(a, x):
+    return bisect.bisect_left(a, x).
+ Test: def check():
+    assert left_insertion([1,2,4,5],6)==4
+    assert left_insertion([1,2,4,5],3)==2
+    assert left_insertion([1,2,4,5],7)==4
+
+2025-09-29 10:55:06 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:55:08 - Error: .
+ Solution: def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.fullmatch(pattern, text):
+        return True
+    else:
+        return False.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-29 10:55:10 - Error: name 'heapq' is not defined.
+ Solution: def large_product(nums1, nums2, N):
+    if N <= 0 or not nums1 or (not nums2):
+        return []
+    max_heap = []
+    for num1 in nums1:
+        for num2 in nums2:
+            product = num1 * num2
+            if len(max_heap) < N:
+                heapq.heappush(max_heap, product)
+            else:
+                heapq.heappushpop(max_heap, product)
+    return sorted(max_heap, reverse=True).
+ Test: def check():
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],3)==[60, 54, 50]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],4)==[60, 54, 50, 48]
+    assert large_product([1, 2, 3, 4, 5, 6],[3, 6, 8, 9, 10, 6],5)==[60, 54, 50, 48, 45]
+
+2025-09-29 10:55:10 - Error: name 'heapq' is not defined.
+ Solution: def k_smallest_pairs(nums1, nums2, k):
+    if not nums1 or not nums2 or k <= 0:
+        return []
+    min_heap = []
+    for i in range(min(k, len(nums1))):
+        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))
+    result = []
+    while k > 0 and min_heap:
+        (sum_pair, i, j) = heapq.heappop(min_heap)
+        result.append([nums1[i], nums2[j]])
+        if j + 1 < len(nums2):
+            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))
+        k -= 1
+    return result.
+ Test: def check():
+    assert k_smallest_pairs([1,3,7],[2,4,6],2)==[[1, 2], [1, 4]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],1)==[[1, 2]]
+    assert k_smallest_pairs([1,3,7],[2,4,6],7)==[[1, 2], [1, 4], [3, 2], [1, 6], [3, 4], [3, 6], [7, 2]]
+
+2025-09-29 10:55:14 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:55:18 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:55:29 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0.0
+    harmonic_sum_value = 0.0
+    for i in range(1, n):
+        harmonic_sum_value += 1 / i
+    return harmonic_sum_value.
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:55:30 - Error: .
+ Solution: def eulerian_num(n, m):
+    if n < 0 or m < 0 or m > n:
+        return 0
+    A = [[0] * (n + 1) for _ in range(n + 1)]
+    A[0][0] = 1
+    for i in range(1, n + 1):
+        A[i][0] = 0
+        A[i][i] = 1
+    for i in range(1, n + 1):
+        for j in range(1, i):
+            A[i][j] = (j + 1) * A[i - 1][j] + (i - j) * A[i - 1][j - 1]
+    return A[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:55:39 - Error: .
+ Solution: import cmath
+def angle_complex(a, b):
+    if a == 0 and b == 0:
+        return 0.0
+    angle = cmath.phase(complex(a, b))
+    return angle.
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:55:44 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    surface_area = 2 * math.pi * r ** 2 + 2 * math.pi * r * h
+    return surface_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:55:44 - Error: .
+ Solution: def max_product_tuple(list1):
+    if not list1 or len(list1) < 2:
+        return 0
+    max_product = float('-inf')
+    for i in range(len(list1)):
+        for j in range(i + 1, len(list1)):
+            for num1 in list1[i]:
+                for num2 in list1[j]:
+                    product = num1 * num2
+                    max_product = max(max_product, abs(product))
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:55:49 - Error: .
+ Solution: def find_sum(arr):
+    from collections import Counter
+    count = Counter(arr)
+    return sum((num for (num, freq) in count.items() if freq == 1)).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:55:50 - Error: .
+ Solution: def average_tuple(nums):
+    if not isinstance(nums, tuple):
+        raise ValueError('Input must be a tuple of tuples.')
+    averages = []
+    for inner_tuple in nums:
+        if not isinstance(inner_tuple, tuple):
+            raise ValueError('Each inner element must be a tuple.')
+        if len(inner_tuple) == 0:
+            averages.append(None)
+        else:
+            try:
+                avg = sum(inner_tuple) / len(inner_tuple)
+                averages.append(avg)
+            except TypeError:
+                raise ValueError('All elements in the inner tuples must be numeric.')
+    return averages.
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:55:57 - Error: .
+ Solution: def count_rotation(arr):
+    n = len(arr)
+    if n == 0:
+        return 0
+    if arr[0] <= arr[-1]:
+        return 0
+    (low, high) = (0, n - 1)
+    while low <= high:
+        mid = (low + high) // 2
+        if mid < n - 1 and arr[mid] > arr[mid + 1]:
+            return mid + 1
+        if mid > 0 and arr[mid] < arr[mid - 1]:
+            return mid
+        if arr[mid] >= arr[low]:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return 0.
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-29 10:56:53 - Error: .
+ Solution: import re
+def text_match_zero_one(text):
+    pattern = 'a(b+)'
+    if re.fullmatch(pattern, text):
+        return True
+    else:
+        return False.
+ Test: def check():
+    assert text_match_zero_one("ac")==False
+    assert text_match_zero_one("dc")==False
+    assert text_match_zero_one("abbbba")==True
+    assert text_match_zero_one("dsabbbba")==True
+    assert text_match_zero_one("asbbbba")==False
+    assert text_match_zero_one("abaaa")==True
+
+2025-09-29 10:56:56 - Error: .
+ Solution: def test_three_equal(x, y, z):
+    count = 0
+    if x == y:
+        count += 1
+    if y == z:
+        count += 1
+    if x == z:
+        count += 1
+    return count.
+ Test: def check():
+    assert test_three_equal(1,1,1) == 3
+    assert test_three_equal(-1,-2,-3) == 0
+    assert test_three_equal(1,2,2) == 2
+
+2025-09-29 10:56:57 - Error: .
+ Solution: def remove_odd(str1):
+    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).
+ Test: def check():
+    assert remove_odd("python")==("yhn")
+    assert remove_odd("program")==("rga")
+    assert remove_odd("language")==("agae")
+
+2025-09-29 10:57:00 - Error: .
+ Solution: def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.capitalize() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('python_program')=='PythonProgram'
+    assert snake_to_camel('python_language')==('PythonLanguage')
+    assert snake_to_camel('programming_language')==('ProgrammingLanguage')
+
+2025-09-29 10:57:01 - Error: .
+ Solution: def dif_Square(n):
+    if n < 0:
+        return False
+    return n % 4 == 0 or n % 4 == 1.
+ Test: def check():
+    assert dif_Square(5) == True
+    assert dif_Square(10) == False
+    assert dif_Square(15) == True
+
+2025-09-29 10:57:19 - Error: .
+ Solution: def find_sum(arr):
+    count = {}
+    for num in arr:
+        count[num] = count.get(num, 0) + 1
+    return sum((key for (key, value) in count.items() if value == 1)).
+ Test: def check():
+    assert find_sum([1,2,3,1,1,4,5,6]) == 21
+    assert find_sum([1,10,9,4,2,10,10,45,4]) == 71
+    assert find_sum([12,10,9,45,2,10,10,45,10]) == 78
+
+2025-09-29 10:57:21 - Error: .
+ Solution: def get_max_sum(n):
+    memo = {}
+    for i in range(n + 1):
+        if i < 12:
+            memo[i] = i
+        else:
+            memo[i] = max(memo[i // 2] + memo[i // 3] + memo[i // 4] + memo[i // 5], i)
+    return memo[n].
+ Test: def check():
+    assert get_max_sum(60) == 106
+    assert get_max_sum(10) == 12
+    assert get_max_sum(2) == 2
+
+2025-09-29 10:57:22 - Error: .
+ Solution: def harmonic_sum(n):
+    if n <= 1:
+        return 0.0
+    harmonic = 0.0
+    for i in range(2, n + 1):
+        harmonic += 1 / i
+    return harmonic.
+ Test: def check():
+    assert math.isclose(harmonic_sum(7), 2.5928571428571425, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(4), 2.083333333333333, rel_tol=0.001)
+    assert math.isclose(harmonic_sum(19), 3.547739657143682, rel_tol=0.001)
+
+2025-09-29 10:57:23 - Error: .
+ Solution: import math
+def surfacearea_cylinder(r, h):
+    if r < 0 or h < 0:
+        raise ValueError('Radius and height must be non-negative.')
+    if r == 0 or h == 0:
+        return 0
+    surface_area = 2 * math.pi * r * (r + h)
+    return surface_area.
+ Test: def check():
+    assert surfacearea_cylinder(10,5)==942.45
+    assert surfacearea_cylinder(4,5)==226.18800000000002
+    assert surfacearea_cylinder(4,10)==351.848
+
+2025-09-29 10:57:23 - Error: .
+ Solution: def find_star_num(n):
+    if n < 1:
+        return 0
+    star_number = 0
+    for i in range(1, n + 1):
+        star_number = i * (6 * i - 6) // 2 + 1
+    return star_number.
+ Test: def check():
+    assert find_star_num(3) == 37
+    assert find_star_num(4) == 73
+    assert find_star_num(5) == 121
+
+2025-09-29 10:57:24 - Error: .
+ Solution: def average_tuple(nums):
+    result = []
+    for current_tuple in nums:
+        if len(current_tuple) == 0:
+            result.append(0)
+        else:
+            numeric_values = [x for x in current_tuple if isinstance(x, (int, float))]
+            if len(numeric_values) == 0:
+                result.append(0)
+            else:
+                average = sum(numeric_values) / len(numeric_values)
+                result.append(average)
+    return result.
+ Test: def check():
+    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]
+    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]
+    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]
+
+2025-09-29 10:57:25 - Error: .
+ Solution: import cmath
+def angle_complex(a: float, b: float) -> float:
+    if a == 0 and b == 0:
+        raise ValueError('The angle of the complex number 0 + 0j is undefined.')
+    z = complex(a, b)
+    return cmath.phase(z).
+ Test: def check():
+    assert math.isclose(angle_complex(0,1j), 1.5707963267948966, rel_tol=0.001)
+    assert math.isclose(angle_complex(2,1j), 0.4636476090008061, rel_tol=0.001)
+    assert math.isclose(angle_complex(0,2j), 1.5707963267948966, rel_tol=0.001)
+
+2025-09-29 10:57:27 - Error: .
+ Solution: def count_rotation(arr):
+    if not arr:
+        return 0
+    n = len(arr)
+    if n == 1:
+        return 0
+    if arr[0] < arr[-1]:
+        return 0
+    (low, high) = (0, n - 1)
+    while low <= high:
+        mid = (low + high) // 2
+        next_index = (mid + 1) % n
+        prev_index = (mid - 1 + n) % n
+        if arr[mid] <= arr[next_index] and arr[mid] <= arr[prev_index]:
+            return mid
+        elif arr[mid] <= arr[high]:
+            high = mid - 1
+        else:
+            low = mid + 1
+    return 0.
+ Test: def check():
+    assert count_rotation([3,2,1]) == 1
+    assert count_rotation([4,5,1,2,3]) == 2
+    assert count_rotation([7,8,9,1,2,3]) == 3
+    assert count_rotation([1,2,3]) == 0
+    assert count_rotation([1,3,2]) == 2
+
+2025-09-29 10:57:30 - Error: .
+ Solution: def max_product_tuple(list1):
+    if not list1 or len(list1) < 2:
+        return None
+    max_product = float('-inf')
+    n = len(list1)
+    for i in range(n):
+        for j in range(i + 1, n):
+            product = abs(list1[i][0] * list1[j][0]) + abs(list1[i][1] * list1[j][1])
+            max_product = max(max_product, product)
+    return max_product.
+ Test: def check():
+    assert max_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==36
+    assert max_product_tuple([(10,20), (15,2), (5,10)] )==200
+    assert max_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==484
+
+2025-09-29 10:57:35 - Error: Function is_polite is not defined in the solution..
+ Solution: .
+ Test: def check():
+    assert is_polite(7) == 11
+    assert is_polite(4) == 7
+    assert is_polite(9) == 13
+
+2025-09-29 10:57:35 - Error: .
+ Solution: def eulerian_num(n, m):
+    eulerian = [[0] * (n + 1) for _ in range(n + 1)]
+    eulerian[0][0] = 1
+    for i in range(1, n + 1):
+        eulerian[i][0] = 0
+        eulerian[i][i] = 0
+    for i in range(1, n + 1):
+        for j in range(1, i):
+            eulerian[i][j] = (i - j) * eulerian[i - 1][j] + (j + 1) * eulerian[i - 1][j - 1]
+    return eulerian[n][m].
+ Test: def check():
+    assert eulerian_num(3, 1) == 4
+    assert eulerian_num(4, 1) == 11
+    assert eulerian_num(5, 3) == 26
+
+2025-09-29 10:57:44 - Error: .
+ Solution: import math
+def sum_of_divisors(n):
+    if n < 1:
+        return 0
+    total = 0
+    for i in range(1, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            total += i
+            if i != n // i:
+                total += n // i
+    return total
+def are_equivalent(num1, num2):
+    return sum_of_divisors(num1) == sum_of_divisors(num2).
+ Test: def check():
+    assert are_equivalent(36, 57) == False
+    assert are_equivalent(2, 4) == False
+    assert are_equivalent(23, 47) == True
+
+2025-09-29 10:57:46 - Error: .
+ Solution: import re
+def snake_to_camel(word):
+    components = word.split('_')
+    return components[0] + ''.join((x.title() for x in components[1:])).
+ Test: def check():
+    assert snake_to_camel('android_tv') == 'AndroidTv'
+    assert snake_to_camel('google_pixel') == 'GooglePixel'
+    assert snake_to_camel('apple_watch') == 'AppleWatch'
+
+2025-09-29 10:57:48 - Error: .
+ Solution: def max_Product(arr):
+    if len(arr) < 2:
+        return None
+    max1 = max(arr[0], arr[1])
+    max2 = min(arr[0], arr[1])
+    for i in range(2, len(arr)):
+        if arr[i] > max1:
+            max2 = max1
+            max1 = arr[i]
+        elif arr[i] > max2:
+            max2 = arr[i]
+    return (max2, max1).
+ Test: def check():
+    assert max_Product([1,2,3,4,7,0,8,4]) == (7,8)
+    assert max_Product([0,-1,-2,-4,5,0,-6]) == (-4,-6)
+    assert max_Product([1,2,3]) == (2,3)
+
+2025-09-29 10:57:50 - Error: .
+ Solution: def count_bidirectional(test_list):
+    count = 0
+    seen = set()
+    for (a, b) in test_list:
+        if (b, a) in seen:
+            count += 1
+        seen.add((a, b))
+    return count.
+ Test: def check():
+    assert count_bidirectional([(5, 6), (1, 2), (6, 5), (9, 1), (6, 5), (2, 1)] ) == 3
+    assert count_bidirectional([(5, 6), (1, 3), (6, 5), (9, 1), (6, 5), (2, 1)] ) == 2
+    assert count_bidirectional([(5, 6), (1, 2), (6, 5), (9, 2), (6, 5), (2, 1)] ) == 4
+
+2025-09-29 10:57:55 - Error: .
+ Solution: def triangle_area(r):
+    if r <= 0:
+        return None
+    return r * r / 2.
+ Test: def check():
+    assert triangle_area(-1) == None
+    assert triangle_area(0) == 0
+    assert triangle_area(2) == 4
+
+2025-09-29 10:57:59 - Error: .
+ Solution: def merge(lst):
+    first_elements = [sublist[0] for sublist in lst]
+    second_elements = [sublist[1] for sublist in lst]
+    return [first_elements, second_elements].
+ Test: def check():
+    assert merge([['x', 'y'], ['a', 'b'], ['m', 'n']]) == [['x', 'a', 'm'], ['y', 'b', 'n']]
+    assert merge([[1, 2], [3, 4], [5, 6], [7, 8]]) == [[1, 3, 5, 7], [2, 4, 6, 8]]
+    assert merge([['x', 'y','z' ], ['a', 'b','c'], ['m', 'n','o']]) == [['x', 'a', 'm'], ['y', 'b', 'n'],['z', 'c','o']]
+
+2025-09-29 10:58:00 - Error: .
+ Solution: def sum_of_digits(nums):
+
+    def digit_sum(n, memo):
+        if n in memo:
+            return memo[n]
+        total = sum((int(digit) for digit in str(abs(n))))
+        memo[n] = total
+        return total
+    memo = {}
+    return [digit_sum(num, memo) for num in nums if isinstance(num, int)].
+ Test: def check():
+    assert sum_of_digits([10,2,56])==14
+    assert sum_of_digits([[10,20,4,5,'b',70,'a']])==19
+    assert sum_of_digits([10,20,-4,5,-70])==19
+
+2025-09-29 10:58:01 - Error: .
+ Solution: def is_num_decagonal(num):
+    if num < 1:
+        return False
+    n = (3 + (1 + 40 * num) ** 0.5) / 20
+    return n.is_integer() and n >= 1.
+ Test: def check():
+    assert is_num_decagonal(3) == 27
+    assert is_num_decagonal(7) == 175
+    assert is_num_decagonal(10) == 370
+
+2025-09-29 10:58:08 - Error: .
+ Solution: def set_left_most_unset_bit(n):
+    if n < 0:
+        raise ValueError('Input must be a non-negative integer.')
+    position = n.bit_length()
+    if n == (1 << position) - 1:
+        return n
+    return n | 1 << position.
+ Test: def check():
+    assert set_left_most_unset_bit(10) == 14
+    assert set_left_most_unset_bit(12) == 14
+    assert set_left_most_unset_bit(15) == 15
+
+2025-09-29 10:58:09 - Error: .
+ Solution: def and_tuples(test_tup1, test_tup2):
+    length = max(len(test_tup1), len(test_tup2))
+    elementwise = []
+    combined = []
+    for i in range(length):
+        val1 = test_tup1[i] if i < len(test_tup1) else None
+        val2 = test_tup2[i] if i < len(test_tup2) else None
+        elementwise.append(val1 and val2)
+        combined.append((val1, val2))
+    return (tuple(elementwise), tuple(combined)).
+ Test: def check():
+    assert and_tuples((10, 4, 6, 9), (5, 2, 3, 3)) == (0, 0, 2, 1)
+    assert and_tuples((1, 2, 3, 4), (5, 6, 7, 8)) == (1, 2, 3, 0)
+    assert and_tuples((8, 9, 11, 12), (7, 13, 14, 17)) == (0, 9, 10, 0)
+
+2025-09-29 10:58:12 - Error: .
+ Solution: def count_Pairs(arr, n):
+    unique_values = set(arr)
+    unique_count = len(unique_values)
+    if unique_count < 2:
+        return 0
+    return unique_count * (unique_count - 1) // 2.
+ Test: def check():
+    assert count_Pairs([1,2,1],3) == 2
+    assert count_Pairs([1,1,1,1],4) == 0
+    assert count_Pairs([1,2,3,4,5],5) == 10
+
+2025-09-29 10:58:14 - Error: .
+ Solution: def group_tuples(Input):
+    if not Input:
+        return None
+    first_elements = Input[0][0] if Input[0] else None
+    for tup in Input:
+        if not tup or tup[0] != first_elements:
+            return None
+    return first_elements.
+ Test: def check():
+    assert group_tuples([('x', 'y'), ('x', 'z'), ('w', 't')]) == [('x', 'y', 'z'), ('w', 't')]
+    assert group_tuples([('a', 'b'), ('a', 'c'), ('d', 'e')]) == [('a', 'b', 'c'), ('d', 'e')]
+    assert group_tuples([('f', 'g'), ('f', 'g'), ('h', 'i')]) == [('f', 'g', 'g'), ('h', 'i')]
+
+2025-09-29 10:58:14 - Error: .
+ Solution: def find_Element(arr, ranges, rotations, index):
+    n = len(arr)
+    if n == 0 or index < 0 or index >= n:
+        return None
+    for (start, end) in ranges:
+        arr[start:end + 1] = arr[start:end + 1][::-1]
+    effective_rotations = rotations % n
+    new_index = (index + effective_rotations) % n
+    return arr[new_index].
+ Test: def check():
+    assert find_Element([1,2,3,4,5],[[0,2],[0,3]],2,1) == 3
+    assert find_Element([1,2,3,4],[[0,1],[0,2]],1,2) == 3
+    assert find_Element([1,2,3,4,5,6],[[0,1],[0,2]],1,1) == 1
+
+2025-09-29 10:58:18 - Error: .
+ Solution: def common_element(list1, list2):
+    return bool(set(list1) & set(list2)).
+ Test: def check():
+    assert common_element([1,2,3,4,5], [5,6,7,8,9])==True
+    assert common_element([1,2,3,4,5], [6,7,8,9])==None
+    assert common_element(['a','b','c'], ['d','b','e'])==True
+
+2025-09-29 10:58:20 - Error: .
+ Solution: def dog_age(h_age):
+    if not isinstance(h_age, (int, float)) or h_age < 0:
+        raise ValueError('Human age must be a non-negative number')
+    if h_age == 0:
+        return 0
+    elif h_age == 1:
+        return 15
+    elif h_age == 2:
+        return 24
+    elif h_age <= 20:
+        return 24 + (h_age - 2) * 5
+    else:
+        return 24 + 18 * 5 + (h_age - 20) * 5.
+ Test: def check():
+    assert dog_age(12)==61
+    assert dog_age(15)==73
+    assert dog_age(24)==109
+
+2025-09-29 10:58:21 - Error: .
+ Solution: def colon_tuplex(tuplex, m, n):
+    if not isinstance(tuplex, tuple) or not all((isinstance(row, tuple) for row in tuplex)):
+        return ()
+    if m < 0 or m >= len(tuplex) or n < 0 or (len(tuplex[m]) > 0 and n >= len(tuplex[m])):
+        return ()
+    result = []
+    for row in tuplex:
+        if n < len(row):
+            result.append(row[n])
+    return tuple(result).
+ Test: def check():
+    assert colon_tuplex(("HELLO", 5, [], True) ,2,50)==("HELLO", 5, [50], True)
+    assert colon_tuplex(("HELLO", 5, [], True) ,2,100)==(("HELLO", 5, [100],True))
+    assert colon_tuplex(("HELLO", 5, [], True) ,2,500)==("HELLO", 5, [500], True)
+
+2025-09-29 10:58:23 - Error: .
+ Solution: def comb_sort(nums):
+    if not nums:
+        return nums
+    if len(nums) == 1:
+        return nums
+    gap = len(nums)
+    shrink = 1.3
+    sorted = False
+    while not sorted and gap > 1:
+        gap = max(1, int(gap / shrink))
+        sorted = True
+        for i in range(len(nums) - gap):
+            if nums[i] > nums[i + gap]:
+                (nums[i], nums[i + gap]) = (nums[i + gap], nums[i])
+                sorted = False
+    return nums.
+ Test: def check():
+    assert comb_sort([5, 15, 37, 25, 79]) == [5, 15, 25, 37, 79]
+    assert comb_sort([41, 32, 15, 19, 22]) == [15, 19, 22, 32, 41]
+    assert comb_sort([99, 15, 13, 47]) == [13, 15, 47, 99]
+
+2025-09-29 10:58:23 - Error: .
+ Solution: def even_bit_set_number(n):
+    if not isinstance(n, int):
+        raise ValueError('Input must be an integer')
+    mask = 2863311530
+    return n | mask.
+ Test: def check():
+    assert even_bit_set_number(10) == 10
+    assert even_bit_set_number(20) == 30
+    assert even_bit_set_number(30) == 30
+
+2025-09-29 10:58:24 - Error: .
+ Solution: def is_octagonal(num):
+    if not isinstance(num, int) or num < 1:
+        return False
+    from math import isqrt
+    discriminant = 1 + 12 * num
+    sqrt_discriminant = isqrt(discriminant)
+    if sqrt_discriminant * sqrt_discriminant != discriminant:
+        return False
+    n = (1 + sqrt_discriminant) / 6
+    return n.is_integer() and n > 0.
+ Test: def check():
+    assert is_octagonal(5) == 65
+    assert is_octagonal(10) == 280
+    assert is_octagonal(15) == 645
+
+2025-09-29 10:58:25 - Error: .
+ Solution: def max_length(list1):
+    if not isinstance(list1, list) or not all((isinstance(lst, list) for lst in list1)):
+        return []
+    max_len = 0
+    max_lists = []
+    for lst in list1:
+        current_len = len(lst)
+        if current_len > max_len:
+            max_len = current_len
+            max_lists = [lst]
+        elif current_len == max_len:
+            max_lists.append(lst)
+    return max_lists.
+ Test: def check():
+    assert max_length([[0], [1, 3], [5, 7], [9, 11], [13, 15, 17]])==(3, [13, 15, 17])
+    assert max_length([[1], [5, 7], [10, 12, 14,15]])==(4, [10, 12, 14,15])
+    assert max_length([[5], [15,20,25]])==(3, [15,20,25])
+
+2025-09-29 10:58:26 - Error: .
+ Solution: def combinations_list(list1):
+    if not isinstance(list1, list):
+        raise ValueError('Input must be a list')
+    result = []
+    n = len(list1)
+    for r in range(n + 1):
+        for i in range(1 << n):
+            if bin(i).count('1') == r:
+                result.append([list1[j] for j in range(n) if i & 1 << j])
+    return result.
+ Test: def check():
+    assert combinations_list(['orange', 'red', 'green', 'blue'])==[[], ['orange'], ['red'], ['red', 'orange'], ['green'], ['green', 'orange'], ['green', 'red'], ['green', 'red', 'orange'], ['blue'], ['blue', 'orange'], ['blue', 'red'], ['blue', 'red', 'orange'], ['blue', 'green'], ['blue', 'green', 'orange'], ['blue', 'green', 'red'], ['blue', 'green', 'red', 'orange']]
+    assert combinations_list(['red', 'green', 'blue', 'white', 'black', 'orange'])==[[], ['red'], ['green'], ['green', 'red'], ['blue'], ['blue', 'red'], ['blue', 'green'], ['blue', 'green', 'red'], ['white'], ['white', 'red'], ['white', 'green'], ['white', 'green', 'red'], ['white', 'blue'], ['white', 'blue', 'red'], ['white', 'blue', 'green'], ['white', 'blue', 'green', 'red'], ['black'], ['black', 'red'], ['black', 'green'], ['black', 'green', 'red'], ['black', 'blue'], ['black', 'blue', 'red'], ['black', 'blue', 'green'], ['black', 'blue', 'green', 'red'], ['black', 'white'], ['black', 'white', 'red'], ['black', 'white', 'green'], ['black', 'white', 'green', 'red'], ['black', 'white', 'blue'], ['black', 'white', 'blue', 'red'], ['black', 'white', 'blue', 'green'], ['black', 'white', 'blue', 'green', 'red'], ['orange'], ['orange', 'red'], ['orange', 'green'], ['orange', 'green', 'red'], ['orange', 'blue'], ['orange', 'blue', 'red'], ['orange', 'blue', 'green'], ['orange', 'blue', 'green', 'red'], ['orange', 'white'], ['orange', 'white', 'red'], ['orange', 'white', 'green'], ['orange', 'white', 'green', 'red'], ['orange', 'white', 'blue'], ['orange', 'white', 'blue', 'red'], ['orange', 'white', 'blue', 'green'], ['orange', 'white', 'blue', 'green', 'red'], ['orange', 'black'], ['orange', 'black', 'red'], ['orange', 'black', 'green'], ['orange', 'black', 'green', 'red'], ['orange', 'black', 'blue'], ['orange', 'black', 'blue', 'red'], ['orange', 'black', 'blue', 'green'], ['orange', 'black', 'blue', 'green', 'red'], ['orange', 'black', 'white'], ['orange', 'black', 'white', 'red'], ['orange', 'black', 'white', 'green'], ['orange', 'black', 'white', 'green', 'red'], ['orange', 'black', 'white', 'blue'], ['orange', 'black', 'white', 'blue', 'red'], ['orange', 'black', 'white', 'blue', 'green'], ['orange', 'black', 'white', 'blue', 'green', 'red']]
+    assert combinations_list(['red', 'green', 'black', 'orange'])==[[], ['red'], ['green'], ['green', 'red'], ['black'], ['black', 'red'], ['black', 'green'], ['black', 'green', 'red'], ['orange'], ['orange', 'red'], ['orange', 'green'], ['orange', 'green', 'red'], ['orange', 'black'], ['orange', 'black', 'red'], ['orange', 'black', 'green'], ['orange', 'black', 'green', 'red']]
+
+2025-09-29 10:58:27 - Error: .
+ Solution: def find_combinations(test_list):
+    result = []
+    n = len(test_list)
+    if n == 0:
+        return result
+    seen = set()
+    for r in range(1, n + 1):
+        for i in range(1 << n):
+            if bin(i).count('1') == r:
+                combo = tuple((test_list[j] for j in range(n) if i & 1 << j))
+                if combo not in seen and sum((sum(tup) for tup in combo)) == 0:
+                    seen.add(combo)
+                    result.append(combo)
+    return result.
+ Test: def check():
+    assert find_combinations([(2, 4), (6, 7), (5, 1), (6, 10)]) == [(8, 11), (7, 5), (8, 14), (11, 8), (12, 17), (11, 11)]
+    assert find_combinations([(3, 5), (7, 8), (6, 2), (7, 11)]) == [(10, 13), (9, 7), (10, 16), (13, 10), (14, 19), (13, 13)]
+    assert find_combinations([(4, 6), (8, 9), (7, 3), (8, 12)]) == [(12, 15), (11, 9), (12, 18), (15, 12), (16, 21), (15, 15)]
+
+2025-09-29 10:58:30 - Error: .
+ Solution: def min_product_tuple(list1):
+    if not list1 or len(list1) < 2:
+        return None
+    min_product = float('inf')
+    min_pair = None
+    valid_tuples = [(a, b) for (a, b) in list1 if isinstance(a, (int, float)) and isinstance(b, (int, float)) and (len((a, b)) == 2)]
+    n = len(valid_tuples)
+    for i in range(n):
+        product_i = valid_tuples[i][0] * valid_tuples[i][1]
+        for j in range(i + 1, n):
+            product_j = valid_tuples[j][0] * valid_tuples[j][1]
+            product = product_i * product_j
+            if product < min_product:
+                min_product = product
+                min_pair = (valid_tuples[i], valid_tuples[j])
+    return (min_pair, min_product) if min_pair is not None else None.
+ Test: def check():
+    assert min_product_tuple([(2, 7), (2, 6), (1, 8), (4, 9)] )==8
+    assert min_product_tuple([(10,20), (15,2), (5,10)] )==30
+    assert min_product_tuple([(11,44), (10,15), (20,5), (12, 9)] )==100
+
+2025-09-29 10:58:30 - Error: .
+ Solution: def max_difference(test_list):
+    if not test_list or len(test_list) < 2:
+        return 0
+    flat_list = [item for tup in test_list for item in tup if isinstance(item, (int, float))]
+    if len(flat_list) < 2:
+        return 0
+    max_val = max(flat_list)
+    min_val = min(flat_list)
+    return max_val - min_val.
+ Test: def check():
+    assert max_difference([(3, 5), (1, 7), (10, 3), (1, 2)]) == 7
+    assert max_difference([(4, 6), (2, 17), (9, 13), (11, 12)]) == 15
+    assert max_difference([(12, 35), (21, 27), (13, 23), (41, 22)]) == 23
+
+2025-09-29 10:58:32 - Error: .
+ Solution: def is_prime(num, memo={}):
+    if num in memo:
+        return memo[num]
+    if num <= 1:
+        return False
+    if num <= 3:
+        return True
+    if num % 2 == 0 or num % 3 == 0:
+        memo[num] = False
+        return False
+    i = 5
+    while i * i <= num:
+        if num % i == 0 or num % (i + 2) == 0:
+            memo[num] = False
+            return False
+        i += 6
+    memo[num] = True
+    return True
+def newman_prime(n):
+    if not isinstance(n, int) or n < 1:
+        return None
+    primes = []
+    k = 1
+    while len(primes) < n:
+        candidate = 2 * k ** 2 - 1
+        if is_prime(candidate):
+            primes.append(candidate)
+        k += 1
+    return primes[-1].
+ Test: def check():
+    assert newman_prime(3) == 7
+    assert newman_prime(4) == 17
+    assert newman_prime(5) == 41
+
+2025-09-29 10:58:33 - Error: Both inputs must be tuples..
+ Solution: def tuple_intersection(test_list1, test_list2):
+    if not isinstance(test_list1, tuple) or not isinstance(test_list2, tuple):
+        raise ValueError('Both inputs must be tuples.')
+    return tuple(set(test_list1) & set(test_list2)).
+ Test: def check():
+    assert tuple_intersection([(3, 4), (5, 6), (9, 10), (4, 5)] , [(5, 4), (3, 4), (6, 5), (9, 11)]) == {(4, 5), (3, 4), (5, 6)}
+    assert tuple_intersection([(4, 1), (7, 4), (11, 13), (17, 14)] , [(1, 4), (7, 4), (16, 12), (10, 13)]) == {(4, 7), (1, 4)}
+    assert tuple_intersection([(2, 1), (3, 2), (1, 3), (1, 4)] , [(11, 2), (2, 3), (6, 2), (1, 3)]) == {(1, 3), (2, 3)}
+
+2025-09-29 10:58:35 - Error: .
+ Solution: def all_Bits_Set_In_The_Given_Range(n: int, l: int, r: int) -> bool:
+    if l > r:
+        return False
+    mask = (1 << r - l + 1) - 1 << l
+    return n & mask == 0.
+ Test: def check():
+    assert all_Bits_Set_In_The_Given_Range(4,1,2) == True
+    assert all_Bits_Set_In_The_Given_Range(17,2,4) == True
+    assert all_Bits_Set_In_The_Given_Range(39,4,6) == False
+
+2025-09-29 10:58:37 - Error: .
+ Solution: import cmath
+def polar_rect(r, theta):
+    if r < 0:
+        theta += cmath.pi
+    if r == 0:
+        return (0.0, 0.0)
+    z = cmath.rect(r, theta)
+    return (z.real, z.imag).
+ Test: def check():
+    assert polar_rect(3,4)==((5.0, 0.9272952180016122), (-2+2.4492935982947064e-16j))
+    assert polar_rect(4,7)==((8.06225774829855, 1.0516502125483738), (-2+2.4492935982947064e-16j))
+    assert polar_rect(15,17)==((22.67156809750927, 0.8478169733934057), (-2+2.4492935982947064e-16j))
+
+2025-09-29 10:58:38 - Error: .
+ Solution: def remove_parenthesis(items):
+    if not isinstance(items, str):
+        return items
+    stack = []
+    result = []
+    for char in items:
+        if char == '(':
+            stack.append(len(result))
+        elif char == ')':
+            if stack:
+                start = stack.pop()
+                result = result[:start]
+        elif not stack:
+            result.append(char)
+    return ''.join(result).replace('  ', ' ').strip().
+ Test: def check():
+    assert remove_parenthesis(["python (chrome)"])==("python")
+    assert remove_parenthesis(["string(.abc)"])==("string")
+    assert remove_parenthesis(["alpha(num)"])==("alpha")
+
+2025-09-29 10:58:38 - Error: .
+ Solution: def geometric_sum(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError('Input must be a non-negative integer.')
+    result = 0.0
+    for i in range(n):
+        result += 1 / 2 ** i
+    return result.
+ Test: def check():
+    assert geometric_sum(7) == 1.9921875
+    assert geometric_sum(4) == 1.9375
+    assert geometric_sum(8) == 1.99609375
+
+2025-09-29 10:58:39 - Error: .
+ Solution: def min_Jumps(steps, d):
+    if d < 0:
+        d = -d
+    if d == 0:
+        return 0
+    if not steps:
+        return -1
+    total_steps = sum(steps)
+    if total_steps < d or (total_steps - d) % 2 != 0:
+        return -1
+    n = len(steps)
+    dp = [float('inf')] * (d + 1)
+    dp[0] = 0
+    for step in steps:
+        if step < 0:
+            continue
+        for j in range(d, step - 1, -1):
+            dp[j] = min(dp[j], dp[j - step] + 1)
+    return dp[d] if dp[d] != float('inf') else -1.
+ Test: def check():
+    assert min_Jumps((3,4),11)==3.5
+    assert min_Jumps((3,4),0)==0
+    assert min_Jumps((11,14),11)==1
+
+2025-09-29 10:58:39 - Error: Temperature must be between -50 and 10 degrees Celsius..
+ Solution: import math
+def wind_chill(v, t):
+    if not isinstance(v, (int, float)) or not isinstance(t, (int, float)):
+        raise TypeError('Both wind velocity and temperature must be numeric values.')
+    if v < 0:
+        raise ValueError('Wind velocity must be non-negative.')
+    if t < -50 or t > 10:
+        raise ValueError('Temperature must be between -50 and 10 degrees Celsius.')
+    if v == 0:
+        return math.ceil(t)
+    wci = 13.12 + 0.6215 * t - 11.37 * v ** 0.16 + 0.3965 * t * v ** 0.16
+    return math.ceil(wci).
+ Test: def check():
+    assert wind_chill(120,35)==40
+    assert wind_chill(40,20)==19
+    assert wind_chill(10,8)==6
+
+2025-09-29 10:58:42 - Error: .
+ Solution: def extended_gcd(a, b):
+    while b != 0:
+        (a, b) = (b, a % b)
+    return a
+def find_solution(a, b, n):
+    if a == 0 and b == 0:
+        return (0, 0) if n == 0 else None
+    if a == 0:
+        return (0, n // b) if n % b == 0 else None
+    if b == 0:
+        return (n // a, 0) if n % a == 0 else None
+    g = extended_gcd(a, b)
+    if n % g != 0:
+        return None
+    a //= g
+    b //= g
+    n //= g
+    (x, y) = (0, 0)
+    (x, y) = (1, 0)
+    (x1, y1) = (0, 1)
+    for _ in range(abs(n)):
+        if n > 0:
+            (x, y) = (x1, y1)
+            x1 = x - n // b * y
+            y1 = y + n // a * x
+        else:
+            (x, y) = (x1, y1)
+            x1 = x + n // b * y
+            y1 = y - n // a * x
+    return (x, y).
+ Test: def check():
+    assert find_solution(2, 3, 7) == (2, 1)
+    assert find_solution(4, 2, 7) == None
+    assert find_solution(1, 13, 17) == (4, 1)
+
+2025-09-29 10:58:44 - Error: .
+ Solution: def sequence(n):
+    if not isinstance(n, int) or n < 1:
+        return None
+    if n == 1:
+        return 1
+    elif n == 2:
+        return 2
+    elif n == 3:
+        return 3
+    seq = [0] * (n + 1)
+    (seq[1], seq[2], seq[3]) = (1, 2, 3)
+    for i in range(4, n + 1):
+        seq[i] = seq[seq[i - 1]] + seq[i - seq[i - 1]]
+    return seq[n].
+ Test: def check():
+    assert sequence(10) == 6
+    assert sequence(2) == 1
+    assert sequence(3) == 2
+
+2025-09-29 10:58:47 - Error: .
+ Solution: import re
+def text_match_three(text):
+    pattern = 'a(b{3})'
+    return bool(re.fullmatch(pattern, text)).
+ Test: def check():
+    assert not text_match_three("ac")
+    assert not text_match_three("dc")
+    assert text_match_three("abbbba")
+    assert text_match_three("caacabbbba")
+
+2025-09-29 10:58:47 - Error: .
+ Solution: def min_Swaps(str1, str2):
+    if len(str1) != len(str2):
+        return -1
+    count1 = [0, 0]
+    count2 = [0, 0]
+    for c in str1:
+        count1[int(c)] += 1
+    for c in str2:
+        count2[int(c)] += 1
+    if count1 != count2:
+        return -1
+    swaps = 0
+    for i in range(len(str1)):
+        if str1[i] != str2[i]:
+            swaps += 1
+    return swaps // 2.
+ Test: def check():
+    assert min_Swaps("1101","1110") == 1
+    assert min_Swaps("111","000") == "Not Possible"
+    assert min_Swaps("111","110") == "Not Possible"
+
+2025-09-29 10:58:48 - Error: .
+ Solution: def get_Char(strr):
+    if not isinstance(strr, str):
+        raise ValueError('Input must be a string')
+    if len(strr) == 0:
+        return 'a'
+    total_ascii = 0
+    for char in strr:
+        total_ascii += ord(char)
+    return chr(total_ascii % 26 + ord('a')).
+ Test: def check():
+    assert get_Char("abc") == "f"
+    assert get_Char("gfg") == "t"
+    assert get_Char("ab") == "c"
+
+2025-09-29 10:58:49 - Error: .
+ Solution: def get_ludic(n):
+    if n < 1:
+        return []
+    ludic = [True] * (n + 1)
+    ludic[0] = ludic[1] = False
+    ludic_numbers = []
+    for i in range(2, n + 1):
+        if ludic[i]:
+            ludic_numbers.append(i)
+            for j in range(i * 2, n + 1, i):
+                ludic[j] = False
+    return ludic_numbers.
+ Test: def check():
+    assert get_ludic(10) == [1, 2, 3, 5, 7]
+    assert get_ludic(25) == [1, 2, 3, 5, 7, 11, 13, 17, 23, 25]
+    assert get_ludic(45) == [1, 2, 3, 5, 7, 11, 13, 17, 23, 25, 29, 37, 41, 43]
+
+2025-09-29 10:58:49 - Error: .
+ Solution: def upper_ctr(s: str) -> int:
+    if not isinstance(s, str):
+        raise ValueError('Input must be a string')
+    count = 0
+    for char in s:
+        if char.isupper():
+            count += 1
+    return count.
+ Test: def check():
+    assert upper_ctr('PYthon') == 1
+    assert upper_ctr('BigData') == 1
+    assert upper_ctr('program') == 0
+
+2025-09-29 10:58:51 - Error: .
+ Solution: def rearrange_bigger(n):
+    digits = list(str(n))
+    length = len(digits)
+    i = length - 2
+    while i >= 0 and digits[i] >= digits[i + 1]:
+        i -= 1
+    if i == -1:
+        return -1
+    j = length - 1
+    while digits[j] <= digits[i]:
+        j -= 1
+    (digits[i], digits[j]) = (digits[j], digits[i])
+    digits = digits[:i + 1] + digits[i + 1:][::-1]
+    return int(''.join(digits)).
+ Test: def check():
+    assert rearrange_bigger(12)==21
+    assert rearrange_bigger(10)==False
+    assert rearrange_bigger(102)==120
+
+2025-09-29 10:58:54 - Error: .
+ Solution: def find_lists(Input):
+    count = 0
+    for item in Input:
+        if isinstance(item, list):
+            count += 1
+    return count.
+ Test: def check():
+    assert find_lists(([1, 2, 3, 4], [5, 6, 7, 8])) == 2
+    assert find_lists(([1, 2], [3, 4], [5, 6]))  == 3
+    assert find_lists(([9, 8, 7, 6, 5, 4, 3, 2, 1])) == 1
+
+2025-09-29 10:58:54 - Error: .
+ Solution: def positive_count(nums):
+    if not nums:
+        return 0.0
+    positive_count = sum((1 for num in nums if num > 0))
+    return positive_count / len(nums).
+ Test: def check():
+    assert positive_count([0, 1, 2, -1, -5, 6, 0, -3, -2, 3, 4, 6, 8])==0.54
+    assert positive_count([2, 1, 2, -1, -5, 6, 4, -3, -2, 3, 4, 6, 8])==0.69
+    assert positive_count([2, 4, -6, -9, 11, -12, 14, -5, 17])==0.56
+
+2025-09-29 10:58:55 - Error: .
+ Solution: def sort_numeric_strings(nums_str):
+    if not nums_str:
+        return []
+    filtered_nums_str = []
+    for num in nums_str:
+        if num.replace('.', '', 1).replace('-', '', 1).isdigit():
+            filtered_nums_str.append(num)
+    return sorted(filtered_nums_str, key=float).
+ Test: def check():
+    assert sort_numeric_strings( ['4','12','45','7','0','100','200','-12','-500'])==[-500, -12, 0, 4, 7, 12, 45, 100, 200]
+    assert sort_numeric_strings(['2','3','8','4','7','9','8','2','6','5','1','6','1','2','3','4','6','9','1','2'])==[1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 4, 5, 6, 6, 6, 7, 8, 8, 9, 9]
+    assert sort_numeric_strings(['1','3','5','7','1', '3','13', '15', '17','5', '7 ','9','1', '11'])==[1, 1, 1, 3, 3, 5, 5, 7, 7, 9, 11, 13, 15, 17]
+
+2025-09-29 10:59:03 - Error: .
+ Solution: def min_k(test_list, K):
+    return sorted(test_list)[:K]
+test_list = [(1, 2), (3, 4), (5, 6), (0, 1), (2, 3)]
+K = 3
+test_list = [(10, 20), (5, 15), (30, 40), (25, 35)]
+K = 2
+test_list = [(1, 2), (1, 3), (1, 4), (1, 5)]
+K = 1
+test_list = [(3, 2), (1, 4), (2, 3), (0, 5)]
+K = 4
+test_list = []
+K = 0.
+ Test: def check():
+    assert min_k([('Manjeet', 10), ('Akshat', 4), ('Akash', 2), ('Nikhil', 8)], 2) == [('Akash', 2), ('Akshat', 4)]
+    assert min_k([('Sanjeev', 11), ('Angat', 5), ('Akash', 3), ('Nepin', 9)], 3) == [('Akash', 3), ('Angat', 5), ('Nepin', 9)]
+    assert min_k([('tanmay', 14), ('Amer', 11), ('Ayesha', 9), ('SKD', 16)], 1) == [('Ayesha', 9)]
+
+2025-09-29 10:59:03 - Error: .
+ Solution: def is_Sum_Of_Powers_Of_Two(n):
+    if n <= 0:
+        return False
+    powers_of_two = set()
+    power = 1
+    while power <= n:
+        powers_of_two.add(power)
+        power *= 2
+
+    def can_form_sum(target, available_powers):
+        if target == 0:
+            return True
+        if target < 0 or not available_powers:
+            return False
+        largest_power = max(available_powers)
+        remaining_powers = available_powers - {largest_power}
+        return can_form_sum(target - largest_power, remaining_powers) or can_form_sum(target, remaining_powers)
+    return can_form_sum(n, powers_of_two).
+ Test: def check():
+    assert is_Sum_Of_Powers_Of_Two(10) == True
+    assert is_Sum_Of_Powers_Of_Two(7) == False
+    assert is_Sum_Of_Powers_Of_Two(14) == True
+
+2025-09-29 10:59:04 - Error: .
+ Solution: def max_product(arr):
+    n = len(arr)
+    if n == 0:
+        return 0
+    if n == 1:
+        return arr[0]
+    dp = [0] * n
+    dp[0] = arr[0]
+    for i in range(1, n):
+        dp[i] = arr[i]
+        for j in range(i):
+            if arr[i] > arr[j]:
+                dp[i] = max(dp[i], dp[j] * arr[i])
+    max_product_value = max(dp)
+    return max_product_value if max_product_value > 0 else max(arr).
+ Test: def check():
+    assert max_product([3, 100, 4, 5, 150, 6]) == 3000
+    assert max_product([4, 42, 55, 68, 80]) == 50265600
+    assert max_product([10, 22, 9, 33, 21, 50, 41, 60]) == 2460
+
+2025-09-29 10:59:05 - Error: .
+ Solution: import re
+def text_match_one(text):
+    pattern = 'a(b+)'
+    return bool(re.fullmatch(pattern, text)).
+ Test: def check():
+    assert text_match_one("ac")==False
+    assert text_match_one("dc")==False
+    assert text_match_one("abba")==True
+
+2025-09-29 10:59:05 - Error: .
+ Solution: def occurance_substring(text, pattern):
+    if not isinstance(text, str) or not isinstance(pattern, str):
+        return None
+    if not text or not pattern:
+        return None
+    matches = []
+    start = 0
+    while True:
+        start = text.find(pattern, start)
+        if start == -1:
+            break
+        matches.append((start, pattern))
+        start += 1
+    return matches if matches else None.
+ Test: def check():
+    assert occurance_substring('python programming, python language','python')==('python', 0, 6)
+    assert occurance_substring('python programming,programming language','programming')==('programming', 7, 18)
+    assert occurance_substring('python programming,programming language','language')==('language', 31, 39)
+    assert occurance_substring('c++ programming, c++ language','python')==None
+
+2025-09-29 10:59:08 - Error: .
+ Solution: def replace_spaces(text):
+    return text.replace(' ', '_').replace('_', ' ').
+ Test: def check():
+    assert replace_spaces('Jumanji The Jungle') == 'Jumanji_The_Jungle'
+    assert replace_spaces('The_Avengers') == 'The Avengers'
+    assert replace_spaces('Fast and Furious') == 'Fast_and_Furious'
+
+2025-09-29 10:59:08 - Error: Input must be a list of complex numbers..
+ Solution: import cmath
+def convert(numbers):
+    if not isinstance(numbers, list):
+        raise ValueError('Input must be a list of complex numbers.')
+    result = []
+    for num in numbers:
+        if not isinstance(num, complex):
+            raise ValueError(f'Invalid input: {num} is not a complex number.')
+        magnitude = abs(num)
+        angle = cmath.phase(num)
+        result.append((magnitude, angle))
+    return result.
+ Test: def check():
+    assert convert(1) == (1.0, 0.0)
+    assert convert(4) == (4.0,0.0)
+    assert convert(5) == (5.0,0.0)
+
+2025-09-29 10:59:11 - Error: list assignment index out of range.
+ Solution: def re_arrange_array(arr, n):
+    if n <= 0 or not arr:
+        return arr
+    n = min(n, len(arr))
+    result = [0] * len(arr)
+    negative_index = 0
+    positive_index = n
+    for i in range(n):
+        if arr[i] < 0:
+            result[negative_index] = arr[i]
+            negative_index += 1
+        else:
+            result[positive_index] = arr[i]
+            positive_index += 1
+    for i in range(n, len(arr)):
+        result[positive_index] = arr[i]
+        positive_index += 1
+    return result.
+ Test: def check():
+    assert re_arrange_array([-1, 2, -3, 4, 5, 6, -7, 8, 9], 9) == [-1, -3, -7, 4, 5, 6, 2, 8, 9]
+    assert re_arrange_array([12, -14, -26, 13, 15], 5) == [-14, -26, 12, 13, 15]
+    assert re_arrange_array([10, 24, 36, -42, -39, -78, 85], 7) == [-42, -39, -78, 10, 24, 36, 85]
+
+2025-09-29 10:59:16 - Error: .
+ Solution: def trim_tuple(test_list, K):
+    if not isinstance(K, int) or K < 0:
+        raise ValueError('K must be a non-negative integer.')
+    trimmed_list = []
+    for t in test_list:
+        if len(t) > 2 * K:
+            trimmed_list.append(t[K:-K])
+        else:
+            trimmed_list.append(())
+    return trimmed_list.
+ Test: def check():
+    assert trim_tuple([(5, 3, 2, 1, 4), (3, 4, 9, 2, 1),(9, 1, 2, 3, 5), (4, 8, 2, 1, 7)], 2) == '[(2,), (9,), (2,), (2,)]'
+    assert trim_tuple([(5, 3, 2, 1, 4), (3, 4, 9, 2, 1), (9, 1, 2, 3, 5), (4, 8, 2, 1, 7)], 1) == '[(3, 2, 1), (4, 9, 2), (1, 2, 3), (8, 2, 1)]'
+    assert trim_tuple([(7, 8, 4, 9), (11, 8, 12, 4),(4, 1, 7, 8), (3, 6, 9, 7)], 1) == '[(8, 4), (8, 12), (1, 7), (6, 9)]'
+
+2025-09-29 10:59:19 - Error: .
+ Solution: def is_nonagonal(n: int) -> int:
+    if n <= 0:
+        raise ValueError('n must be a positive integer')
+    return (7 * n * n - 3 * n) // 2.
+ Test: def check():
+    assert is_nonagonal(10) == 325
+    assert is_nonagonal(15) == 750
+    assert is_nonagonal(18) == 1089
+
+2025-09-29 10:59:20 - Error: check_value() takes 1 positional argument but 2 were given.
+ Solution: def check_value(d):
+    if not d:
+        return True
+    first_value = next(iter(d.values()))
+    return all((value == first_value for value in d.values())).
+ Test: def check():
+    assert check_value({'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12},10)==False
+    assert check_value({'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12},12)==True
+    assert check_value({'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12},5)==False
+
+2025-09-29 10:59:23 - Error: .
+ Solution: def loss_amount(actual_cost, sale_amount):
+    if not isinstance(actual_cost, (int, float)) or not isinstance(sale_amount, (int, float)):
+        raise ValueError('Both actual_cost and sale_amount must be numeric values.')
+    if actual_cost < 0 or sale_amount < 0:
+        raise ValueError('Both actual_cost and sale_amount must be non-negative.')
+    return max(0, actual_cost - sale_amount).
+ Test: def check():
+    assert loss_amount(1500,1200)==0
+    assert loss_amount(100,200)==100
+    assert loss_amount(2000,5000)==3000
+
+2025-09-29 10:59:25 - Error: .
+ Solution: def surface_Area(b, h):
+    if not (isinstance(b, (int, float)) and isinstance(h, (int, float))):
+        raise ValueError('Base edge and height must be numeric values.')
+    if b <= 0 or h <= 0:
+        raise ValueError('Base edge and height must be positive values.')
+    base_area = b ** 2
+    slant_height = (h ** 2 + (b / 2) ** 2) ** 0.5
+    lateral_area = 2 * b * slant_height
+    total_area = base_area + lateral_area
+    return total_area.
+ Test: def check():
+    assert surface_Area(3,4) == 33
+    assert surface_Area(4,5) == 56
+    assert surface_Area(1,2) == 5
+
+2025-09-29 10:59:27 - Error: .
+ Solution: def find_Max_Num(arr):
+    if not arr:
+        return ''
+    arr = list(map(str, arr))
+    arr.sort(key=lambda x: x * 10, reverse=True)
+    if arr[0] == '0':
+        return '0'
+    return ''.join(arr).
+ Test: def check():
+    assert find_Max_Num([1,2,3]) == 321
+    assert find_Max_Num([4,5,6,1]) == 6541
+    assert find_Max_Num([1,2,3,9]) == 9321
+
+2025-09-29 10:59:28 - Error: .
+ Solution: def cal_sum(n: int) -> int:
+    if n < 0:
+        return 0
+    elif n == 0:
+        return 3
+    elif n == 1:
+        return 6
+    elif n == 2:
+        return 10
+    perrin = [3, 3, 4]
+    total_sum = sum(perrin)
+    for i in range(3, n + 1):
+        next_perrin = perrin[i - 2] + perrin[i - 1]
+        perrin.append(next_perrin)
+        total_sum += next_perrin
+    return total_sum.
+ Test: def check():
+    assert cal_sum(9) == 49
+    assert cal_sum(10) == 66
+    assert cal_sum(11) == 88
+
+2025-09-29 10:59:31 - Error: .
+ Solution: def count_vowels(test_str):
+    if not isinstance(test_str, str):
+        return 0
+    vowels = set('aeiouAEIOU')
+    count = 0
+    length = len(test_str)
+    for i in range(length):
+        if i > 0 and test_str[i - 1] in vowels or (i < length - 1 and test_str[i + 1] in vowels):
+            count += 1
+    return count.
+ Test: def check():
+    assert count_vowels('bestinstareels') == 7
+    assert count_vowels('partofthejourneyistheend') == 12
+    assert count_vowels('amazonprime') == 5
+
+2025-09-29 10:59:31 - Error: .
+ Solution: def remove_kth_element(list1, k):
+    if not isinstance(list1, list) or not isinstance(k, int):
+        raise ValueError('Input must be a list and an integer.')
+    if k < 0 or k >= len(list1):
+        return list1.copy()
+    result = []
+    for i in range(len(list1)):
+        if i != k:
+            result.append(list1[i])
+    return result.
+ Test: def check():
+    assert remove_kth_element([1,1,2,3,4,4,5,1],3)==[1, 1, 3, 4, 4, 5, 1]
+    assert remove_kth_element([0, 0, 1, 2, 3, 4, 4, 5, 6, 6, 6, 7, 8, 9, 4, 4],4)==[0, 0, 1, 3, 4, 4, 5, 6, 6, 6, 7, 8, 9, 4, 4]
+    assert remove_kth_element([10, 10, 15, 19, 18, 18, 17, 26, 26, 17, 18, 10],5)==[10,10,15,19, 18, 17, 26, 26, 17, 18, 10]
+
+2025-09-29 10:59:34 - Error: .
+ Solution: def count_first_elements(test_tup):
+    if not isinstance(test_tup, tuple):
+        raise ValueError('Input must be a tuple')
+    count_dict = {}
+    result = []
+    for element in test_tup:
+        count_dict[element] = count_dict.get(element, 0)
+        result.append(count_dict[element])
+        count_dict[element] += 1
+    return tuple(result).
+ Test: def check():
+    assert count_first_elements((1, 5, 7, (4, 6), 10) ) == 3
+    assert count_first_elements((2, 9, (5, 7), 11) ) == 2
+    assert count_first_elements((11, 15, 5, 8, (2, 3), 8) ) == 4
+
+2025-09-29 10:59:41 - Error: .
+ Solution: def parabola_directrix(a, b, c):
+    if a == 0:
+        raise ValueError("Coefficient 'a' cannot be zero for a parabola.")
+    vertex_y = (4 * a * c - b ** 2) / (4 * a)
+    directrix = vertex_y - 1 / (4 * a)
+    return directrix.
+ Test: def check():
+    assert parabola_directrix(5,3,2)==-198
+    assert parabola_directrix(9,8,4)==-2336
+    assert parabola_directrix(2,4,6)==-130
+
