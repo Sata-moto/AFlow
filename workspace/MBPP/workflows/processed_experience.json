@@ -1,113 +1,22 @@
 {
-    "1": {
-        "score": 0.7209302325581395,
+    "2": {
+        "score": 0.8023255813953488,
         "success": {
             "3": {
-                "modification": "Add ScEnsemble operator to validate and select the best solution from multiple generations, and modify the output format to match the expected True/False format shown in the error logs.",
-                "score": 0.7325581395348837
-            }
-        },
-        "failure": {
-            "2": {
-                "modification": "Add Test operator to validate solutions before returning them and format the output according to the standard format shown in the error logs.",
-                "score": 0.046511627906976744
-            },
-            "11": {
-                "modification": "Add Test operator to validate the solution and ensure proper formatting before returning. This will help catch incorrect solutions and ensure the output matches the expected format seen in the logs (with proper error handling and test cases).",
-                "score": 0.03488372093023256
-            }
-        }
-    },
-    "4": {
-        "score": 0.7906976744186046,
-        "success": {
-            "12": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [4, 8, 10] (scores: ['0.7907', '0.7674', '0.7442']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.813953488372093
-            }
-        },
-        "failure": {
-            "7": {
-                "modification": "Modify the FORMAT_PROMPT to include explicit instructions about handling tuple operations and result formatting, and add specific examples to guide the model better.",
-                "score": 0.7790697674418605
-            },
-            "10": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [4, 8, 6] (scores: ['0.7907', '0.7674', '0.7326']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.7441860465116279
-            },
-            "8": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [4, 6, 5] (scores: ['0.7907', '0.7326', '0.7907']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.7674418604651163
-            },
-            "6": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [4, 5, 1] (scores: ['0.7907', '0.7907', '0.7209']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.7325581395348837
-            }
-        }
-    },
-    "12": {
-        "score": 0.813953488372093,
-        "success": {
-            "16": {
-                "modification": "Add a validation step using Custom operator before final testing to verify solution completeness and correctness. This helps catch potential issues before running the actual test cases.",
+                "modification": "Add a memoization mechanism to the get_max_sum function implementation and improve error handling by implementing a more robust solution refinement process that includes multiple attempts with different strategies. Also add the ScEnsemble operator to generate multiple solutions and select the best one.",
                 "score": 0.8255813953488372
-            }
-        },
-        "failure": {
-            "13": {
-                "modification": "Add complexity assessment branch using Custom operator to determine problem difficulty and adjust solution strategy accordingly. This helps tailor the approach based on problem characteristics.",
-                "score": 0.813953488372093
-            },
-            "15": {
-                "modification": "Add complexity assessment branch at the beginning of the workflow to determine problem difficulty and adjust solution strategy. This helps tailor the approach based on problem characteristics.",
-                "score": 0.7906976744186046
-            },
-            "14": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [12, 13, 8] (scores: ['0.8140', '0.8140', '0.7674']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.7093023255813954
-            }
-        }
-    },
-    "3": {
-        "score": 0.7325581395348837,
-        "success": {
-            "5": {
-                "modification": "1. Add Test operator to validate solutions before returning final result\n2. Add another solution variant using Custom with a different prompt focused on test cases\n3. Modify the FORMAT_PROMPT to better match correct answer format",
-                "score": 0.7906976744186046
-            },
-            "4": {
-                "modification": "1. Add test operator to validate solutions before returning\n2. Modify the custom prompt to better handle solution formatting\n3. Add error handling and format standardization before returning the final solution",
-                "score": 0.7906976744186046
             }
         },
         "failure": {}
     },
-    "16": {
-        "score": 0.8255813953488372,
-        "success": {},
-        "failure": {
-            "19": {
-                "modification": "Add a FORMAT_CHECK_PROMPT to validate and format the solution before final return, ensuring proper numeric/list output formatting. This addresses the issue where outputs were returning 0.0 instead of properly formatted solutions.",
-                "score": 0.7906976744186046
-            },
-            "17": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [16, 13, 8] (scores: ['0.8256', '0.8140', '0.7674']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.7441860465116279
-            },
-            "18": {
-                "modification": "Add a FORMAT_PROMPT to standardize the output format and modify the final return statement to ensure consistent formatting with the expected answer structure. This addresses the issue where outputs were returning 0.0 instead of properly formatted solutions.",
-                "score": 0.5232558139534884
+    "1": {
+        "score": 0.7093023255813954,
+        "success": {
+            "2": {
+                "modification": "Add the Test operator to validate solutions and modify the output format to match expected standards. Also add error handling and solution refinement.",
+                "score": 0.8023255813953488
             }
-        }
-    },
-    "5": {
-        "score": 0.7906976744186046,
-        "success": {},
-        "failure": {
-            "9": {
-                "modification": "Add a new custom call to format and standardize the solution before testing, focusing on proper function structure and error handling. This will help ensure consistent output format and better handle edge cases.",
-                "score": 0.7558139534883721
-            }
-        }
+        },
+        "failure": {}
     }
 }

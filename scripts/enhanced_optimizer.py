@@ -3,12 +3,17 @@ import os
 import json
 import time
 from typing import List, Literal, Dict
+import random
+import os
+import json
+import time
 
 from pydantic import BaseModel, Field
 
 from scripts.evaluator import DatasetType
 from scripts.optimizer import Optimizer, QuestionType, OptimizerType, GraphOptimize
 from scripts.workflow_fusion import WorkflowFusion
+from scripts.workflow_differentiation import WorkflowDifferentiation
 from scripts.optimizer_utils.convergence_utils import ConvergenceUtils
 from scripts.optimizer_utils.data_utils import DataUtils
 from scripts.optimizer_utils.evaluation_utils import EvaluationUtils
@@ -17,11 +22,13 @@ from scripts.optimizer_utils.graph_utils import GraphUtils
 from scripts.async_llm import create_llm_instance
 from scripts.formatter import XmlFormatter, FormatError
 from scripts.logs import logger
+from scripts.utils.code_processor import CodeProcessor
+from scripts.utils.workflow_manager import WorkflowManager, FusionChecker
 
 
 class EnhancedOptimizer(Optimizer):
     """
-    Enhanced optimizer that integrates workflow fusion into the optimization process
+    Enhanced optimizer that integrates workflow fusion and differentiation into the optimization process
     """
     
     def __init__(
@@ -40,6 +47,9 @@ class EnhancedOptimizer(Optimizer):
         enable_fusion: bool = True,
         max_envelope_workflows: int = 3,
         fusion_score_threshold: float = 0.0,  # Minimum score improvement required for fusion
+        enable_differentiation: bool = True,
+        differentiation_probability: float = 0.3,  # Probability of differentiation vs regular optimization
+        max_differentiation_rounds: int = 5,  # Maximum rounds with differentiation per optimization cycle
     ) -> None:
         # Initialize parent class
         super().__init__(
@@ -61,8 +71,15 @@ class EnhancedOptimizer(Optimizer):
         self.max_envelope_workflows = max_envelope_workflows
         self.fusion_score_threshold = fusion_score_threshold
         
-        # Track fusion attempts to prevent consecutive fusion rounds
+        # Differentiation-specific parameters
+        self.enable_differentiation = enable_differentiation
+        self.differentiation_probability = differentiation_probability
+        self.max_differentiation_rounds = max_differentiation_rounds
+        
+        # Track fusion and differentiation attempts
         self.last_fusion_round = -1
+        self.differentiation_rounds_used = 0
+        self.used_differentiation_directions = []
         
         # Track fusion metadata counter for proper numbering
         self.fusion_metadata_counter = 0
@@ -80,6 +97,28 @@ class EnhancedOptimizer(Optimizer):
                 max_envelope_workflows=self.max_envelope_workflows,
                 validation_rounds=self.validation_rounds,
             )
+        
+        # Initialize differentiation processor
+        if self.enable_differentiation:
+            self.differentiation_processor = WorkflowDifferentiation(
+                dataset=self.dataset,
+                question_type=self.type,
+                opt_llm_config=self.optimize_llm_config,
+                exec_llm_config=self.execute_llm_config,
+                operators=self.operators,
+                optimized_path=optimized_path,
+                validation_rounds=self.validation_rounds,
+            )
+        
+        # Initialize workflow management utilities
+        self.workflow_manager = WorkflowManager(
+            root_path=self.root_path,
+            data_utils=self.data_utils,
+            graph_utils=self.graph_utils
+        )
+        
+        # Initialize fusion checker
+        self.fusion_checker = FusionChecker(root_path=self.root_path)
     
     def _initialize_fusion_counter(self):
         """Initialize fusion metadata counter by checking existing files"""
@@ -96,57 +135,8 @@ class EnhancedOptimizer(Optimizer):
         self.fusion_metadata_counter = counter
         logger.info(f"Initialized fusion counter at {self.fusion_metadata_counter}")
     
-    def _check_fusion_already_attempted(self, envelope_workflows: List[Dict]) -> bool:
-        """
-        Check if this specific fusion combination has been attempted before
-        
-        Args:
-            envelope_workflows: List of workflows to be fused
-            
-        Returns:
-            bool: True if this combination was already attempted
-        """
-        try:
-            # Create a sorted signature of the fusion combination
-            workflow_rounds = sorted([w["round"] for w in envelope_workflows])
-            fusion_signature = tuple(workflow_rounds)
-            
-            # Check all existing fusion metadata files
-            fusion_metadata_dir = f"{self.root_path}/workflows"
-            counter = 1
-            
-            while True:
-                metadata_file = os.path.join(fusion_metadata_dir, f"fusion_metadata_{counter}.json")
-                if not os.path.exists(metadata_file):
-                    break
-                
-                try:
-                    with open(metadata_file, 'r', encoding='utf-8') as f:
-                        metadata = json.load(f)
-                    
-                    # Extract source workflow rounds from metadata
-                    source_rounds = sorted([w["round"] for w in metadata.get("source_workflows", [])])
-                    existing_signature = tuple(source_rounds)
-                    
-                    # Check if signatures match
-                    if fusion_signature == existing_signature:
-                        logger.info(f"Fusion combination {workflow_rounds} already attempted (found in fusion_metadata_{counter}.json)")
-                        return True
-                        
-                except Exception as e:
-                    logger.error(f"Error reading fusion metadata {counter}: {e}")
-                
-                counter += 1
-            
-            logger.info(f"Fusion combination {workflow_rounds} not attempted before")
-            return False
-            
-        except Exception as e:
-            logger.error(f"Error checking fusion history: {e}")
-            return False
-    
     def optimize(self, mode: OptimizerType = "Graph"):
-        """Enhanced optimize method with integrated fusion"""
+        """Enhanced optimize method with integrated fusion and differentiation"""
         if mode == "Test":
             test_n = 1  # validation datasets's execution number
             for i in range(test_n):
@@ -165,25 +155,37 @@ class EnhancedOptimizer(Optimizer):
 
             while retry_count < max_retries:
                 try:
-                    # Check if we should attempt fusion instead of optimization
+                    # Priority 1: Check if we should attempt fusion
                     if self._should_attempt_fusion():
                         logger.info(f"Attempting workflow fusion instead of optimization for round {self.round + 1}")
                         score = loop.run_until_complete(self._attempt_fusion())
                         if score is not None:
-                            # Fusion successful, skip regular optimization
+                            # Fusion successful, skip other strategies
                             break
                         else:
-                            # Fusion failed, fall back to regular optimization
-                            logger.info("Fusion failed, falling back to regular optimization")
+                            # Fusion failed, try other strategies
+                            logger.warning("Fusion failed, trying other strategies")
                     
-                    # Regular optimization process
-                    score = loop.run_until_complete(self._optimize_graph())
+                    # Priority 2: Check if we should attempt differentiation
+                    if score is None and self._should_attempt_differentiation():
+                        logger.info(f"Attempting workflow differentiation for round {self.round + 1}")
+                        score = loop.run_until_complete(self._attempt_differentiation())
+                        if score is not None:
+                            # Differentiation successful, skip regular optimization
+                            break
+                        else:
+                            # Differentiation failed, fall back to regular optimization
+                            logger.warning("Differentiation failed, falling back to regular optimization")
+                    
+                    # Priority 3: Regular optimization process
+                    if score is None:
+                        score = loop.run_until_complete(self._optimize_graph())
                     break
                 except Exception as e:
                     retry_count += 1
-                    logger.info(f"Error occurred: {e}. Retrying... (Attempt {retry_count}/{max_retries})")
+                    logger.warning(f"Error occurred: {e}. Retrying... (Attempt {retry_count}/{max_retries})")
                     if retry_count == max_retries:
-                        logger.info("Max retries reached. Moving to next round.")
+                        logger.warning("Max retries reached. Moving to next round.")
                         score = None
 
                     wait_time = 5 * retry_count
@@ -235,13 +237,173 @@ class EnhancedOptimizer(Optimizer):
             return False
         
         # Check if this specific fusion combination has been attempted before
-        if self._check_fusion_already_attempted(envelope_workflows):
+        if self.fusion_checker.check_fusion_already_attempted(envelope_workflows):
             logger.info("Skipping fusion - this combination has been attempted before")
             return False
         
         logger.info(f"Fusion conditions met: {len(envelope_workflows)} envelope workflows available")
         return True
     
+    def _should_attempt_differentiation(self) -> bool:
+        """
+        Determine if we should attempt differentiation based on current conditions.
+        
+        Returns:
+            bool: True if differentiation should be attempted
+        """
+        if not self.enable_differentiation:
+            return False
+        
+        # Don't attempt differentiation in the first round
+        if self.round < 2:
+            return False
+        
+        # Check if we've exceeded max differentiation rounds
+        if self.differentiation_rounds_used >= self.max_differentiation_rounds:
+            logger.info("Skipping differentiation - maximum differentiation rounds reached")
+            return False
+        
+        # Probabilistic decision for differentiation
+        import random
+        if random.random() > self.differentiation_probability:
+            return False
+        
+        # Check if we have workflows to differentiate from
+        workflows_data = self.data_utils.load_results(f"{self.root_path}/workflows")
+        if len(workflows_data) < 2:
+            logger.info("Insufficient workflows for differentiation (need at least 2)")
+            return False
+        
+        logger.info(f"Differentiation conditions met: probability check passed, {len(workflows_data)} workflows available")
+        return True
+    
+    def _select_differentiation_candidates(self) -> List[Dict]:
+        """
+        Select candidate workflows for differentiation.
+        
+        Returns:
+            List of candidate workflows with scores and metadata
+        """
+        workflows_data = self.data_utils.load_results(f"{self.root_path}/workflows")
+        
+        # Sort by score and select top candidates
+        sorted_workflows = sorted(workflows_data, key=lambda x: x.get('score', 0), reverse=True)
+        
+        # Return top workflows as candidates (limit to avoid too many options)
+        max_candidates = min(5, len(sorted_workflows))
+        return sorted_workflows[:max_candidates]
+    
+    async def _attempt_differentiation(self) -> float:
+        """
+        Attempt workflow differentiation and evaluate the result.
+        
+        Returns:
+            float: Score of differentiated workflow if successful, None if differentiation failed
+        """
+        differentiation_score = None
+        try:
+            # Record that we're attempting differentiation this round
+            self.differentiation_rounds_used += 1
+            
+            # Get workflow results for analysis
+            workflow_results = self.data_utils.load_results(f"{self.root_path}/workflows")
+            
+            # Group results by round and get average scores
+            round_summaries = self.workflow_manager.get_round_summaries(workflow_results)
+            
+            # Analyze differentiation candidates
+            candidates = self.differentiation_processor.analyze_differentiation_candidates(round_summaries)
+            
+            if not candidates:
+                logger.warning("No suitable differentiation candidates found")
+                return None
+            
+            # Select best candidate
+            selected_candidate = candidates[0]["workflow"]  # Select highest priority candidate
+            logger.info(f"Selected workflow from round {selected_candidate['round']} for differentiation")
+            
+            # Select differentiation direction
+            differentiation_direction = self.differentiation_processor.select_differentiation_direction(
+                selected_candidate,
+                self.used_differentiation_directions,
+                performance_gaps=[]  # Could be enhanced with actual gap analysis
+            )
+            
+            # Track used direction
+            self.used_differentiation_directions.append(differentiation_direction)
+            
+            # Load source workflow content
+            source_workflow_content = await self.workflow_manager.load_workflow_content(selected_candidate["round"])
+            
+            # Get operator descriptions
+            operator_description = self.graph_utils.load_operators_description(self.operators)
+            
+            # Create differentiated workflow
+            differentiation_response = await self.differentiation_processor.create_differentiated_workflow(
+                source_workflow=source_workflow_content,
+                differentiation_direction=differentiation_direction,
+                operator_description=operator_description
+            )
+            
+            if not differentiation_response:
+                logger.error("Differentiation process failed")
+                return None
+            
+            # Save differentiated workflow to next round directory using differentiation processor
+            next_round = self.round + 1
+            success = self.differentiation_processor.save_differentiated_workflow_direct(
+                differentiation_response, selected_candidate, differentiation_direction, 
+                next_round, self.root_path, self.graph_utils, self.experience_utils
+            )
+            
+            if not success:
+                logger.error("Failed to save differentiated workflow")
+                return None
+            
+            # Evaluate the differentiated workflow using standard evaluation process
+            graph_path = f"{self.root_path}/workflows"
+            directory = f"{self.root_path}/workflows/round_{next_round}"
+            
+            # Load the differentiated graph
+            self.graph = self.graph_utils.load_graph(next_round, graph_path)
+            if self.graph is None:
+                logger.error("Failed to load differentiated workflow")
+                return None
+            
+            # Load data for evaluation context
+            data = self.data_utils.load_results(graph_path)
+            
+            # Evaluate using standard evaluation process
+            differentiation_score = await self.evaluation_utils.evaluate_graph(
+                self, directory, self.validation_rounds, data, initial=False
+            )
+            
+            # Ensure experience.json is updated
+            experience_path = os.path.join(directory, "experience.json")
+            if os.path.exists(experience_path):
+                with open(experience_path, 'r', encoding='utf-8') as f:
+                    experience_data = json.load(f)
+                
+                if experience_data.get("after") is None:
+                    self.experience_utils.update_experience(directory, experience_data, differentiation_score)
+            
+            logger.info(f"Differentiated workflow score: {differentiation_score:.4f}")
+            
+            # Save differentiation metadata
+            self.differentiation_processor.save_differentiation_metadata(
+                source_workflow=selected_candidate,
+                differentiated_workflow=differentiation_response,
+                differentiation_direction=differentiation_direction,
+                target_round=next_round,
+                differentiation_score=differentiation_score
+            )
+            
+            return differentiation_score
+                
+        except Exception as e:
+            logger.error(f"Error in differentiation attempt: {e}")
+            return None
+
     async def _attempt_fusion(self) -> float:
         """
         Attempt workflow fusion and evaluate the result using standard evaluation process
@@ -305,22 +467,25 @@ class EnhancedOptimizer(Optimizer):
                 logger.info(f"Fusion successful! Score {fusion_score:.4f} > threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
                 
                 # Save metadata for successful adoption
-                self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=True)
+                self.fusion_processor.save_fusion_metadata(
+                    envelope_workflows, fusion_score, self.round, self.fusion_metadata_counter + 1, adopted=True
+                )
+                self.fusion_metadata_counter += 1
                 
                 return fusion_score
             else:
                 logger.info(f"Fusion score {fusion_score:.4f} below threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
                 # Even if below threshold, we keep the fusion workflow since it was already created
                 # Save metadata for tracking purposes
-                self._save_fusion_metadata(envelope_workflows, fusion_score, adopted=True)
+                self.fusion_processor.save_fusion_metadata(
+                    envelope_workflows, fusion_score, self.round, self.fusion_metadata_counter + 1, adopted=True
+                )
+                self.fusion_metadata_counter += 1
                 return fusion_score
                 
         except Exception as e:
             logger.error(f"Error in fusion attempt: {e}")
             return None
-        finally:
-            # Always clean up temporary fusion directories
-            self._cleanup_fusion_directories()
     
     async def _execute_fusion_async(self) -> bool:
         """
@@ -359,213 +524,24 @@ class EnhancedOptimizer(Optimizer):
             # Get operator descriptions
             operator_description = self.graph_utils.load_operators_description(self.operators)
             
-            # Create fusion prompt
-            fusion_prompt = self._create_fusion_prompt(workflow_contents, operator_description)
-            
-            # Call LLM for fusion
-            fusion_response = await self._call_fusion_llm(fusion_prompt)
+            # Create fusion prompt and call LLM
+            fusion_response = await self.fusion_processor.create_fused_workflow(
+                envelope_workflows=envelope_workflows,
+                workflow_contents=workflow_contents,
+                operator_description=operator_description
+            )
             
             if not fusion_response:
                 return False
             
-            # Save fused workflow directly to next round directory
-            return self._save_fused_workflow_direct(fusion_response, envelope_workflows)
+            # Save fused workflow directly to next round directory using fusion processor
+            return self.fusion_processor.save_fused_workflow_direct(
+                fusion_response, envelope_workflows, self.root_path, self.round, 
+                self.graph_utils, self.experience_utils
+            )
             
         except Exception as e:
             logger.error(f"Error executing fusion: {e}")
-            return False
-    
-    def _create_fusion_prompt(self, workflow_contents: List[Dict], operator_description: str) -> str:
-        """
-        Create fusion prompt for LLM using optimizer pattern
-        
-        Args:
-            workflow_contents: List of workflow data dictionaries
-            operator_description: Description of available operators
-            
-        Returns:
-            Generated fusion prompt
-        """
-        # Format workflows for prompt
-        workflows_formatted = ""
-        
-        for i, workflow in enumerate(workflow_contents, 1):
-            solved_problems = workflow["solved_problems"]
-            if isinstance(solved_problems, list):
-                solved_problems = set(solved_problems)
-            
-            workflows_formatted += f"""
-    <workflow_{i}>
-        <round>{workflow['round']}</round>
-        <score>{workflow['score']:.4f}</score>
-        <solved_problems>{len(solved_problems)} problems</solved_problems>
-        <prompt>
-{workflow['prompt']}
-        </prompt>
-        <graph>
-{workflow['graph']}
-        </graph>
-    </workflow_{i}>
-"""
-        
-        # Use fusion processor's prompt generator with optimizer pattern
-        return self.fusion_processor.prompt_generator.create_fusion_prompt(
-            dataset=self.dataset,
-            type=self.type,
-            workflows=workflows_formatted,
-            operator_description=operator_description
-        )
-    
-    async def _call_fusion_llm(self, fusion_prompt: str) -> Dict[str, str]:
-        """
-        Call LLM for workflow fusion
-        
-        Args:
-            fusion_prompt: Prompt for fusion
-            
-        Returns:
-            Dict containing fusion response or None if failed
-        """
-        try:
-            # Create formatter for fusion result
-            from scripts.workflow_fusion import WorkflowFusionResult
-            fusion_formatter = XmlFormatter.from_model(WorkflowFusionResult)
-            
-            # Call LLM with formatter
-            response = await self.fusion_processor.fusion_llm.call_with_format(
-                fusion_prompt,
-                fusion_formatter
-            )
-            
-            # Clean the graph content even for properly formatted responses
-            if "graph" in response and response["graph"]:
-                response["graph"] = self._clean_code_content(response["graph"])
-            
-            logger.info("Workflow fusion LLM call successful")
-            return response
-            
-        except FormatError as e:
-            logger.error(f"Format error in workflow fusion: {str(e)}")
-            # Try fallback approach
-            raw_response = await self.fusion_processor.fusion_llm(fusion_prompt)
-            response = self._extract_fusion_fields(raw_response)
-            if response:
-                return response
-            else:
-                logger.error("Failed to extract fields from fusion response")
-                return None
-                
-        except Exception as e:
-            logger.error(f"Error calling fusion LLM: {e}")
-            return None
-    
-    def _extract_fusion_fields(self, response: str) -> Dict[str, str]:
-        """
-        Extract fields from raw fusion response using regex
-        
-        Args:
-            response: Raw response text from LLM
-            
-        Returns:
-            Dictionary with extracted fields or None if extraction fails
-        """
-        try:
-            import re
-            
-            result = {
-                "modification": "",
-                "graph": "",
-                "prompt": ""
-            }
-            
-            # Extract each field with regex
-            for field in result.keys():
-                pattern = rf"<{field}>(.*?)</{field}>"
-                match = re.search(pattern, response, re.DOTALL)
-                if match:
-                    content = match.group(1).strip()
-                    
-                    # Clean up code blocks (especially for graph field)
-                    if field == "graph":
-                        content = self._clean_code_content(content)
-                    
-                    result[field] = content
-            
-            # Verify we have at least some content
-            if not any(result.values()):
-                return None
-            
-            return result
-            
-        except Exception as e:
-            logger.error(f"Error extracting fusion fields: {e}")
-            return None
-    
-    def _clean_code_content(self, content: str) -> str:
-        """
-        Clean code content by removing markdown code block markers
-        
-        Args:
-            content: Raw code content that may contain ```python markers
-            
-        Returns:
-            Cleaned code content
-        """
-        import re
-        
-        # Remove ```python and ``` markers
-        content = re.sub(r'^```python\s*\n?', '', content, flags=re.MULTILINE)
-        content = re.sub(r'\n?```\s*$', '', content, flags=re.MULTILINE)
-        
-        # Remove any leading/trailing whitespace but preserve internal formatting
-        content = content.strip()
-        
-        return content
-    
-    def _save_fused_workflow_direct(self, fusion_response: Dict[str, str], envelope_workflows: List[Dict]) -> bool:
-        """
-        Save the fused workflow directly to the next round directory
-        
-        Args:
-            fusion_response: Response from fusion LLM
-            envelope_workflows: Original envelope workflows used for fusion
-            
-        Returns:
-            bool: True if save successful
-        """
-        try:
-            # Calculate next round number
-            next_round = self.round + 1
-            
-            # Create next round directory directly
-            workflows_dir = f"{self.root_path}/workflows"
-            target_dir = os.path.join(workflows_dir, f"round_{next_round}")
-            os.makedirs(target_dir, exist_ok=True)
-            
-            # Save fused workflow files using graph_utils pattern
-            self.graph_utils.write_graph_files(
-                target_dir,
-                fusion_response,
-                next_round,  # Use actual round number
-                self.dataset
-            )
-            
-            # Create __init__.py
-            init_file = os.path.join(target_dir, "__init__.py")
-            with open(init_file, 'w') as f:
-                f.write("")
-            
-            # Create experience.json for fusion workflow
-            self._create_fusion_experience_file(target_dir, envelope_workflows, next_round)
-            
-            # Create log.json for fusion workflow
-            self._create_fusion_log_file(target_dir, envelope_workflows)
-            
-            logger.info(f"Fused workflow saved directly to round_{next_round}")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error saving fused workflow directly: {e}")
             return False
     
     async def _evaluate_fused_workflow(self) -> float:
@@ -608,147 +584,6 @@ class EnhancedOptimizer(Optimizer):
         except Exception as e:
             logger.error(f"Error evaluating fused workflow: {e}")
             return None
-
-    def _save_fusion_metadata(self, envelope_workflows: List[Dict], fusion_score: float, adopted: bool = True) -> None:
-        """
-        Save fusion metadata with proper numbering
-        
-        Args:
-            envelope_workflows: Original envelope workflows used for fusion
-            fusion_score: Score achieved by fused workflow
-            adopted: Whether the fused workflow was adopted
-        """
-        try:
-            # Increment counter for new metadata file
-            self.fusion_metadata_counter += 1
-            
-            # Create fusion metadata
-            fusion_metadata = {
-                "fusion_id": self.fusion_metadata_counter,
-                "fusion_timestamp": time.time(),
-                "fusion_round": self.round,
-                "source_workflows": [
-                    {
-                        "round": w["round"],
-                        "score": w["avg_score"],
-                        "solved_problems_count": len(w["solved_problems"])
-                    }
-                    for w in envelope_workflows
-                ],
-                "fusion_score": fusion_score,
-                "adopted": adopted,
-                "target_round": self.round + 1 if adopted else None
-            }
-            
-            # Save fusion metadata to numbered file
-            fusion_dir = f"{self.root_path}/workflows"
-            metadata_path = os.path.join(fusion_dir, f"fusion_metadata_{self.fusion_metadata_counter}.json")
-            with open(metadata_path, 'w', encoding='utf-8') as f:
-                json.dump(fusion_metadata, f, indent=2, ensure_ascii=False)
-            
-            logger.info(f"Fusion metadata saved to fusion_metadata_{self.fusion_metadata_counter}.json")
-            
-        except Exception as e:
-            logger.error(f"Error saving fusion metadata: {e}")
-    
-    def _cleanup_fusion_directories(self) -> None:
-        """
-        Clean up temporary fusion evaluation directories
-        """
-        try:
-            import shutil
-            
-            # Only clean up temporary evaluation directories
-            fusion_dirs = [
-                f"{self.root_path}/workflows/round_fused_eval"
-            ]
-            
-            for fusion_dir in fusion_dirs:
-                if os.path.exists(fusion_dir):
-                    shutil.rmtree(fusion_dir)
-                    logger.info(f"Cleaned up fusion directory: {fusion_dir}")
-            
-        except Exception as e:
-            logger.error(f"Error cleaning up fusion directories: {e}")
-
-    def _create_fusion_experience_file(self, target_dir: str, envelope_workflows: List[Dict], fusion_round: int) -> None:
-        """
-        Create experience.json file for fusion workflow following the standard format
-        
-        Args:
-            target_dir: Target directory for the fusion round
-            envelope_workflows: Source workflows that were fused
-            fusion_round: The round number of this fusion
-        """
-        try:
-            # Find the best source workflow to use as "father node"
-            best_workflow = max(envelope_workflows, key=lambda w: w["avg_score"])
-            
-            # Create fusion modification description
-            source_rounds = [w["round"] for w in envelope_workflows]
-            source_scores = [f"{w['avg_score']:.4f}" for w in envelope_workflows]
-            
-            fusion_modification = f"Workflow Fusion: Combined high-performing workflows from rounds {source_rounds} " \
-                                f"(scores: {source_scores}). Integrated the best aspects of {len(envelope_workflows)} " \
-                                f"workflows to achieve improved coverage and performance."
-            
-            # Create a mock sample object for the fusion
-            fusion_sample = {
-                "round": best_workflow["round"],  # Use best workflow as father node
-                "score": best_workflow["avg_score"]  # Use best score as "before"
-            }
-            
-            # Use standard experience creation method
-            experience_data = self.experience_utils.create_experience_data(fusion_sample, fusion_modification)
-            
-            # Save experience.json using standard method
-            experience_path = os.path.join(target_dir, "experience.json")
-            with open(experience_path, 'w', encoding='utf-8') as f:
-                json.dump(experience_data, f, indent=4, ensure_ascii=False)
-            
-            logger.info(f"Created fusion experience.json with father node {best_workflow['round']}")
-            
-        except Exception as e:
-            logger.error(f"Error creating fusion experience file: {e}")
-    
-    def _create_fusion_log_file(self, target_dir: str, envelope_workflows: List[Dict]) -> None:
-        """
-        Create log.json file for fusion workflow
-        
-        Args:
-            target_dir: Target directory for the fusion round
-            envelope_workflows: Source workflows that were fused
-        """
-        try:
-            # Create a comprehensive log entry for fusion
-            log_data = {
-                "fusion_metadata": {
-                    "timestamp": time.time(),
-                    "fusion_type": "envelope_fusion",
-                    "source_workflows": [
-                        {
-                            "round": w["round"],
-                            "score": w["avg_score"],
-                            "solved_problems": len(w["solved_problems"])
-                        }
-                        for w in envelope_workflows
-                    ],
-                    "total_unique_problems": len(set().union(*[set(w["solved_problems"]) for w in envelope_workflows])),
-                    "fusion_strategy": "Combined best aspects of envelope workflows using LLM-guided fusion"
-                },
-                # Initialize empty list for actual execution logs (will be populated during evaluation)
-                "execution_logs": []
-            }
-            
-            # Save log.json
-            log_path = os.path.join(target_dir, "log.json")
-            with open(log_path, 'w', encoding='utf-8') as f:
-                json.dump(log_data, f, indent=4, ensure_ascii=False)
-            
-            logger.info(f"Created fusion log.json with metadata for {len(envelope_workflows)} source workflows")
-            
-        except Exception as e:
-            logger.error(f"Error creating fusion log file: {e}")
 
     async def _optimize_graph(self):
         """Override parent method to remove the original fusion logic"""

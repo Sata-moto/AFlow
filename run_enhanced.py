@@ -128,7 +128,7 @@ def clear_optimization_records(dataset: str, optimized_path: str = "workspace"):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Enhanced AFlow Optimizer with Integrated Workflow Fusion")
+    parser = argparse.ArgumentParser(description="Enhanced AFlow Optimizer with Integrated Workflow Fusion and Differentiation")
     parser.add_argument(
         "--dataset",
         type=str,
@@ -162,7 +162,7 @@ def parse_args():
     parser.add_argument(
         "--opt_model_name",
         type=str,
-        default="claude-3-5-sonnet-20241022",
+        default="claude-3-7-sonnet-20250219",
         help="Specifies the name of the model used for optimization tasks.",
     )
     parser.add_argument(
@@ -189,6 +189,25 @@ def parse_args():
         type=float,
         default=0.0,
         help="Minimum score improvement required for fusion adoption.",
+    )
+    # Differentiation-specific parameters
+    parser.add_argument(
+        "--enable_differentiation",
+        type=lambda x: x.lower() == "true",
+        default=True,
+        help="Whether to enable workflow differentiation during optimization.",
+    )
+    parser.add_argument(
+        "--differentiation_probability",
+        type=float,
+        default=0.3,
+        help="Probability of attempting differentiation vs regular optimization.",
+    )
+    parser.add_argument(
+        "--max_differentiation_rounds",
+        type=int,
+        default=5,
+        help="Maximum number of differentiation rounds per optimization cycle.",
     )
     return parser.parse_args()
 
@@ -234,16 +253,23 @@ if __name__ == "__main__":
         enable_fusion=args.enable_fusion,
         max_envelope_workflows=args.max_envelope_workflows,
         fusion_score_threshold=args.fusion_score_threshold,
+        enable_differentiation=args.enable_differentiation,
+        differentiation_probability=args.differentiation_probability,
+        max_differentiation_rounds=args.max_differentiation_rounds,
     )
 
     print("\n" + "="*50)
-    print("Enhanced AFlow with Integrated Workflow Fusion")
+    print("Enhanced AFlow with Integrated Workflow Fusion and Differentiation")
     print("="*50)
     print(f"Dataset: {config.dataset}")
     print(f"Fusion enabled: {args.enable_fusion}")
     if args.enable_fusion:
         print(f"Max envelope workflows: {args.max_envelope_workflows}")
         print(f"Fusion score threshold: {args.fusion_score_threshold}")
+    print(f"Differentiation enabled: {args.enable_differentiation}")
+    if args.enable_differentiation:
+        print(f"Differentiation probability: {args.differentiation_probability}")
+        print(f"Max differentiation rounds: {args.max_differentiation_rounds}")
     print("="*50)
     
     # Run enhanced optimization with integrated fusion
