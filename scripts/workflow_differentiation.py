@@ -65,90 +65,74 @@ class WorkflowDifferentiation:
     
     def analyze_differentiation_candidates(self, workflow_results: List[Dict]) -> List[Dict]:
         """
-        Analyze workflows to identify good differentiation candidates.
+        Analyze workflows to identify good candidates for problem type specialization.
+        Focus on avoiding over-differentiation and selecting diverse high-quality workflows.
         
         Args:
             workflow_results: List of workflow performance data
             
         Returns:
-            List of candidates with differentiation suggestions
+            List of candidates sorted by selection priority
         """
         candidates = []
         
-        # Sort by score and select diverse candidates
-        sorted_workflows = sorted(workflow_results, key=lambda x: x.get("avg_score", 0), reverse=True)
-        
-        # Select top performers and moderate performers for differentiation
-        for i, workflow in enumerate(sorted_workflows):
-            if i < 3:  # Top 3 performers
+        for workflow in workflow_results:
+            # Skip already differentiated workflows
+            if self._is_differentiated_workflow(workflow):
+                continue
+                
+            base_score = workflow.get("avg_score", 0.0)
+            differentiation_count = workflow.get("differentiation_count", 0)
+            
+            # Apply differentiation count penalty: 5% reduction per previous differentiation
+            final_weight = base_score * (1.0 - differentiation_count * 0.05)
+            
+            # Only consider workflows with good performance and not over-differentiated
+            if final_weight > 0.3 and differentiation_count < 3:
                 candidates.append({
                     "workflow": workflow,
-                    "reason": "high_performance",
-                    "suggested_directions": ["strategy_diversification", "problem_type_specialization"],
-                    "priority": 1
-                })
-            elif i < len(sorted_workflows) // 2:  # Middle performers
-                candidates.append({
-                    "workflow": workflow,
-                    "reason": "moderate_performance", 
-                    "suggested_directions": ["algorithmic_approach_variation", "complexity_adaptation"],
-                    "priority": 2
+                    "final_weight": final_weight,
+                    "differentiation_count": differentiation_count
                 })
         
-        return candidates[:5]  # Limit to top 5 candidates
+        # Sort by final weight (performance with differentiation penalty)
+        candidates.sort(key=lambda x: x["final_weight"], reverse=True)
+        
+        return candidates[:5]
     
-    def select_differentiation_direction(
-        self,
-        workflow: Dict,
-        existing_directions: List[str] = None,
-        performance_gaps: List[Dict] = None
-    ) -> str:
+    def _is_differentiated_workflow(self, workflow: Dict) -> bool:
         """
-        Select the best differentiation direction for a workflow.
+        Check if workflow was created through differentiation.
         
         Args:
-            workflow: Source workflow data
-            existing_directions: Already used directions to avoid repetition
-            performance_gaps: Performance gap analysis
+            workflow: Workflow data
             
         Returns:
-            Selected differentiation direction
+            bool: True if this is a differentiated workflow
         """
-        available_directions = self.get_available_directions()
+        return any([
+            workflow.get("is_differentiated", False),
+            workflow.get("differentiation_source") is not None,
+            "differentiation" in workflow.get("creation_type", "").lower(),
+            "specialized" in workflow.get("description", "").lower()
+        ])
+    
+    def select_differentiation_direction(self, workflow: Dict, **kwargs) -> str:
+        """
+        Select differentiation direction. Since we only support problem type specialization,
+        always returns the same direction.
         
-        # Filter out already used directions
-        if existing_directions:
-            available_directions = [d for d in available_directions if d not in existing_directions]
-        
-        if not available_directions:
-            available_directions = self.get_available_directions()  # Reset if all used
-        
-        # Select direction based on performance and gaps
-        workflow_score = workflow.get("avg_score", 0.0)
-        
-        if workflow_score > 0.7:
-            # High-performing workflows: try strategy diversification
-            preferred = ["strategy_diversification", "problem_type_specialization"]
-        elif workflow_score > 0.4:
-            # Medium-performing workflows: try algorithmic variation
-            preferred = ["algorithmic_approach_variation", "complexity_adaptation"]
-        else:
-            # Low-performing workflows: focus on error handling
-            preferred = ["error_pattern_handling", "complexity_adaptation"]
-        
-        # Select first available preferred direction
-        for direction in preferred:
-            if direction in available_directions:
-                return direction
-        
-        # Fallback to first available direction
-        return available_directions[0] if available_directions else "strategy_diversification"
+        Returns:
+            str: Always returns "problem_type_specialization"
+        """
+        return "problem_type_specialization"
     
     async def create_differentiated_workflow(
         self,
         source_workflow: Dict,
         differentiation_direction: str,
         operator_description: str,
+        target_round: int,
         performance_gaps: List[Dict] = None
     ) -> Optional[Dict[str, str]]:
         """
@@ -171,6 +155,7 @@ class WorkflowDifferentiation:
                 source_workflow=source_workflow,
                 operator_description=operator_description,
                 differentiation_direction=differentiation_direction,
+                target_round=target_round,
                 performance_gaps=performance_gaps
             )
             

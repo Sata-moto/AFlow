@@ -32,54 +32,95 @@ max_differentiation_rounds: int = 5                   # 每个优化周期最大
 
 ## 2. 候选工作流选择
 
-### 2.1 选择策略
-分化候选选择基于性能分析（在 `WorkflowDifferentiation.analyze_differentiation_candidates()` 中实现）：
+### 2.1 重新设计的选择策略
 
-**高性能候选（前3名）**：
-- **选择原因**：`high_performance`
-- **建议方向**：`["strategy_diversification", "problem_type_specialization"]`
-- **优先级**：1
-- **目标**：在已有优势基础上进一步专业化
+**重要改进**：解决了原有选择逻辑的三个关键问题：
 
-**中等性能候选（前50%）**：
-- **选择原因**：`moderate_performance`  
-- **建议方向**：`["algorithmic_approach_variation", "complexity_adaptation"]`
-- **优先级**：2
-- **目标**：通过算法变化提升性能
+1. **避免分化已分化工作流**：检测并降权已经被分化出来的工作流
+2. **不总是选择最好的工作流**：基于综合权重而非单纯性能分数进行选择
+3. **考虑分化次数惩罚**：每次分化会降低该工作流未来被选择的概率
 
-### 2.2 选择流程
+### 2.2 新的权重计算逻辑
+
 ```python
-# 1. 按分数排序所有工作流
-sorted_workflows = sorted(workflow_results, key=lambda x: x.get("avg_score", 0), reverse=True)
-
-# 2. 分类候选工作流
-for i, workflow in enumerate(sorted_workflows):
-    if i < 3:  # 前3名 - 高性能
-        candidates.append({
-            "workflow": workflow,
-            "reason": "high_performance",
-            "suggested_directions": ["strategy_diversification", "problem_type_specialization"],
-            "priority": 1
-        })
-    elif i < len(sorted_workflows) // 2:  # 中位数以上 - 中等性能
-        candidates.append({
-            "workflow": workflow, 
-            "reason": "moderate_performance",
-            "suggested_directions": ["algorithmic_approach_variation", "complexity_adaptation"],
-            "priority": 2
-        })
-
-# 3. 选择最高优先级候选（通常是最高分工作流）
-selected_candidate = candidates[0]["workflow"]
+def analyze_differentiation_candidates(workflow_results):
+    for workflow in workflow_results:
+        # 1. 检查是否为分化工作流
+        is_differentiated = self._is_differentiated_workflow(workflow)
+        
+        # 2. 获取基础性能分数
+        base_score = workflow.get("avg_score", 0.0)
+        
+        # 3. 计算被分化次数惩罚
+        differentiation_count = workflow.get("differentiation_count", 0)
+        differentiation_penalty = differentiation_count * 0.05  # 每次分化减少5%权重
+        
+        # 4. 计算最终权重分数
+        if is_differentiated:
+            # 已分化工作流大幅降权，避免二次分化
+            final_weight = base_score * 0.1  # 降到10%
+        else:
+            # 未分化工作流根据性能和分化次数计算权重
+            final_weight = base_score * (1.0 - differentiation_penalty)
+        
+        # 5. 筛选条件：权重>0.3且分化次数<3
+        if final_weight > 0.3 and differentiation_count < 3:
+            candidates.append({
+                "workflow": workflow,
+                "final_weight": final_weight,  # 用于排序的关键指标
+                "differentiation_count": differentiation_count,
+                "is_differentiated": is_differentiated
+            })
+    
+    # 按最终权重排序，而不是简单按分数排序
+    candidates.sort(key=lambda x: x["final_weight"], reverse=True)
 ```
+
+### 2.3 分化工作流检测
+
+系统通过多种方式识别已分化的工作流：
+
+```python
+def _is_differentiated_workflow(workflow):
+    indicators = [
+        workflow.get("is_differentiated", False),
+        workflow.get("differentiation_source") is not None,
+        workflow.get("father_node_type") == "differentiation",
+        "differentiation" in workflow.get("creation_type", "").lower(),
+        "specialized" in workflow.get("description", "").lower(),
+        # 检查分化元数据文件存在性
+        os.path.exists(f"differentiation_metadata_{round}.json"),
+        # 检查experience.json中的modification字段
+        "differentiation" in experience_data.get('modification', '').lower()
+    ]
+    return any(indicators)
+```
+
+### 2.4 权重分类系统
+
+**高优先级候选（权重 > 0.7）**：
+- **特征**：高性能且未被过度分化
+- **优先级**：1（最高）
+- **分化原因**：`high_performance_specialization`
+
+**中等优先级候选（0.3 < 权重 ≤ 0.7）**：
+- **特征**：中等性能或被分化1-2次的高性能工作流
+- **优先级**：2
+- **分化原因**：`moderate_performance_specialization`
+
+**低优先级候选（权重 ≤ 0.3 或已分化）**：
+- **特征**：性能较低或已经被分化的工作流
+- **优先级**：3（基本不考虑）
+- **分化原因**：`secondary_differentiation` 或 `low_performance_rescue`
 
 ## 3. 分化方向与种类
 
-### 3.1 可用分化方向
-系统定义了5种主要分化方向：
+### 3.1 重新设计的分化方向
 
-#### 3.1.1 问题类型专业化 (`problem_type_specialization`)
-**目标**：针对特定类型问题进行专门优化
+**重要变更**：基于对分化本质的重新理解，我们将分化方向大幅简化，专注于真正的差异化而非优化。
+
+#### 3.1.1 问题类型专业化 (`problem_type_specialization`) - 唯一保留的核心方向
+**目标**：针对特定类型问题进行专门优化，创造真正的工作流差异化
 
 **数学问题**：
 - 专攻特定数学领域（代数、几何、微积分、组合数学等）
@@ -93,145 +134,114 @@ selected_candidate = candidates[0]["workflow"]
 - 专攻特定推理类型（事实性、推理性、分析性等）
 - 关注信息处理模式、推理链构建
 
-#### 3.1.2 策略多样化 (`strategy_diversification`)
-**目标**：引入替代性问题解决策略
+#### 3.1.2 移除的"伪分化"方向
+以下方向已被移除，因为它们本质上是优化而非分化，应该整合到常规优化过程中：
 
-**数学策略**：
-- 视觉/几何方法 vs 代数方法
-- 构造性证明 vs 反证法
-- 递归思维 vs 迭代思维
-- 模式识别 vs 第一性原理
+**已移除的方向**：
+- ~~`strategy_diversification`~~ → 应该是常规优化的策略选择
+- ~~`algorithmic_approach_variation`~~ → 应该是常规优化的算法探索
+- ~~`complexity_adaptation`~~ → 应该是常规优化的适应性改进
+- ~~`error_pattern_handling`~~ → 应该是常规优化的错误处理改进
 
-**编程策略**：
-- 自底向上 vs 自顶向下设计
-- 迭代 vs 递归解决方案
-- 空间优化 vs 时间优化方法
-- 函数式 vs 命令式范式
-
-**问答策略**：
-- 演绎 vs 归纳推理
-- 整体性 vs 分析性思维
-- 上下文驱动 vs 规则驱动方法
-- 多视角分析
-
-#### 3.1.3 算法方法变化 (`algorithmic_approach_variation`)
-**目标**：引入不同的算法范式和计算方法
-
-**数学算法**：
-- 符号计算、数值方法、图论思维
-- 优化技术、概率推理
-
-**编程算法**：
-- 动态规划、贪心算法、分治策略
-- 回溯法、机器学习方法
-
-**问答算法**：
-- 语义分析、逻辑推理、证据聚合
-- 多步推理链
-
-#### 3.1.4 复杂度适应 (`complexity_adaptation`)
-**目标**：适应不同复杂度级别，实现分层处理
-
-**分层策略**：
-- 简单情况：直接方法
-- 中等情况：增强推理
-- 复杂情况：高级技术和验证
-
-#### 3.1.5 错误模式处理 (`error_pattern_handling`)
-**目标**：专门处理特定错误模式和失败场景
-
-**错误处理策略**：
-- 验证步骤引入
-- 替代解决路径
-- 错误模式识别
-- 基于性能分析的特定错误处理
-
-### 3.2 分化方向选择逻辑
+### 3.2 简化的分化方向选择
 
 ```python
 def select_differentiation_direction(workflow, existing_directions, performance_gaps):
-    # 1. 过滤已使用的方向
-    available_directions = [d for d in all_directions if d not in existing_directions]
-    
-    # 2. 基于工作流性能选择偏好方向
-    workflow_score = workflow.get("avg_score", 0.0)
-    
-    if workflow_score > 0.7:        # 高性能工作流
-        preferred = ["strategy_diversification", "problem_type_specialization"]
-    elif workflow_score > 0.4:      # 中等性能工作流  
-        preferred = ["algorithmic_approach_variation", "complexity_adaptation"]
-    else:                          # 低性能工作流
-        preferred = ["error_pattern_handling", "complexity_adaptation"]
-    
-    # 3. 选择第一个可用的偏好方向
-    for direction in preferred:
-        if direction in available_directions:
-            return direction
-    
-    # 4. 备用方案：选择第一个可用方向
-    return available_directions[0] if available_directions else "strategy_diversification"
+    # 简化：直接返回唯一的真正分化方向
+    return "problem_type_specialization"
 ```
 
 ## 4. 分化过程详述
 
-### 4.1 整体执行流程
+### 4.1 改进的执行流程
 
 ```python
 async def _attempt_differentiation() -> float:
-    """完整的分化执行流程"""
+    """改进后的分化执行流程，解决原有问题"""
     
     # 1. 记录分化尝试
     self.differentiation_rounds_used += 1
     
-    # 2. 获取工作流数据并生成候选
+    # 2. 获取工作流数据并生成轮次摘要
     workflow_results = self.data_utils.load_results(f"{self.root_path}/workflows")
     round_summaries = self.workflow_manager.get_round_summaries(workflow_results)
+    
+    # 3. 更新工作流分化次数信息
+    self._update_differentiation_counts(round_summaries)
+    
+    # 4. 分析候选工作流（考虑分化次数和权重）
     candidates = self.differentiation_processor.analyze_differentiation_candidates(round_summaries)
     
-    # 3. 选择最佳候选和分化方向
-    selected_candidate = candidates[0]["workflow"]  # 最高优先级
+    # 5. 选择最佳候选（基于权重而非单纯分数）
+    selected_candidate = candidates[0]["workflow"]  # 最高权重候选
+    logger.info(f"Selected workflow from round {selected_candidate['round']}")
+    logger.info(f"  Base score: {selected_candidate.get('avg_score', 0):.4f}")
+    logger.info(f"  Final weight: {candidates[0].get('final_weight', 0):.4f}")
+    logger.info(f"  Differentiation count: {candidates[0].get('differentiation_count', 0)}")
+    logger.info(f"  Is differentiated: {candidates[0].get('is_differentiated', False)}")
+    
+    # 6. 更新该工作流的分化次数
+    source_round = selected_candidate['round']
+    self.workflow_differentiation_counts[source_round] = self.workflow_differentiation_counts.get(source_round, 0) + 1
+    
+    # 7. 选择分化方向（固定为问题类型专业化）
     differentiation_direction = self.differentiation_processor.select_differentiation_direction(
         selected_candidate, self.used_differentiation_directions, performance_gaps=[]
-    )
+    )  # 返回 "problem_type_specialization"
     
-    # 4. 记录使用的方向
-    self.used_differentiation_directions.append(differentiation_direction)
-    
-    # 5. 加载源工作流内容
+    # 8. 加载源工作流内容
     source_workflow_content = await self.workflow_manager.load_workflow_content(selected_candidate["round"])
     operator_description = self.graph_utils.load_operators_description(self.operators)
     
-    # 6. 创建分化工作流
+    # 9. 创建分化工作流（专注于问题类型专业化）
     differentiation_response = await self.differentiation_processor.create_differentiated_workflow(
         source_workflow=source_workflow_content,
         differentiation_direction=differentiation_direction,
         operator_description=operator_description
     )
     
-    # 7. 保存分化工作流
-    next_round = self.round + 1
-    success = self.differentiation_processor.save_differentiated_workflow_direct(
-        differentiation_response, selected_candidate, differentiation_direction, 
-        next_round, self.root_path, self.graph_utils, self.experience_utils
-    )
-    
-    # 8. 评估分化结果
-    self.graph = self.graph_utils.load_graph(next_round, graph_path)
-    data = self.data_utils.load_results(graph_path)
-    differentiation_score = await self.evaluation_utils.evaluate_graph(
-        self, directory, self.validation_rounds, data, initial=False
-    )
-    
-    # 9. 保存分化元数据
-    self.differentiation_processor.save_differentiation_metadata(
-        source_workflow=selected_candidate,
-        differentiated_workflow=differentiation_response,
-        differentiation_direction=differentiation_direction,
-        target_round=next_round,
-        differentiation_score=differentiation_score
-    )
+    # 10-12. 保存、评估、记录元数据（保持不变）
+    # ...
     
     return differentiation_score
+```
+
+### 4.2 分化次数跟踪机制
+
+```python
+class EnhancedOptimizer:
+    def __init__(self):
+        # 新增：跟踪每个工作流被分化的次数
+        self.workflow_differentiation_counts = {}  # {round: count}
+    
+    def _update_differentiation_counts(self, round_summaries):
+        """将分化次数信息注入到工作流数据中"""
+        for summary in round_summaries:
+            round_num = summary.get('round')
+            if round_num is not None:
+                # 注入分化次数
+                current_count = self.workflow_differentiation_counts.get(round_num, 0)
+                summary['differentiation_count'] = current_count
+                
+                # 检查是否为分化工作流
+                summary['is_differentiated'] = self._check_if_differentiated_workflow(round_num)
+    
+    def _check_if_differentiated_workflow(self, round_num):
+        """检查工作流是否为分化产生的"""
+        # 检查分化元数据文件
+        metadata_file = f"differentiation_metadata_{round_num}.json"
+        if os.path.exists(os.path.join(workflows_dir, metadata_file)):
+            return True
+            
+        # 检查experience.json中的modification字段
+        experience_file = f"round_{round_num}/experience.json"
+        if os.path.exists(os.path.join(workflows_dir, experience_file)):
+            with open(experience_file, 'r') as f:
+                experience_data = json.load(f)
+                modification = experience_data.get('modification', '').lower()
+                return 'differentiation' in modification or 'specialized' in modification
+        
+        return False
 ```
 
 ### 4.2 LLM调用和提示生成
@@ -439,14 +449,58 @@ if score is None:
 - 历史数据用于候选选择
 - 分化效果持续跟踪
 
-## 9. 总结
+## 9. 总结与关键改进
 
-AFlow的工作流分化机制是一个复杂而精妙的系统，它通过以下方式增强优化过程：
+AFlow的工作流分化机制经过重新设计，解决了原有的关键问题，现在更加专注于真正的差异化：
 
-1. **智能候选选择**：基于性能数据选择最有潜力的工作流进行分化
-2. **多样化方向**：5种不同的分化方向覆盖问题解决的各个维度
-3. **自适应策略**：根据工作流性能自动选择最合适的分化方向
-4. **完整的生命周期管理**：从候选选择到结果评估的全流程自动化
-5. **性能跟踪**：详细记录分化过程和结果，支持持续改进
+### 9.1 核心设计原则
 
-这个机制使得AFlow能够在保持现有高性能工作流的同时，系统性地探索解决方案空间的不同区域，从而实现更全面和robust的问题求解能力。
+1. **真正的分化 vs 伪分化**：只保留 `problem_type_specialization`，移除其他优化性质的"分化"方向
+2. **智能候选选择**：基于综合权重而非单纯性能进行选择，避免总是分化同一个工作流
+3. **分化次数控制**：通过权重衰减机制避免过度分化，每次分化降低5%权重
+4. **已分化工作流识别**：通过多种机制识别并降权已分化的工作流，避免二次分化
+
+### 9.2 解决的关键问题
+
+**问题1：避免分化已分化工作流**
+- ✅ **解决方案**：通过元数据文件和experience.json检测已分化工作流
+- ✅ **效果**：已分化工作流权重降至10%，基本不会被选中
+
+**问题2：避免总是选择最佳工作流**  
+- ✅ **解决方案**：基于综合权重（性能×分化惩罚）选择候选
+- ✅ **效果**：高性能但已被多次分化的工作流会被降权
+
+**问题3：控制单个工作流分化次数**
+- ✅ **解决方案**：引入 `workflow_differentiation_counts` 跟踪机制
+- ✅ **效果**：每次分化增加5%权重惩罚，最多分化3次后排除
+
+### 9.3 权重计算公式
+
+```python
+# 核心权重计算逻辑
+if is_differentiated:
+    final_weight = base_score * 0.1  # 已分化：大幅降权
+else:
+    differentiation_penalty = differentiation_count * 0.05  # 每次分化5%惩罚
+    final_weight = base_score * (1.0 - differentiation_penalty)
+
+# 筛选条件
+if final_weight > 0.3 and differentiation_count < 3:
+    # 纳入候选
+```
+
+### 9.4 分化方向简化
+
+- **保留**：`problem_type_specialization` - 真正的工作流差异化
+- **移除**：`strategy_diversification`, `algorithmic_approach_variation`, `complexity_adaptation`, `error_pattern_handling` 
+- **原因**：后者本质上是优化而非分化，应整合到常规优化过程中
+
+### 9.5 系统优势
+
+1. **专注性**：只做真正的分化，不与优化功能重叠
+2. **智能性**：避免无效的重复分化和过度分化
+3. **平衡性**：在探索多样性和避免无效分化间取得平衡
+4. **可追踪性**：完整记录每个工作流的分化历史
+5. **扩展性**：为未来添加新的真正分化方向提供框架
+
+这个重新设计的分化机制真正实现了工作流差异化的目标，同时避免了与常规优化功能的冗余，使整个AFlow系统更加清晰和高效。

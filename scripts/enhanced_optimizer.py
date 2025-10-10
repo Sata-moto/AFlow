@@ -47,6 +47,8 @@ class EnhancedOptimizer(Optimizer):
         enable_fusion: bool = True,
         max_envelope_workflows: int = 3,
         fusion_score_threshold: float = 0.0,  # Minimum score improvement required for fusion
+        fusion_start_round: int = 5,  # Round from which fusion is allowed
+        fusion_interval_rounds: int = 2,  # Minimum rounds between fusion attempts
         enable_differentiation: bool = True,
         differentiation_probability: float = 0.3,  # Probability of differentiation vs regular optimization
         max_differentiation_rounds: int = 5,  # Maximum rounds with differentiation per optimization cycle
@@ -70,16 +72,25 @@ class EnhancedOptimizer(Optimizer):
         self.enable_fusion = enable_fusion
         self.max_envelope_workflows = max_envelope_workflows
         self.fusion_score_threshold = fusion_score_threshold
+        self.fusion_start_round = fusion_start_round  # Round from which fusion is allowed
+        self.fusion_interval_rounds = fusion_interval_rounds  # Minimum rounds between fusion attempts
         
         # Differentiation-specific parameters
         self.enable_differentiation = enable_differentiation
-        self.differentiation_probability = differentiation_probability
+        self.differentiation_probability = differentiation_probability  # Base probability
         self.max_differentiation_rounds = max_differentiation_rounds
         
-        # Track fusion and differentiation attempts
-        self.last_fusion_round = -1
+        # Retry parameters for fusion and differentiation
+        self.max_retries = 3  # Maximum number of retries for fusion and differentiation
+        self.fusion_retry_count = 0  # Current retry count for fusion
+        self.differentiation_retry_count = 0  # Current retry count for differentiation
+        
+        # Track differentiation attempts
         self.differentiation_rounds_used = 0
-        self.used_differentiation_directions = []
+        self.workflow_differentiation_counts = {}  # Track how many times each workflow was differentiated
+        
+        # Track fusion state
+        self.last_fusion_round = -1  # Initialize to -1 to indicate no fusion has occurred yet
         
         # Track fusion metadata counter for proper numbering
         self.fusion_metadata_counter = 0
@@ -221,13 +232,15 @@ class EnhancedOptimizer(Optimizer):
         if not self.enable_fusion:
             return False
         
-        # Don't attempt fusion in the first round
-        if self.round < 2:
+        # Don't attempt fusion before the specified start round
+        if self.round < self.fusion_start_round:
+            logger.info(f"Skipping fusion - not yet at start round {self.fusion_start_round} (current: {self.round})")
             return False
         
-        # Don't attempt fusion if we just did fusion in the previous round
-        if self.last_fusion_round == self.round - 1:
-            logger.info("Skipping fusion - fusion was attempted in the previous round")
+        # Don't attempt fusion if insufficient rounds have passed since last fusion
+        if self.last_fusion_round != -1 and (self.round - self.last_fusion_round) < self.fusion_interval_rounds:
+            rounds_since_last = self.round - self.last_fusion_round
+            logger.info(f"Skipping fusion - insufficient interval (need {self.fusion_interval_rounds} rounds, only {rounds_since_last} have passed)")
             return False
         
         # Check if we have enough envelope workflows
@@ -247,6 +260,7 @@ class EnhancedOptimizer(Optimizer):
     def _should_attempt_differentiation(self) -> bool:
         """
         Determine if we should attempt differentiation based on current conditions.
+        Uses dynamic probability that increases linearly with rounds from base_p to 2*base_p
         
         Returns:
             bool: True if differentiation should be attempted
@@ -263,9 +277,29 @@ class EnhancedOptimizer(Optimizer):
             logger.info("Skipping differentiation - maximum differentiation rounds reached")
             return False
         
+        # Calculate dynamic probability that increases with rounds
+        base_probability = self.differentiation_probability  # Base probability (p)
+        max_probability = 2 * base_probability  # Maximum probability (2*p)
+        
+        # Linear increase from base_p to 2*base_p over max_rounds
+        # For round r: probability = base_p + (2*base_p - base_p) * min(r-2, max_rounds-2) / (max_rounds-2)
+        # Simplified: probability = base_p * (1 + min(r-2, max_rounds-2) / (max_rounds-2))
+        if self.max_rounds > 2:
+            progress_ratio = min(self.round - 2, self.max_rounds - 2) / (self.max_rounds - 2)
+            current_probability = base_probability * (1 + progress_ratio)
+        else:
+            current_probability = base_probability
+        
+        # Clamp to maximum probability
+        current_probability = min(current_probability, max_probability)
+        
         # Probabilistic decision for differentiation
         import random
-        if random.random() > self.differentiation_probability:
+        probability_check = random.random() <= current_probability
+        
+        logger.info(f"Differentiation probability check: {current_probability:.3f} (base: {base_probability:.3f}, round: {self.round})")
+        
+        if not probability_check:
             return False
         
         # Check if we have workflows to differentiate from
@@ -277,82 +311,82 @@ class EnhancedOptimizer(Optimizer):
         logger.info(f"Differentiation conditions met: probability check passed, {len(workflows_data)} workflows available")
         return True
     
-    def _select_differentiation_candidates(self) -> List[Dict]:
-        """
-        Select candidate workflows for differentiation.
-        
-        Returns:
-            List of candidate workflows with scores and metadata
-        """
-        workflows_data = self.data_utils.load_results(f"{self.root_path}/workflows")
-        
-        # Sort by score and select top candidates
-        sorted_workflows = sorted(workflows_data, key=lambda x: x.get('score', 0), reverse=True)
-        
-        # Return top workflows as candidates (limit to avoid too many options)
-        max_candidates = min(5, len(sorted_workflows))
-        return sorted_workflows[:max_candidates]
-    
     async def _attempt_differentiation(self) -> float:
         """
-        Attempt workflow differentiation and evaluate the result.
+        Attempt workflow differentiation with retry mechanism.
         
         Returns:
-            float: Score of differentiated workflow if successful, None if differentiation failed
+            float: Score of differentiated workflow if successful, None if failed after all retries
         """
-        differentiation_score = None
+        for attempt in range(self.max_retries):
+            try:
+                logger.info(f"Differentiation attempt {attempt + 1}/{self.max_retries}")
+                result = await self._execute_single_differentiation()
+                if result is not None:
+                    logger.info(f"Differentiation successful on attempt {attempt + 1}")
+                    return result
+                else:
+                    logger.warning(f"Differentiation attempt {attempt + 1} failed, retrying...")
+            except Exception as e:
+                logger.error(f"Differentiation attempt {attempt + 1} failed with error: {e}")
+                if attempt < self.max_retries - 1:
+                    logger.info(f"Retrying differentiation (attempt {attempt + 2}/{self.max_retries})...")
+                    continue
+        
+        logger.error(f"All {self.max_retries} differentiation attempts failed")
+        return None
+
+    async def _execute_single_differentiation(self) -> float:
+        """
+        Attempt workflow differentiation for problem type specialization.
+        
+        Returns:
+            float: Score of differentiated workflow if successful, None if failed
+        """
         try:
-            # Record that we're attempting differentiation this round
             self.differentiation_rounds_used += 1
             
-            # Get workflow results for analysis
+            # Get workflow results and update differentiation counts
             workflow_results = self.data_utils.load_results(f"{self.root_path}/workflows")
-            
-            # Group results by round and get average scores
             round_summaries = self.workflow_manager.get_round_summaries(workflow_results)
+            self._update_differentiation_counts(round_summaries)
             
-            # Analyze differentiation candidates
+            # Find best candidate for differentiation
             candidates = self.differentiation_processor.analyze_differentiation_candidates(round_summaries)
-            
             if not candidates:
                 logger.warning("No suitable differentiation candidates found")
                 return None
             
-            # Select best candidate
-            selected_candidate = candidates[0]["workflow"]  # Select highest priority candidate
-            logger.info(f"Selected workflow from round {selected_candidate['round']} for differentiation")
+            # Select best candidate and update its differentiation count
+            selected_candidate = candidates[0]["workflow"]
+            source_round = selected_candidate['round']
+            self.workflow_differentiation_counts[source_round] = self.workflow_differentiation_counts.get(source_round, 0) + 1
             
-            # Select differentiation direction
-            differentiation_direction = self.differentiation_processor.select_differentiation_direction(
-                selected_candidate,
-                self.used_differentiation_directions,
-                performance_gaps=[]  # Could be enhanced with actual gap analysis
-            )
+            logger.info(f"Selected workflow from round {source_round} for problem type specialization")
+            logger.info(f"  Score: {selected_candidate.get('avg_score', 0):.4f}, Weight: {candidates[0].get('final_weight', 0):.4f}")
             
-            # Track used direction
-            self.used_differentiation_directions.append(differentiation_direction)
-            
-            # Load source workflow content
-            source_workflow_content = await self.workflow_manager.load_workflow_content(selected_candidate["round"])
-            
-            # Get operator descriptions
+            # Load source workflow and create differentiated version
+            source_workflow_content = await self.workflow_manager.load_workflow_content(source_round)
             operator_description = self.graph_utils.load_operators_description(self.operators)
             
-            # Create differentiated workflow
+            # Calculate target round
+            next_round = self.round + 1
+            
             differentiation_response = await self.differentiation_processor.create_differentiated_workflow(
                 source_workflow=source_workflow_content,
-                differentiation_direction=differentiation_direction,
-                operator_description=operator_description
+                differentiation_direction="problem_type_specialization",
+                operator_description=operator_description,
+                target_round=next_round
             )
             
             if not differentiation_response:
                 logger.error("Differentiation process failed")
                 return None
             
-            # Save differentiated workflow to next round directory using differentiation processor
+            # Save differentiated workflow to next round
             next_round = self.round + 1
             success = self.differentiation_processor.save_differentiated_workflow_direct(
-                differentiation_response, selected_candidate, differentiation_direction, 
+                differentiation_response, selected_candidate, "problem_type_specialization",
                 next_round, self.root_path, self.graph_utils, self.experience_utils
             )
             
@@ -360,58 +394,127 @@ class EnhancedOptimizer(Optimizer):
                 logger.error("Failed to save differentiated workflow")
                 return None
             
-            # Evaluate the differentiated workflow using standard evaluation process
+            # Evaluate the differentiated workflow
             graph_path = f"{self.root_path}/workflows"
             directory = f"{self.root_path}/workflows/round_{next_round}"
             
-            # Load the differentiated graph
             self.graph = self.graph_utils.load_graph(next_round, graph_path)
             if self.graph is None:
                 logger.error("Failed to load differentiated workflow")
                 return None
             
-            # Load data for evaluation context
             data = self.data_utils.load_results(graph_path)
-            
-            # Evaluate using standard evaluation process
             differentiation_score = await self.evaluation_utils.evaluate_graph(
                 self, directory, self.validation_rounds, data, initial=False
             )
             
-            # Ensure experience.json is updated
+            # Update experience.json if needed
             experience_path = os.path.join(directory, "experience.json")
             if os.path.exists(experience_path):
                 with open(experience_path, 'r', encoding='utf-8') as f:
                     experience_data = json.load(f)
-                
                 if experience_data.get("after") is None:
                     self.experience_utils.update_experience(directory, experience_data, differentiation_score)
             
-            logger.info(f"Differentiated workflow score: {differentiation_score:.4f}")
-            
-            # Save differentiation metadata
+            # Save metadata
             self.differentiation_processor.save_differentiation_metadata(
                 source_workflow=selected_candidate,
                 differentiated_workflow=differentiation_response,
-                differentiation_direction=differentiation_direction,
+                differentiation_direction="problem_type_specialization",
                 target_round=next_round,
                 differentiation_score=differentiation_score
             )
             
+            logger.info(f"Problem type specialization completed with score: {differentiation_score:.4f}")
             return differentiation_score
-                
+        
         except Exception as e:
-            logger.error(f"Error in differentiation attempt: {e}")
+            logger.error(f"Error in single differentiation execution: {e}")
             return None
+
+    def _update_differentiation_counts(self, round_summaries: List[Dict]) -> None:
+        """
+        Update differentiation count information for each workflow
+        
+        Args:
+            round_summaries: Workflow round summary data
+        """
+        for summary in round_summaries:
+            round_num = summary.get('round')
+            if round_num is not None:
+                # Inject differentiation count information into workflow data
+                current_count = self.workflow_differentiation_counts.get(round_num, 0)
+                summary['differentiation_count'] = current_count
+                
+                # Check if this is a differentiated workflow (can be determined through metadata files or other methods)
+                summary['is_differentiated'] = self._check_if_differentiated_workflow(round_num)
+    
+    def _check_if_differentiated_workflow(self, round_num: int) -> bool:
+        """
+        Check if the workflow of specified round was created through differentiation
+        
+        Args:
+            round_num: Round number
+            
+        Returns:
+            bool: Whether this is a differentiated workflow
+        """
+        try:
+            # Check if differentiation metadata file exists
+            workflows_dir = f"{self.root_path}/workflows"
+            metadata_file = f"differentiation_metadata_{round_num}.json"
+            metadata_path = os.path.join(workflows_dir, metadata_file)
+            
+            if os.path.exists(metadata_path):
+                return True
+                
+            # Check modification field in experience.json file
+            experience_file = os.path.join(workflows_dir, f"round_{round_num}", "experience.json")
+            if os.path.exists(experience_file):
+                with open(experience_file, 'r', encoding='utf-8') as f:
+                    experience_data = json.load(f)
+                    modification = experience_data.get('modification', '').lower()
+                    if 'differentiation' in modification or 'specialized' in modification:
+                        return True
+            
+            return False
+            
+        except Exception as e:
+            logger.warning(f"Error checking if workflow {round_num} is differentiated: {e}")
+            return False
 
     async def _attempt_fusion(self) -> float:
         """
-        Attempt workflow fusion and evaluate the result using standard evaluation process
+        Attempt workflow fusion with retry mechanism.
         
         Returns:
-            float: Score of fused workflow if successful, None if fusion failed
+            float: Score of fused workflow if successful, None if failed after all retries
         """
-        fusion_score = None
+        for attempt in range(self.max_retries):
+            try:
+                logger.info(f"Fusion attempt {attempt + 1}/{self.max_retries}")
+                result = await self._execute_single_fusion()
+                if result is not None:
+                    logger.info(f"Fusion successful on attempt {attempt + 1}")
+                    return result
+                else:
+                    logger.warning(f"Fusion attempt {attempt + 1} failed, retrying...")
+            except Exception as e:
+                logger.error(f"Fusion attempt {attempt + 1} failed with error: {e}")
+                if attempt < self.max_retries - 1:
+                    logger.info(f"Retrying fusion (attempt {attempt + 2}/{self.max_retries})...")
+                    continue
+        
+        logger.error(f"All {self.max_retries} fusion attempts failed")
+        return None
+
+    async def _execute_single_fusion(self) -> float:
+        """
+        Execute a single fusion attempt.
+        
+        Returns:
+            float: Score of fused workflow if successful, None if failed
+        """
         try:
             # Record that we're attempting fusion this round
             self.last_fusion_round = self.round
@@ -482,9 +585,9 @@ class EnhancedOptimizer(Optimizer):
                 )
                 self.fusion_metadata_counter += 1
                 return fusion_score
-                
+        
         except Exception as e:
-            logger.error(f"Error in fusion attempt: {e}")
+            logger.error(f"Error in single fusion execution: {e}")
             return None
     
     async def _execute_fusion_async(self) -> bool:

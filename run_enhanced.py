@@ -190,6 +190,18 @@ def parse_args():
         default=0.0,
         help="Minimum score improvement required for fusion adoption.",
     )
+    parser.add_argument(
+        "--fusion_start_round",
+        type=int,
+        default=5,
+        help="Round from which fusion is allowed to start.",
+    )
+    parser.add_argument(
+        "--fusion_interval_rounds",
+        type=int,
+        default=2,
+        help="Minimum rounds between consecutive fusion attempts.",
+    )
     # Differentiation-specific parameters
     parser.add_argument(
         "--enable_differentiation",
@@ -253,6 +265,8 @@ if __name__ == "__main__":
         enable_fusion=args.enable_fusion,
         max_envelope_workflows=args.max_envelope_workflows,
         fusion_score_threshold=args.fusion_score_threshold,
+        fusion_start_round=args.fusion_start_round,
+        fusion_interval_rounds=args.fusion_interval_rounds,
         enable_differentiation=args.enable_differentiation,
         differentiation_probability=args.differentiation_probability,
         max_differentiation_rounds=args.max_differentiation_rounds,
@@ -266,6 +280,8 @@ if __name__ == "__main__":
     if args.enable_fusion:
         print(f"Max envelope workflows: {args.max_envelope_workflows}")
         print(f"Fusion score threshold: {args.fusion_score_threshold}")
+        print(f"Fusion start round: {args.fusion_start_round}")
+        print(f"Fusion interval rounds: {args.fusion_interval_rounds}")
     print(f"Differentiation enabled: {args.enable_differentiation}")
     if args.enable_differentiation:
         print(f"Differentiation probability: {args.differentiation_probability}")
