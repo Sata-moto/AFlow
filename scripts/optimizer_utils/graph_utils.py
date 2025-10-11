@@ -113,8 +113,11 @@ class GraphUtils:
         return None
 
     def write_graph_files(self, directory: str, response: dict, round_number: int, dataset: str):
+        # Clean the generated graph code before inserting into template
+        cleaned_graph = self._clean_generated_graph_code(response["graph"])
+        
         # Supplement necessary imports and other information in the generated Graph based on existing templates
-        graph = WORKFLOW_TEMPLATE.format(graph=response["graph"], round=round_number, dataset=dataset)
+        graph = WORKFLOW_TEMPLATE.format(graph=cleaned_graph, round=round_number, dataset=dataset)
 
         with open(os.path.join(directory, "graph.py"), "w", encoding="utf-8") as file:
             file.write(graph)
@@ -124,3 +127,35 @@ class GraphUtils:
 
         with open(os.path.join(directory, "__init__.py"), "w", encoding="utf-8") as file:
             file.write("")
+
+    def _clean_generated_graph_code(self, graph_code: str) -> str:
+        """
+        Clean the generated graph code by removing imports and keeping only the class definition.
+        
+        Args:
+            graph_code: Raw graph code from LLM
+            
+        Returns:
+            Cleaned graph code with only class definition
+        """
+        lines = graph_code.strip().split('\n')
+        cleaned_lines = []
+        in_class = False
+        
+        for line in lines:
+            stripped_line = line.strip()
+            
+            # Skip import statements
+            if (stripped_line.startswith('import ') or 
+                stripped_line.startswith('from ') or
+                stripped_line == '' and not in_class):
+                continue
+                
+            # Start collecting from class definition
+            if stripped_line.startswith('class '):
+                in_class = True
+                
+            if in_class:
+                cleaned_lines.append(line)
+        
+        return '\n'.join(cleaned_lines)

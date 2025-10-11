@@ -166,27 +166,33 @@ class EnhancedOptimizer(Optimizer):
 
             while retry_count < max_retries:
                 try:
-                    # Priority 1: Check if we should attempt fusion
+                    # Priority 1: Check if we should attempt fusion with retry
                     if self._should_attempt_fusion():
                         logger.info(f"Attempting workflow fusion instead of optimization for round {self.round + 1}")
-                        score = loop.run_until_complete(self._attempt_fusion())
+                        score = self._attempt_with_retry(
+                            lambda: loop.run_until_complete(self._attempt_fusion()),
+                            "fusion", 3
+                        )
                         if score is not None:
                             # Fusion successful, skip other strategies
                             break
                         else:
-                            # Fusion failed, try other strategies
-                            logger.warning("Fusion failed, trying other strategies")
+                            # Fusion failed after retries, try other strategies
+                            logger.warning("Fusion failed after retries, trying other strategies")
                     
-                    # Priority 2: Check if we should attempt differentiation
+                    # Priority 2: Check if we should attempt differentiation with retry
                     if score is None and self._should_attempt_differentiation():
                         logger.info(f"Attempting workflow differentiation for round {self.round + 1}")
-                        score = loop.run_until_complete(self._attempt_differentiation())
+                        score = self._attempt_with_retry(
+                            lambda: loop.run_until_complete(self._attempt_differentiation()),
+                            "differentiation", 3
+                        )
                         if score is not None:
                             # Differentiation successful, skip regular optimization
                             break
                         else:
-                            # Differentiation failed, fall back to regular optimization
-                            logger.warning("Differentiation failed, falling back to regular optimization")
+                            # Differentiation failed after retries, fall back to regular optimization
+                            logger.warning("Differentiation failed after retries, falling back to regular optimization")
                     
                     # Priority 3: Regular optimization process
                     if score is None:
@@ -221,6 +227,38 @@ class EnhancedOptimizer(Optimizer):
                 break
 
             time.sleep(5)
+
+    def _attempt_with_retry(self, operation, operation_name: str, max_retries: int = 3):
+        """
+        Attempt an operation with retry mechanism.
+        
+        Args:
+            operation: Callable operation to retry
+            operation_name: Name of the operation for logging
+            max_retries: Maximum number of retry attempts
+            
+        Returns:
+            Result of the operation if successful, None if all retries failed
+        """
+        for attempt in range(max_retries):
+            try:
+                result = operation()
+                if result is not None:
+                    if attempt > 0:
+                        logger.info(f"{operation_name.capitalize()} succeeded on attempt {attempt + 1}")
+                    return result
+                else:
+                    if attempt < max_retries - 1:
+                        logger.warning(f"{operation_name.capitalize()} failed (attempt {attempt + 1}/{max_retries}), retrying...")
+                    else:
+                        logger.warning(f"{operation_name.capitalize()} failed after {max_retries} attempts")
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    logger.warning(f"{operation_name.capitalize()} error on attempt {attempt + 1}/{max_retries}: {e}, retrying...")
+                else:
+                    logger.error(f"{operation_name.capitalize()} error after {max_retries} attempts: {e}")
+        
+        return None
 
     def _should_attempt_fusion(self) -> bool:
         """
@@ -344,8 +382,6 @@ class EnhancedOptimizer(Optimizer):
             float: Score of differentiated workflow if successful, None if failed
         """
         try:
-            self.differentiation_rounds_used += 1
-            
             # Get workflow results and update differentiation counts
             workflow_results = self.data_utils.load_results(f"{self.root_path}/workflows")
             round_summaries = self.workflow_manager.get_round_summaries(workflow_results)
@@ -424,6 +460,9 @@ class EnhancedOptimizer(Optimizer):
                 target_round=next_round,
                 differentiation_score=differentiation_score
             )
+            
+            # Only increment differentiation count if successful
+            self.differentiation_rounds_used += 1
             
             logger.info(f"Problem type specialization completed with score: {differentiation_score:.4f}")
             return differentiation_score
@@ -516,9 +555,6 @@ class EnhancedOptimizer(Optimizer):
             float: Score of fused workflow if successful, None if failed
         """
         try:
-            # Record that we're attempting fusion this round
-            self.last_fusion_round = self.round
-            
             # Get envelope workflows before fusion
             envelope_workflows = self.data_utils.find_envelope_workflows(self.max_envelope_workflows, True)
             min_envelope_score = min(w["avg_score"] for w in envelope_workflows)
@@ -569,6 +605,9 @@ class EnhancedOptimizer(Optimizer):
             if fusion_score > min_envelope_score + self.fusion_score_threshold:
                 logger.info(f"Fusion successful! Score {fusion_score:.4f} > threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
                 
+                # Record successful fusion round
+                self.last_fusion_round = self.round
+                
                 # Save metadata for successful adoption
                 self.fusion_processor.save_fusion_metadata(
                     envelope_workflows, fusion_score, self.round, self.fusion_metadata_counter + 1, adopted=True
@@ -579,6 +618,9 @@ class EnhancedOptimizer(Optimizer):
             else:
                 logger.info(f"Fusion score {fusion_score:.4f} below threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
                 # Even if below threshold, we keep the fusion workflow since it was already created
+                # Record successful fusion round (even if below threshold, fusion was successful)
+                self.last_fusion_round = self.round
+                
                 # Save metadata for tracking purposes
                 self.fusion_processor.save_fusion_metadata(
                     envelope_workflows, fusion_score, self.round, self.fusion_metadata_counter + 1, adopted=True

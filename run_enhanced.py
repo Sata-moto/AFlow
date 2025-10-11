@@ -162,7 +162,7 @@ def parse_args():
     parser.add_argument(
         "--opt_model_name",
         type=str,
-        default="claude-3-7-sonnet-20250219",
+        default="claude-sonnet-4-5-20250929",
         help="Specifies the name of the model used for optimization tasks.",
     )
     parser.add_argument(

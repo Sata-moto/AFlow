@@ -121,9 +121,12 @@ class DifferentiationPromptGenerator:
 - ❌ Do NOT create problem type classifiers or conditional strategy selection
 - ❌ Do NOT use multiple solution generation with different approaches  
 - ❌ Do NOT create "if problem_type == X then do Y" logic
+- ❌ Do NOT duplicate import statements or any code sections
+- ❌ Do NOT write documentation/comments in prompt.py - only Python constants
 - ✅ DO create a single, focused approach optimized for the specialization
 - ✅ DO use specialized prompts and operators for the target domain
 - ✅ DO ensure every step contributes to the specialization goal
+- ✅ DO write prompt.py as pure Python constants (PROMPT_NAME = "content")
 
 ## Output Format
 Provide your differentiated workflow in the following XML format:
@@ -133,33 +136,67 @@ Provide your differentiated workflow in the following XML format:
 </modification>
 
 <graph>
-[Complete Python class definition for the specialized workflow. MUST follow this exact import structure:
+[Complete Python class definition for the specialized workflow. MUST follow this exact format:
 
 ```python
-from typing import Literal
-import workspace.{dataset}.workflows.template.operator as operator
-import workspace.{dataset}.workflows.round_{target_round}.prompt as prompt_custom
-from scripts.async_llm import create_llm_instance
-from scripts.evaluator import DatasetType
-
 class Workflow:
     def __init__(self, name: str, llm_config, dataset: DatasetType) -> None:
         self.name = name
         self.dataset = dataset
         self.llm = create_llm_instance(llm_config)
-        # Initialize operators like: self.custom = operator.Custom(self.llm)
+        self.custom = operator.Custom(self.llm)
+        self.custom_code_generate = operator.CustomCodeGenerate(self.llm)
+        self.test = operator.Test(self.llm)
+        self.sc_ensemble = operator.ScEnsemble(self.llm)
         
     async def __call__(self, problem: str, entry_point: str = None):
-        # Your specialized workflow implementation
-        pass
+        # Your specialized workflow implementation that focuses on the specialization
+        # Use prompt_custom.CONSTANT_NAME to reference prompts
+        result = await self.custom_code_generate(
+            problem=problem,
+            entry_point=entry_point,
+            instruction=prompt_custom.MAIN_PROMPT
+        )
+        return result['response'], self.llm.get_usage_summary()["total_cost"]
 ```
 
-Ensure correct import paths and operator usage!]
+CRITICAL: Do NOT include any import statements! Only provide the class definition. Import statements will be automatically added by the system.]
 </graph>
 
 <prompt>
-[Updated prompt that reflects the specialization. Should be clear about the workflow's specialized focus while maintaining effectiveness.]
+[MUST be a Python file with prompt constants. Follow this EXACT format:
+
+```python
+MAIN_PROMPT = \"\"\"
+Your specialized prompt for the main workflow step
+\"\"\"
+
+SECONDARY_PROMPT = \"\"\"
+Any additional prompt needed for the specialization
+\"\"\"
+
+# Add more prompt constants as needed for your specialization
+```
+
+Do NOT write descriptive text or documentation. Only Python code with string constants!]
 </prompt>
+
+**CRITICAL FORMATTING REQUIREMENTS**:
+
+1. **graph.py**: Must be a complete, valid Python class with NO duplicate imports
+2. **prompt.py**: Must contain ONLY Python string constants, NO markdown or documentation
+3. **Both files**: Must follow exact Python syntax and import structures shown above
+
+**EXAMPLE prompt.py content**:
+```python
+SPECIALIZED_INSTRUCTION = \"\"\"You are solving X type problems. Focus on Y approach.\"\"\"
+REFINEMENT_PROMPT = \"\"\"When fixing errors, consider Z aspects.\"\"\"
+```
+
+**EXAMPLE graph.py usage**:
+```python
+result = await self.custom(input=problem, instruction=prompt_custom.SPECIALIZED_INSTRUCTION)
+```
 
 Remember: The goal is to create a workflow that excels in the specified specialization direction."""
 
