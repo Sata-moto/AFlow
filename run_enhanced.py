@@ -51,6 +51,11 @@ EXPERIMENT_CONFIGS: Dict[str, ExperimentConfig] = {
         question_type="code",
         operators=["Custom", "CustomCodeGenerate", "ScEnsemble", "Test"],
     ),
+    "MIXED": ExperimentConfig(
+        dataset="MIXED",
+        question_type="mixed",  # 混合数据集包含 DROP (qa), MATH (math), GSM8K (math)
+        operators=["Custom", "AnswerGenerate", "ScEnsemble", "Programmer"],
+    ),
 }
 
 
@@ -162,7 +167,7 @@ def parse_args():
     parser.add_argument(
         "--opt_model_name",
         type=str,
-        default="claude-sonnet-4-5-20250929",
+        default="claude-sonnet-4-20250514",
         help="Specifies the name of the model used for optimization tasks.",
     )
     parser.add_argument(

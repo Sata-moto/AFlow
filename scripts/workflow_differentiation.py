@@ -72,7 +72,15 @@ class WorkflowDifferentiation:
             workflow_results: List of workflow performance data
             
         Returns:
-            List of candidates sorted by selection priority
+            List of candidates sorted by selection priority.
+            Each candidate has a flat structure compatible with select_round():
+            {
+                "workflow": {...},  # Original workflow data
+                "score": float,  # Adjusted score for selection (final_weight)
+                "original_score": float,  # Original unadjusted score
+                "final_weight": float,  # Same as score, for backwards compatibility
+                "differentiation_count": int
+            }
         """
         candidates = []
         
@@ -91,31 +99,48 @@ class WorkflowDifferentiation:
             if final_weight > 0.3 and differentiation_count < 3:
                 candidates.append({
                     "workflow": workflow,
-                    "final_weight": final_weight,
+                    "score": final_weight,  # Use adjusted score for selection
+                    "original_score": base_score,  # Keep original for reference
+                    "final_weight": final_weight,  # Backwards compatibility
                     "differentiation_count": differentiation_count
                 })
         
-        # Sort by final weight (performance with differentiation penalty)
-        candidates.sort(key=lambda x: x["final_weight"], reverse=True)
+        # Sort by score (which is final_weight)
+        candidates.sort(key=lambda x: x["score"], reverse=True)
         
         return candidates[:5]
     
     def _is_differentiated_workflow(self, workflow: Dict) -> bool:
         """
-        Check if workflow was created through differentiation.
+        Check if workflow was created through differentiation or fusion by reading experience.json.
         
         Args:
-            workflow: Workflow data
+            workflow: Workflow data containing round_dir path
             
         Returns:
-            bool: True if this is a differentiated workflow
+            bool: True if this workflow was differentiated or fused (not pure optimization)
         """
-        return any([
-            workflow.get("is_differentiated", False),
-            workflow.get("differentiation_source") is not None,
-            "differentiation" in workflow.get("creation_type", "").lower(),
-            "specialized" in workflow.get("description", "").lower()
-        ])
+        round_dir = workflow.get("round_dir", "")
+        if not round_dir:
+            return False
+        
+        experience_path = os.path.join(round_dir, "experience.json")
+        if not os.path.exists(experience_path):
+            return False
+        
+        try:
+            with open(experience_path, 'r', encoding='utf-8') as f:
+                experience_data = json.load(f)
+            
+            modification = experience_data.get('modification', '').lower()
+            
+            # Check if modification indicates differentiation or fusion
+            diff_keywords = ['differentiation', 'specialized', 'fusion', 'fused']
+            return any(keyword in modification for keyword in diff_keywords)
+            
+        except Exception as e:
+            logger.error(f"Error reading experience.json from {experience_path}: {e}", exc_info=True)
+            return False
     
     def select_differentiation_direction(self, workflow: Dict, **kwargs) -> str:
         """
@@ -133,7 +158,10 @@ class WorkflowDifferentiation:
         differentiation_direction: str,
         operator_description: str,
         target_round: int,
-        performance_gaps: List[Dict] = None
+        performance_gaps: List[Dict] = None,
+        target_category: str = None,
+        category_description: str = None,
+        category_examples: List[Dict] = None
     ) -> Optional[Dict[str, str]]:
         """
         Create a differentiated workflow from a source workflow.
@@ -142,35 +170,49 @@ class WorkflowDifferentiation:
             source_workflow: Source workflow data
             differentiation_direction: Direction for specialization
             operator_description: Available operators description
+            target_round: Target round number
             performance_gaps: Performance gaps to address
+            target_category: 目标问题类别（用于定向分化）
+            category_description: 目标类别的描述
+            category_examples: 目标类别的示例问题
             
         Returns:
             Dict containing differentiation response or None if failed
         """
         try:
+            # Extract source workflow components
+            source_score = source_workflow.get("score", source_workflow.get("avg_score", 0.0))
+            source_graph = source_workflow.get("graph", "")
+            source_prompt = source_workflow.get("prompt", "")
+            
             # Create differentiation prompt
             diff_prompt = self.prompt_generator.create_differentiation_prompt(
                 dataset=self.dataset,
-                question_type=self.question_type,
-                source_workflow=source_workflow,
-                operator_description=operator_description,
-                differentiation_direction=differentiation_direction,
                 target_round=target_round,
-                performance_gaps=performance_gaps
+                question_type=self.question_type,
+                differentiation_direction=differentiation_direction,
+                source_score=source_score,
+                source_graph=source_graph,
+                source_prompt=source_prompt,
+                operator_description=operator_description,
+                target_category=target_category,
+                category_description=category_description,
+                category_examples=category_examples
             )
             
             # Call LLM for differentiation
             response = await self._call_differentiation_llm(diff_prompt)
             
             if response:
-                logger.info(f"Successfully created differentiated workflow in direction: {differentiation_direction}")
+                category_info = f" for category '{target_category}'" if target_category else ""
+                logger.info(f"Successfully created differentiated workflow in direction: {differentiation_direction}{category_info}")
                 return response
             else:
                 logger.warning(f"Failed to create differentiated workflow for direction: {differentiation_direction}")
                 return None
                 
         except Exception as e:
-            logger.error(f"Error creating differentiated workflow: {e}")
+            logger.error(f"Error creating differentiated workflow: {e}", exc_info=True)
             return None
     
     async def _call_differentiation_llm(self, differentiation_prompt: str) -> Optional[Dict[str, str]]:
@@ -220,7 +262,7 @@ class WorkflowDifferentiation:
                 return None
                 
         except Exception as e:
-            logger.error(f"Error calling differentiation LLM: {e}")
+            logger.error(f"Error calling differentiation LLM: {e}", exc_info=True)
             return None
     
     def save_differentiation_metadata(
@@ -267,7 +309,7 @@ class WorkflowDifferentiation:
             logger.info(f"Differentiation metadata saved to {metadata_file}")
             
         except Exception as e:
-            logger.error(f"Error saving differentiation metadata: {e}")
+            logger.error(f"Error saving differentiation metadata: {e}", exc_info=True)
     
     def save_differentiated_workflow_direct(
         self,
@@ -277,7 +319,8 @@ class WorkflowDifferentiation:
         target_round: int,
         root_path: str,
         graph_utils,
-        experience_utils
+        experience_utils,
+        target_category: str = None
     ) -> bool:
         """
         Save the differentiated workflow directly to the target round directory.
@@ -316,7 +359,7 @@ class WorkflowDifferentiation:
             # Create experience.json for differentiated workflow
             self.create_differentiation_experience_file(
                 target_dir, source_workflow, differentiation_direction, 
-                differentiation_response, experience_utils
+                differentiation_response, experience_utils, target_category
             )
             
             # Create log.json for differentiated workflow
@@ -328,7 +371,7 @@ class WorkflowDifferentiation:
             return True
             
         except Exception as e:
-            logger.error(f"Error saving differentiated workflow directly: {e}")
+            logger.error(f"Error saving differentiated workflow directly: {e}", exc_info=True)
             return False
     
     def create_differentiation_experience_file(
@@ -337,7 +380,8 @@ class WorkflowDifferentiation:
         source_workflow: Dict,
         differentiation_direction: str,
         differentiation_response: Dict[str, str],
-        experience_utils
+        experience_utils,
+        target_category: str = None
     ) -> None:
         """
         Create experience.json file for differentiated workflow.
@@ -366,6 +410,14 @@ class WorkflowDifferentiation:
                 differentiation_sample, differentiation_modification
             )
             
+            # Add operation metadata including target category
+            experience_data["operation"] = {
+                "type": "differentiation",
+                "direction": differentiation_direction,
+                "source_round": source_workflow["round"],
+                "target_category": target_category
+            }
+            
             # Save experience.json
             experience_path = os.path.join(target_dir, "experience.json")
             with open(experience_path, 'w', encoding='utf-8') as f:
@@ -374,7 +426,7 @@ class WorkflowDifferentiation:
             logger.info(f"Created differentiation experience.json with father node {source_workflow['round']}")
             
         except Exception as e:
-            logger.error(f"Error creating differentiation experience file: {e}")
+            logger.error(f"Error creating differentiation experience file: {e}", exc_info=True)
     
     def create_differentiation_log_file(
         self,
@@ -416,4 +468,4 @@ class WorkflowDifferentiation:
             logger.info(f"Created differentiation log.json with direction '{differentiation_direction}'")
             
         except Exception as e:
-            logger.error(f"Error creating differentiation log file: {e}")
+            logger.error(f"Error creating differentiation log file: {e}", exc_info=True)

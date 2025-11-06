@@ -12,8 +12,8 @@ from scripts.utils.sanitize import sanitize
 
 
 class MBPPBenchmark(BaseBenchmark):
-    def __init__(self, name: str, file_path: str, log_path: str):
-        super().__init__(name, file_path, log_path)
+    def __init__(self, name: str, file_path: str, log_path: str, solved_threshold: float = 0.5):
+        super().__init__(name, file_path, log_path, solved_threshold)
 
     class TimeoutError(Exception):
         pass
@@ -112,6 +112,9 @@ class MBPPBenchmark(BaseBenchmark):
             return input_text, prediction, expected_output, score, cost
 
         except Exception as e:
+            import traceback
+            error_traceback = traceback.format_exc()
+            logger.error(f"Error in evaluate_problem:\n{error_traceback}")
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
             return input_text, str(e), expected_output, 0.0, 0.0
 

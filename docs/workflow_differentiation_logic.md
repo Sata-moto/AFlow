@@ -78,23 +78,47 @@ def analyze_differentiation_candidates(workflow_results):
 
 ### 2.3 分化工作流检测
 
-系统通过多种方式识别已分化的工作流：
+系统通过读取 `experience.json` 文件来准确识别已分化或融合的工作流：
 
 ```python
 def _is_differentiated_workflow(workflow):
-    indicators = [
-        workflow.get("is_differentiated", False),
-        workflow.get("differentiation_source") is not None,
-        workflow.get("father_node_type") == "differentiation",
-        "differentiation" in workflow.get("creation_type", "").lower(),
-        "specialized" in workflow.get("description", "").lower(),
-        # 检查分化元数据文件存在性
-        os.path.exists(f"differentiation_metadata_{round}.json"),
-        # 检查experience.json中的modification字段
-        "differentiation" in experience_data.get('modification', '').lower()
-    ]
-    return any(indicators)
+    """
+    通过读取 experience.json 文件判断工作流是否通过分化或融合创建。
+    只有通过纯优化创建的工作流才会返回 False。
+    """
+    round_num = workflow.get("round")
+    experience_path = os.path.join(root_path, "workflows", f"round_{round_num}", "experience.json")
+    
+    if not os.path.exists(experience_path):
+        return False
+    
+    try:
+        with open(experience_path, 'r', encoding='utf-8') as f:
+            experience_data = json.load(f)
+        
+        # 检查 modification 字段中的关键词
+        modification = experience_data.get('modification', '').lower()
+        
+        # 分化或融合的标识关键词
+        keywords = ['differentiation', 'specialized', 'fusion', 'fused']
+        
+        return any(keyword in modification for keyword in keywords)
+        
+    except (json.JSONDecodeError, IOError) as e:
+        logger.warning(f"Failed to read experience.json for round {round_num}: {e}")
+        return False
 ```
+
+**检测逻辑说明**：
+- **优化工作流**：`modification` 字段描述具体的优化操作（如 "Add Test operator to validate..."）
+- **分化工作流**：`modification` 字段包含 "Workflow Differentiation: Specialized from round X..."
+- **融合工作流**：`modification` 字段包含 "Workflow Fusion: Combined workflows from rounds X, Y, Z..."
+
+**为什么这样设计**：
+1. **准确性**：直接从源文件读取，避免元数据不一致
+2. **可靠性**：`experience.json` 是每次分化/融合必然创建的文件
+3. **简洁性**：单一可靠的数据源，避免多重判断导致的混乱
+4. **扩展性**：同时支持分化和融合的检测
 
 ### 2.4 权重分类系统
 

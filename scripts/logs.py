@@ -75,8 +75,14 @@ class SimpleLogger:
             file_path = os.path.join(log_dir, log_file)
             self.file_output = open(file_path, 'a', encoding='utf-8')
     
-    def _log(self, level: LogLevel, message: str) -> None:
-        """Internal method to log messages at specified level"""
+    def _log(self, level: LogLevel, message: str, exc_info: bool = False) -> None:
+        """Internal method to log messages at specified level
+        
+        Args:
+            level: Log level
+            message: Log message
+            exc_info: If True, add exception information to the log
+        """
         if level.value[0] < self.log_level:
             return
             
@@ -84,6 +90,14 @@ class SimpleLogger:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         level_name = level.name
         formatted_msg = f"{timestamp} - {level_name} - {message}"
+        
+        # Add exception info if requested
+        if exc_info:
+            import traceback
+            tb_lines = traceback.format_exc()
+            # Only add traceback if there's an actual exception
+            if tb_lines != "NoneType: None\n":
+                formatted_msg += "\n" + tb_lines
         
         # Write to console if enabled
         if self.console_output:
@@ -100,25 +114,50 @@ class SimpleLogger:
             self.file_output.write(formatted_msg + "\n")
             self.file_output.flush()
     
-    def debug(self, message: str) -> None:
-        """Log a debug message"""
-        self._log(LogLevel.DEBUG, message)
+    def debug(self, message: str, exc_info: bool = False) -> None:
+        """Log a debug message
+        
+        Args:
+            message: Log message
+            exc_info: If True, add exception information to the log
+        """
+        self._log(LogLevel.DEBUG, message, exc_info)
     
-    def info(self, message: str) -> None:
-        """Log an info message"""
-        self._log(LogLevel.INFO, message)
+    def info(self, message: str, exc_info: bool = False) -> None:
+        """Log an info message
+        
+        Args:
+            message: Log message
+            exc_info: If True, add exception information to the log
+        """
+        self._log(LogLevel.INFO, message, exc_info)
     
-    def warning(self, message: str) -> None:
-        """Log a warning message"""
-        self._log(LogLevel.WARNING, message)
+    def warning(self, message: str, exc_info: bool = False) -> None:
+        """Log a warning message
+        
+        Args:
+            message: Log message
+            exc_info: If True, add exception information to the log
+        """
+        self._log(LogLevel.WARNING, message, exc_info)
     
-    def error(self, message: str) -> None:
-        """Log an error message"""
-        self._log(LogLevel.ERROR, message)
+    def error(self, message: str, exc_info: bool = False) -> None:
+        """Log an error message
+        
+        Args:
+            message: Log message
+            exc_info: If True, add exception information to the log
+        """
+        self._log(LogLevel.ERROR, message, exc_info)
     
-    def critical(self, message: str) -> None:
-        """Log a critical message"""
-        self._log(LogLevel.CRITICAL, message)
+    def critical(self, message: str, exc_info: bool = False) -> None:
+        """Log a critical message
+        
+        Args:
+            message: Log message
+            exc_info: If True, add exception information to the log
+        """
+        self._log(LogLevel.CRITICAL, message, exc_info)
     
     def __del__(self):
         """Close file handle when logger is destroyed"""

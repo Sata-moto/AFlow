@@ -1,324 +1,237 @@
-"""
-Differentiation prompt generator for workflow specialization.
+from typing import List
 
-This module generates prompts to guide LLMs in creating specialized workflows
-that diverge from existing ones in specific directions (problem types, strategies, etc.).
+WORKFLOW_DIFFERENTIATION_PROMPT = """You are an expert workflow designer tasked with differentiating an existing workflow to create a specialized variant for {type} problems.
+
+**CRITICAL - What is Differentiation**:
+Differentiation means converting ABSTRACT/GENERAL steps into CONCRETE/SPECIFIC steps for a particular problem domain.
+- You MUST keep the same number of main steps as the parent workflow
+- You MUST keep the same operators in the same order
+- You ONLY change: prompt content to be more specific for the target domain
+
+**What You ARE Doing**:
+✅ Converting "analyze problem" → "analyze [specific problem type] characteristics"
+✅ Converting "solve" → "apply [specific technique] to solve"
+✅ Converting "verify" → "verify using [specific domain] validation rules"
+✅ Making prompts more specific and detailed for the target domain
+
+Use logical and control flow (IF-ELSE, loops) for a more enhanced graphical representation.
+Ensure that all the prompts required by the current graph from prompt_custom are included. Exclude any other prompts.
+Output the modified graph and all the necessary Prompts in prompt_custom (if needed).
+The prompt you need to generate is only the one used in `prompt_custom.XXX` within Custom. Other methods already have built-in prompts and are prohibited from being generated. Only generate those needed for use in `prompt_custom`; please remove any unused prompts in prompt_custom.
+The generated prompt must not contain any placeholders.
 """
 
-from typing import List, Dict
+WORKFLOW_DIFFERENTIATION_INPUT = """
+You are differentiating an existing workflow to make it specialized for {specialization_focus}.
+
+<differentiation_data>
+    <dataset>{dataset}</dataset>
+    <target_round>{target_round}</target_round>
+    <specialization_direction>{direction}</specialization_direction>
+    <specialization_focus>{specialization_focus}</specialization_focus>
+    <parent_workflow>
+        <score>{source_score}</score>
+        <graph>{source_graph}</graph>
+        <prompt>{source_prompt}</prompt>
+    </parent_workflow>
+    <operator_description>{operator_description}</operator_description>
+</differentiation_data>
+
+**Your Task**:
+Convert the parent workflow's ABSTRACT steps into CONCRETE steps specialized for {specialization_focus}.
+
+**Differentiation Rules (MUST FOLLOW)**:
+1. **Keep Same Structure**: Use the EXACT SAME operators in the EXACT SAME order as parent
+2. **Same Number of Steps**: If parent has N operators, differentiated workflow has N operators
+3. **Only Change Prompts**: Make prompt content specific to {specialization_focus}
+4. **No Structural Changes**: Do NOT add/remove operators or change workflow logic
+
+**How to Convert Abstract → Concrete**:
+- Parent: "analyze the problem"
+  Child: "analyze {specialization_focus} characteristics: identify key variables, constraints, and target"
+  
+- Parent: "solve the problem" 
+  Child: "apply {specialization_focus} techniques: [specific method 1], [specific method 2]"
+  
+- Parent: "verify the solution"
+  Child: "verify using {specialization_focus} rules: check [specific constraint 1], [specific constraint 2]"
+
+**Example Differentiation**:
+If parent workflow is:
+```python
+analysis = await self.custom(input=problem, instruction=prompt_custom.ANALYSIS_PROMPT)
+solution = await self.custom(input=analysis['response'], instruction=prompt_custom.SOLUTION_PROMPT)
+```
+
+Differentiated workflow should be:
+```python
+analysis = await self.custom(input=problem, instruction=prompt_custom.ALGEBRAIC_ANALYSIS_PROMPT)  # More specific name
+solution = await self.custom(input=analysis['response'], instruction=prompt_custom.ALGEBRAIC_SOLUTION_PROMPT)  # More specific name
+```
+
+The prompts should contain {specialization_focus}-specific instructions, but the structure remains identical.
+
+When introducing new functionalities in the graph, please make sure to import the necessary libraries or modules yourself, except for operator, prompt_custom, create_llm_instance, and CostManage, which have already been automatically imported.
+**Under no circumstances should Graph output None for any field.**
+Use custom methods to restrict your output format, rather than using code (outside of the code, the system will extract answers based on certain rules and score them).
+You do not need to manually import prompt_custom or operator to use them; they are already included in the execution environment.
+"""
+
+WORKFLOW_DIFFERENTIATION_CUSTOM_USE = """\nHere's an example of using the `custom` method in graph:
+```
+# You can write your own prompt in <prompt>prompt_custom</prompt> and then use it in the Custom method in the graph
+response = await self.custom(input=problem, instruction=prompt_custom.XXX_PROMPT)
+# You can also concatenate previously generated string results in the input to provide more comprehensive contextual information.
+# response = await self.custom(input=problem+f"xxx:{xxx}, xxx:{xxx}", instruction=prompt_custom.XXX_PROMPT)
+# The output from the Custom method can be placed anywhere you need it, as shown in the example below
+solution = await self.generate(problem=f"question:{problem}, xxx:{response['response']}")
+```
+Note: In custom, the input and instruction are directly concatenated(instruction+input), and placeholders are not supported. Please ensure to add comments and handle the concatenation externally.
+
+**CRITICAL REMINDER FOR DIFFERENTIATION**:
+- Keep the SAME workflow structure as parent (same operators, same order)
+- ONLY make prompts more specific for the target domain
+- Do NOT add extra processing steps or complex branching
+- Simple abstract-to-concrete conversion is enough
+"""
 
 
 class DifferentiationPromptGenerator:
-    """Generate prompts for workflow differentiation/specialization."""
+    """Generator for workflow differentiation prompts following optimizer pattern"""
     
     def __init__(self):
-        self.differentiation_strategies = [
-            "problem_type_specialization", 
+        # Specialization focuses for different problem types
+        self.math_specializations = [
+            "algebraic manipulation and equation solving",
+            "geometric reasoning and spatial visualization", 
+            "combinatorial counting and probability",
+            "calculus and analysis techniques",
+            "number theory and modular arithmetic"
+        ]
+        
+        self.code_specializations = [
+            "string processing and text manipulation",
+            "array and list manipulation algorithms",
+            "recursive problem decomposition",
+            "graph traversal and network algorithms",
+            "dynamic programming optimization"
+        ]
+        
+        self.qa_specializations = [
+            "multi-step logical reasoning chains",
+            "factual information extraction and synthesis",
+            "causal relationship analysis",
+            "comparative and analytical reasoning",
+            "evidence-based conclusion drawing"
         ]
     
-    def generate_differentiation_prompt(
-        self,
-        candidates: List[Dict],
-        direction: str,
-        dataset: str,
-        question_type: str
-    ) -> str:
-        """
-        Generate a differentiation prompt based on candidate workflows and direction.
-        
-        Args:
-            candidates: List of candidate workflows with scores and metadata
-            direction: Differentiation direction to pursue
-            dataset: Target dataset name
-            question_type: Type of questions (math, code, qa)
-            
-        Returns:
-            Generated differentiation prompt
-        """
-        # Select best candidate as source
-        best_candidate = max(candidates, key=lambda x: x.get('score', 0))
-        
-        return self.create_differentiation_prompt(
-            dataset=dataset,
-            question_type=question_type,
-            source_workflow=best_candidate.get('workflow_data', {}),
-            operator_description="Available operators for workflow construction",
-            differentiation_direction=direction,
-            performance_gaps=None
-        )
-    
-    def create_differentiation_prompt(
-        self,
-        dataset: str,
-        question_type: str,
-        source_workflow: Dict,
-        operator_description: str,
-        differentiation_direction: str,
-        target_round: int,
-        performance_gaps: List[Dict] = None
-    ) -> str:
-        """
-        Create a differentiation prompt for workflow specialization.
-        
-        Args:
-            dataset: Target dataset name
-            question_type: Type of questions (math, code, qa)
-            source_workflow: Source workflow data containing prompt, graph, score, solved_problems
-            operator_description: Available operators description
-            differentiation_direction: Direction for specialization
-            performance_gaps: Performance gaps analysis for targeted improvement
-            
-        Returns:
-            Generated differentiation prompt
-        """
-        
-        # Extract source workflow information
-        source_prompt = source_workflow.get("prompt", "")
-        source_graph = source_workflow.get("graph", "")
-        source_score = source_workflow.get("score", 0.0)
-        solved_problems = source_workflow.get("solved_problems", set())
-        
-        # Generate direction-specific guidance
-        direction_guidance = self._get_direction_guidance(
-            differentiation_direction, question_type, performance_gaps
-        )
-        
-        # Create base prompt template
-        base_prompt = f"""You are an expert in {question_type} problem-solving workflow design. Your task is to create a SPECIALIZED version of an existing workflow by differentiating it in a specific direction.
-
-## Current Workflow Analysis
-**Dataset**: {dataset}
-**Target Round**: {target_round}
-**Current Score**: {source_score:.4f}
-**Problems Solved**: {len(solved_problems)} problems
-**Specialization Direction**: {differentiation_direction}
-
-## Source Workflow
-### Current Prompt:
-```
-{source_prompt}
-```
-
-### Current Graph:
-```python
-{source_graph}
-```
-
-## Specialization Objective
-{direction_guidance}
-
-## Available Operators
-{operator_description}
-
-## Differentiation Requirements
-1. **Single Specialization Focus**: Create a workflow that excels in ONE specific area, not a general multi-strategy system
-2. **NO Problem Classification**: Do NOT create workflows that classify problems and apply different strategies
-3. **Deep Specialization**: Sacrifice generality for excellence in the target specialization
-4. **Simple Structure**: Avoid complex branching logic - focus on streamlined, specialized processing
-5. **Targeted Optimization**: Every component should contribute to the specialization goal
-
-## IMPORTANT RESTRICTIONS
-- ❌ Do NOT create problem type classifiers or conditional strategy selection
-- ❌ Do NOT use multiple solution generation with different approaches  
-- ❌ Do NOT create "if problem_type == X then do Y" logic
-- ❌ Do NOT duplicate import statements or any code sections
-- ❌ Do NOT write documentation/comments in prompt.py - only Python constants
-- ✅ DO create a single, focused approach optimized for the specialization
-- ✅ DO use specialized prompts and operators for the target domain
-- ✅ DO ensure every step contributes to the specialization goal
-- ✅ DO write prompt.py as pure Python constants (PROMPT_NAME = "content")
-
-## Output Format
-Provide your differentiated workflow in the following XML format:
-
-<modification>
-[Detailed description of how you differentiated the workflow, what specialization was introduced, and why this direction was chosen. Explain the key changes and expected benefits.]
-</modification>
-
-<graph>
-[Complete Python class definition for the specialized workflow. MUST follow this exact format:
-
-```python
-class Workflow:
-    def __init__(self, name: str, llm_config, dataset: DatasetType) -> None:
-        self.name = name
-        self.dataset = dataset
-        self.llm = create_llm_instance(llm_config)
-        self.custom = operator.Custom(self.llm)
-        self.custom_code_generate = operator.CustomCodeGenerate(self.llm)
-        self.test = operator.Test(self.llm)
-        self.sc_ensemble = operator.ScEnsemble(self.llm)
-        
-    async def __call__(self, problem: str, entry_point: str = None):
-        # Your specialized workflow implementation that focuses on the specialization
-        # Use prompt_custom.CONSTANT_NAME to reference prompts
-        result = await self.custom_code_generate(
-            problem=problem,
-            entry_point=entry_point,
-            instruction=prompt_custom.MAIN_PROMPT
-        )
-        return result['response'], self.llm.get_usage_summary()["total_cost"]
-```
-
-CRITICAL: Do NOT include any import statements! Only provide the class definition. Import statements will be automatically added by the system.]
-</graph>
-
-<prompt>
-[MUST be a Python file with prompt constants. Follow this EXACT format:
-
-```python
-MAIN_PROMPT = \"\"\"
-Your specialized prompt for the main workflow step
-\"\"\"
-
-SECONDARY_PROMPT = \"\"\"
-Any additional prompt needed for the specialization
-\"\"\"
-
-# Add more prompt constants as needed for your specialization
-```
-
-Do NOT write descriptive text or documentation. Only Python code with string constants!]
-</prompt>
-
-**CRITICAL FORMATTING REQUIREMENTS**:
-
-1. **graph.py**: Must be a complete, valid Python class with NO duplicate imports
-2. **prompt.py**: Must contain ONLY Python string constants, NO markdown or documentation
-3. **Both files**: Must follow exact Python syntax and import structures shown above
-
-**EXAMPLE prompt.py content**:
-```python
-SPECIALIZED_INSTRUCTION = \"\"\"You are solving X type problems. Focus on Y approach.\"\"\"
-REFINEMENT_PROMPT = \"\"\"When fixing errors, consider Z aspects.\"\"\"
-```
-
-**EXAMPLE graph.py usage**:
-```python
-result = await self.custom(input=problem, instruction=prompt_custom.SPECIALIZED_INSTRUCTION)
-```
-
-Remember: The goal is to create a workflow that excels in the specified specialization direction."""
-
-        # Format the template placeholders
-        base_prompt = base_prompt.format(dataset=dataset, target_round=target_round)
-        
-        return base_prompt
-    
-    def _get_direction_guidance(
-        self,
-        direction: str,
-        question_type: str,
-        performance_gaps: List[Dict] = None
-    ) -> str:
-        """Generate direction-specific guidance for differentiation."""
-        
-        # Only handle problem_type_specialization since other directions are removed
-        if direction == "problem_type_specialization":
-            return self._get_problem_type_guidance(question_type, performance_gaps)
-        else:
-            return self._get_generic_guidance(direction, question_type)
-    
-    def _get_problem_type_guidance(self, question_type: str, performance_gaps: List[Dict] = None) -> str:
-        """Generate guidance for problem type specialization."""
-        
-        # Provide specific, focused specialization directions instead of generic ones
-        if question_type == "math":
-            specializations = [
-                "algebraic manipulation and equation solving",
-                "geometric reasoning and spatial visualization", 
-                "combinatorial counting and probability",
-                "calculus and analysis techniques",
-                "number theory and modular arithmetic"
-            ]
-        elif question_type == "code":
-            specializations = [
-                "string processing and text manipulation",
-                "array and list manipulation algorithms",
-                "recursive problem decomposition",
-                "graph traversal and network algorithms",
-                "dynamic programming optimization"
-            ]
-        elif question_type == "qa":
-            specializations = [
-                "multi-step logical reasoning chains",
-                "factual information extraction and synthesis",
-                "causal relationship analysis",
-                "comparative and analytical reasoning",
-                "evidence-based conclusion drawing"
-            ]
-        else:
-            specializations = ["domain-specific pattern recognition"]
-        
-        # Choose one specific specialization rather than asking LLM to pick
+    def _get_specialization_focus(self, question_type: str, direction: str) -> str:
+        """Get specific specialization focus based on problem type"""
         import random
-        chosen_specialization = random.choice(specializations)
         
-        guidance = f"""Create a workflow that SPECIALIZES EXCLUSIVELY in {chosen_specialization}.
-
-**CRITICAL**: Do NOT create a general problem classifier or multi-strategy workflow. Instead:
-
-1. **Single Focus**: The entire workflow should be optimized for {chosen_specialization} problems
-2. **Targeted Approach**: Use specialized operators, prompts, and logic specifically for this domain
-3. **Deep Specialization**: Sacrifice generality for excellence in this specific area
-4. **Simple Structure**: Avoid complex branching or multiple strategies - focus on one specialized approach
-
-**Example Specialization Approach**:
-- Identify the core techniques needed for {chosen_specialization}
-- Design operators that excel at these specific techniques
-- Create prompts that guide the model to use domain-specific reasoning
-- Structure the workflow to maximize performance on this narrow focus"""
-        
-        if performance_gaps:
-            gap_info = "\n\n**Performance Gaps Analysis**:\n"
-            for gap in performance_gaps[:3]:  # Limit to top 3 gaps
-                gap_info += f"- {gap.get('category', 'Unknown')}: {gap.get('description', 'N/A')}\n"
-            guidance += gap_info + f"\nFocus your {chosen_specialization} specialization on addressing these specific weaknesses."
-        
-        return guidance
+        if question_type == "math":
+            return random.choice(self.math_specializations)
+        elif question_type == "code":
+            return random.choice(self.code_specializations)
+        elif question_type == "qa":
+            return random.choice(self.qa_specializations)
+        else:
+            return "domain-specific pattern recognition"
     
-    def _get_generic_guidance(self, direction: str, question_type: str) -> str:
-        """Generate generic guidance for custom differentiation directions."""
-        return f"Specialize the workflow in the '{direction}' direction for {question_type} problems. Introduce focused improvements and targeted capabilities while maintaining overall effectiveness."
-
-    def get_available_directions(self) -> List[str]:
-        """Get list of available differentiation directions."""
-        return self.differentiation_strategies.copy()
-
-    def analyze_performance_gaps(self, workflow_results: List[Dict], failed_problems: List[Dict] = None) -> List[Dict]:
+    def create_differentiation_prompt(self,
+                                    dataset: str,
+                                    target_round: int,
+                                    question_type: str,
+                                    differentiation_direction: str,
+                                    source_score: float,
+                                    source_graph: str,
+                                    source_prompt: str,
+                                    operator_description: str,
+                                    target_category: str = None,
+                                    category_description: str = None,
+                                    category_examples: List = None) -> str:
         """
-        Analyze performance gaps to guide differentiation.
+        Create differentiation prompt following optimizer pattern
         
         Args:
-            workflow_results: Historical workflow performance data
-            failed_problems: Problems that consistently fail
+            dataset: Dataset name
+            target_round: Target round number
+            question_type: Type of problem (math/code/qa)
+            differentiation_direction: Direction of differentiation
+            source_score: Parent workflow score
+            source_graph: Parent workflow graph code
+            source_prompt: Parent workflow prompt code
+            operator_description: Available operators description
+            target_category: 目标问题类别（用于定向分化）
+            category_description: 目标类别的描述
+            category_examples: 目标类别的示例问题（最多3个）
             
         Returns:
-            List of performance gap analyses
+            Complete differentiation prompt string
         """
-        gaps = []
-        
-        # Analyze score patterns
-        if workflow_results:
-            scores = [r.get("score", 0.0) for r in workflow_results]
-            avg_score = sum(scores) / len(scores)
+        # Determine specialization focus
+        if target_category:
+            # Use explicit category for directed differentiation
+            specialization_focus = target_category
             
-            if avg_score < 0.3:
-                gaps.append({
-                    "category": "low_overall_performance",
-                    "description": f"Overall performance is low (avg: {avg_score:.3f}). Needs fundamental approach improvement."
-                })
-            elif avg_score < 0.7:
-                gaps.append({
-                    "category": "moderate_performance",
-                    "description": f"Moderate performance (avg: {avg_score:.3f}). Could benefit from specialization."
-                })
+            # Add category examples section if provided
+            category_section = f"\n<target_category>\n    <name>{target_category}</name>\n"
+            if category_description:
+                category_section += f"    <description>{category_description}</description>\n"
+            if category_examples:
+                category_section += "    <examples>\n"
+                for idx, example in enumerate(category_examples[:3], 1):
+                    # Extract problem text based on dataset structure
+                    problem_text = (example.get('question') or 
+                                  example.get('problem') or 
+                                  example.get('context') or 
+                                  example.get('prompt') or 
+                                  str(example))
+                    # Truncate if too long
+                    if len(problem_text) > 500:
+                        problem_text = problem_text[:500] + "..."
+                    category_section += f"        <example_{idx}>{problem_text}</example_{idx}>\n"
+                category_section += "    </examples>\n"
+            category_section += "</target_category>\n"
+        else:
+            # Use random specialization for exploratory differentiation
+            specialization_focus = self._get_specialization_focus(question_type, differentiation_direction)
+            category_section = ""
         
-        # Analyze failed problems patterns
-        if failed_problems:
-            gaps.append({
-                "category": "failure_patterns",
-                "description": f"Consistent failures on {len(failed_problems)} problem types. Needs targeted improvements."
-            })
+        # Format input section
+        differentiation_input = WORKFLOW_DIFFERENTIATION_INPUT.format(
+            dataset=dataset,
+            target_round=target_round,
+            type=question_type,
+            direction=differentiation_direction,
+            specialization_focus=specialization_focus,
+            source_score=source_score,
+            source_graph=source_graph,
+            source_prompt=source_prompt,
+            operator_description=operator_description
+        )
         
-        return gaps
+        # Insert category section if available
+        if category_section:
+            # Insert before </differentiation_data>
+            differentiation_input = differentiation_input.replace(
+                "</differentiation_data>",
+                category_section + "</differentiation_data>"
+            )
+            
+            # Add category-specific instructions
+            category_instructions = f"""
+**IMPORTANT - Targeted Differentiation**:
+You are creating a workflow specialized SPECIFICALLY for problems in the category: "{target_category}"
+{f'Description: {category_description}' if category_description else ''}
+
+The example problems above show the exact type of problems this workflow should excel at.
+Make sure your differentiated workflow is optimized for THIS SPECIFIC category of problems.
+"""
+            differentiation_input += category_instructions
+        
+        # Format system prompt
+        differentiation_system = WORKFLOW_DIFFERENTIATION_PROMPT.format(type=question_type)
+        
+        # Combine all parts
+        return differentiation_input + WORKFLOW_DIFFERENTIATION_CUSTOM_USE + differentiation_system

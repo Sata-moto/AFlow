@@ -118,7 +118,7 @@ class WorkflowFusion:
             return response
             
         except FormatError as e:
-            logger.error(f"Format error in workflow fusion: {str(e)}")
+            logger.error(f"Format error in workflow fusion: {str(e)}", exc_info=True)
             # Try fallback approach
             raw_response = await self.fusion_llm(fusion_prompt)
             response = CodeProcessor.extract_fields_from_response(
@@ -133,7 +133,7 @@ class WorkflowFusion:
                 return None
                 
         except Exception as e:
-            logger.error(f"Error calling fusion LLM: {e}")
+            logger.error(f"Error calling fusion LLM: {e}", exc_info=True)
             return None
     
     async def create_fused_workflow(
@@ -168,7 +168,7 @@ class WorkflowFusion:
                 return None
                 
         except Exception as e:
-            logger.error(f"Error creating fused workflow: {e}")
+            logger.error(f"Error creating fused workflow: {e}", exc_info=True)
             return None
     
     def save_fusion_metadata(
@@ -217,7 +217,7 @@ class WorkflowFusion:
             logger.info(f"Fusion metadata saved to fusion_metadata_{fusion_id}.json")
             
         except Exception as e:
-            logger.error(f"Error saving fusion metadata: {e}")
+            logger.error(f"Error saving fusion metadata: {e}", exc_info=True)
     
     def create_fusion_experience_file(
         self, 
@@ -264,7 +264,7 @@ class WorkflowFusion:
             logger.info(f"Created fusion experience.json with father node {best_workflow['round']}")
             
         except Exception as e:
-            logger.error(f"Error creating fusion experience file: {e}")
+            logger.error(f"Error creating fusion experience file: {e}", exc_info=True)
     
     def create_fusion_log_file(self, target_dir: str, envelope_workflows: List[Dict]) -> None:
         """
@@ -303,7 +303,7 @@ class WorkflowFusion:
             logger.info(f"Created fusion log.json with metadata for {len(envelope_workflows)} source workflows")
             
         except Exception as e:
-            logger.error(f"Error creating fusion log file: {e}")
+            logger.error(f"Error creating fusion log file: {e}", exc_info=True)
     
     def save_fused_workflow_direct(
         self, 
@@ -362,5 +362,5 @@ class WorkflowFusion:
             return True
             
         except Exception as e:
-            logger.error(f"Error saving fused workflow directly: {e}")
+            logger.error(f"Error saving fused workflow directly: {e}", exc_info=True)
             return False

@@ -193,6 +193,29 @@ def fallback_sanitize_with_ast(code: str, entrypoint: Optional[str] = None) -> s
             # Start DFS from the entrypoint
             if entrypoint in dependencies:
                 dfs(entrypoint)
+            else:
+                # If exact match not found, try case-insensitive and fuzzy matching
+                entrypoint_lower = entrypoint.lower()
+                matched_entry = None
+                
+                # Try to find a close match
+                for name in dependencies:
+                    # Exact case-insensitive match
+                    if name.lower() == entrypoint_lower:
+                        matched_entry = name
+                        break
+                    # Check if one is a substring of the other (e.g., "cummulative" vs "cumulative")
+                    if (entrypoint_lower in name.lower() or name.lower() in entrypoint_lower):
+                        matched_entry = name
+                        break
+                
+                if matched_entry:
+                    print(f"Warning: Exact entrypoint '{entrypoint}' not found. Using '{matched_entry}' instead.")
+                    dfs(matched_entry)
+                else:
+                    # If still no match found, include all function definitions as a fallback
+                    print(f"Warning: Entrypoint '{entrypoint}' not found. Including all definitions.")
+                    reachable = set(dependencies.keys())
             
             # Filter definitions to only include reachable ones
             filtered_defs = []

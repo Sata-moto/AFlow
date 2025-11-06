@@ -11,8 +11,7 @@ Output the modified graph and all the necessary Prompts in prompt_custom (if nee
 The prompt you need to generate is only the one used in `prompt_custom.XXX` within Custom. Other methods already have built-in prompts and are prohibited from being generated. Only generate those needed for use in `prompt_custom`; please remove any unused prompts in prompt_custom.
 the generated prompt must not contain any placeholders.
 Considering information loss, complex graphs may yield better results, but insufficient information transmission can omit the solution. It's crucial to include necessary context during the process.
-
-**IMPORTANT**: For the <graph> section, provide ONLY the Workflow class definition. Do NOT include any import statements. The import statements will be automatically added by the system."""
+"""
 
 
 WORKFLOW_INPUT = """

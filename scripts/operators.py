@@ -65,12 +65,18 @@ class Operator:
                 
             # Convert to expected format based on the original implementation
             if isinstance(response, dict):
+                # Ensure 'response' key exists even if there was an error
+                if 'error' in response and 'response' not in response:
+                    logger.error(f"Operator {self.name} returned error: {response['error']}", exc_info=True)
+                    # Return empty response to avoid KeyError in workflow code
+                    return {"response": "", "error": response['error']}
                 return response
             else:
                 return {"response": response}
         except FormatError as e:
-            print(f"Format error in {self.name}: {str(e)}")
-            return {"error": str(e)}
+            error_msg = f"Format error in {self.name}: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+            return {"response": "", "error": str(e)}
     
     def _create_formatter(self, op_class, mode=None, **extra_kwargs) -> Optional[BaseFormatter]:
         """Create appropriate formatter based on operation class and mode"""
@@ -102,8 +108,12 @@ class AnswerGenerate(Operator):
 
     async def __call__(self, input: str) -> Tuple[str, str]:
         prompt = ANSWER_GENERATION_PROMPT.format(input=input)
-        response = await self._fill_node(AnswerGenerateOp, prompt, mode="xml_fill")
-        return response
+        result = await self._fill_node(AnswerGenerateOp, prompt, mode="xml_fill")
+        # Convert to unified format with 'response' key
+        # AnswerGenerateOp returns {"thought": ..., "answer": ...}
+        if isinstance(result, dict) and 'answer' in result:
+            return {"response": result['answer'], "thought": result.get('thought', '')}
+        return result
 
 
 class CustomCodeGenerate(Operator):
@@ -128,19 +138,43 @@ class ScEnsemble(Operator):
         super().__init__(llm, name)
 
     async def __call__(self, solutions: List[str], problem: str):
-        answer_mapping = {}
-        solution_text = ""
-        for index, solution in enumerate(solutions):
-            answer_mapping[chr(65 + index)] = index
-            solution_text += f"{chr(65 + index)}: \n{str(solution)}\n\n\n"
+        # Add detailed error logging
+        try:
+            if not isinstance(solutions, list):
+                error_msg = f"ScEnsemble Error: 'solutions' must be a list, got {type(solutions).__name__}. Value: {solutions}"
+                logger.error(error_msg, exc_info=True)
+                raise TypeError(error_msg)
+            
+            if not solutions:
+                error_msg = "ScEnsemble Error: 'solutions' list is empty"
+                logger.error(error_msg, exc_info=True)
+                raise ValueError(error_msg)
+            
+            answer_mapping = {}
+            solution_text = ""
+            for index, solution in enumerate(solutions):
+                answer_mapping[chr(65 + index)] = index
+                solution_text += f"{chr(65 + index)}: \n{str(solution)}\n\n\n"
 
-        prompt = SC_ENSEMBLE_PROMPT.format(question=problem, solutions=solution_text)
-        response = await self._fill_node(ScEnsembleOp, prompt, mode="xml_fill")
+            prompt = SC_ENSEMBLE_PROMPT.format(question=problem, solutions=solution_text)
+            response = await self._fill_node(ScEnsembleOp, prompt, mode="xml_fill")
 
-        answer = response.get("solution_letter", "")
-        answer = answer.strip().upper()
+            answer = response.get("solution_letter", "")
+            answer = answer.strip().upper()
+            
+            # Check if the answer is valid
+            if answer not in answer_mapping:
+                error_msg = f"ScEnsemble Error: Invalid solution letter '{answer}'. Valid options: {list(answer_mapping.keys())}"
+                logger.error(error_msg, exc_info=True)
+                logger.warning(f"Falling back to first solution due to invalid answer letter")
+                # Return the first solution as fallback
+                return {"response": solutions[0]}
 
-        return {"response": solutions[answer_mapping[answer]]}
+            return {"response": solutions[answer_mapping[answer]]}
+        except Exception as e:
+            error_msg = f"ScEnsemble Error: {type(e).__name__}: {str(e)}\nSolutions type: {type(solutions).__name__}\nSolutions value: {solutions}"
+            logger.error(error_msg, exc_info=True)
+            raise
 
 
 def run_code(code):
@@ -233,6 +267,12 @@ class Programmer(Operator):
             feedback=feedback
         )
         response = await self._fill_node(CodeGenerateOp, prompt, mode, function_name="solve")
+        
+        # Convert 'response' key to 'code' key for consistency
+        # CodeFormatter returns {"response": code}, but Programmer expects {"code": code}
+        if isinstance(response, dict) and 'response' in response and 'code' not in response:
+            return {"code": response['response'], "error": response.get('error')}
+        
         return response
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))

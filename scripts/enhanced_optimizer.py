@@ -14,6 +14,7 @@ from scripts.evaluator import DatasetType
 from scripts.optimizer import Optimizer, QuestionType, OptimizerType, GraphOptimize
 from scripts.workflow_fusion import WorkflowFusion
 from scripts.workflow_differentiation import WorkflowDifferentiation
+from scripts.problem_classifier import ProblemClassifier
 from scripts.optimizer_utils.convergence_utils import ConvergenceUtils
 from scripts.optimizer_utils.data_utils import DataUtils
 from scripts.optimizer_utils.evaluation_utils import EvaluationUtils
@@ -120,6 +121,16 @@ class EnhancedOptimizer(Optimizer):
                 optimized_path=optimized_path,
                 validation_rounds=self.validation_rounds,
             )
+            
+            # Initialize problem classifier for directed differentiation
+            self.problem_classifier = ProblemClassifier(
+                exec_llm_config=self.execute_llm_config,
+                dataset=self.dataset,
+                optimized_path=optimized_path
+            )
+            
+            # Track last differentiation round for each category
+            self.category_last_differentiation = {}
         
         # Initialize workflow management utilities
         self.workflow_manager = WorkflowManager(
@@ -156,6 +167,24 @@ class EnhancedOptimizer(Optimizer):
                 score = loop.run_until_complete(self.test())
             return None
 
+        # Step 1: Classify all problems in validation set before optimization starts
+        if self.enable_differentiation:
+            logger.info("=" * 80)
+            logger.info("STEP 1: Classifying all problems in validation set")
+            logger.info("=" * 80)
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            classification_success = loop.run_until_complete(self._ensure_problem_classification())
+            loop.close()
+            
+            if classification_success:
+                logger.info("✓ Problem classification completed successfully")
+                logger.info("=" * 80)
+            else:
+                logger.warning("Problem classification failed, differentiation will be disabled")
+                self.enable_differentiation = False
+        
+        # Step 2: Start optimization loop
         while self.round < self.max_rounds:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
@@ -256,7 +285,7 @@ class EnhancedOptimizer(Optimizer):
                 if attempt < max_retries - 1:
                     logger.warning(f"{operation_name.capitalize()} error on attempt {attempt + 1}/{max_retries}: {e}, retrying...")
                 else:
-                    logger.error(f"{operation_name.capitalize()} error after {max_retries} attempts: {e}")
+                    logger.error(f"{operation_name.capitalize()} error after {max_retries} attempts: {e}", exc_info=True)
         
         return None
 
@@ -295,6 +324,62 @@ class EnhancedOptimizer(Optimizer):
         logger.info(f"Fusion conditions met: {len(envelope_workflows)} envelope workflows available")
         return True
     
+    async def _ensure_problem_classification(self) -> bool:
+        """
+        确保问题分类已完成，如果未完成则执行分类
+        从 round_1 的 log.json 中读取问题数据进行分类
+        
+        Returns:
+            bool: 分类是否可用
+        """
+        if not self.enable_differentiation:
+            return False
+        
+        # Check if classification already exists
+        classifications = self.problem_classifier.load_classifications()
+        if classifications:
+            logger.info("Problem classifications already exist, skipping classification")
+            return True
+        
+        # Load validation data directly from validation file
+        try:
+            logger.info("No existing problem classification found, starting classification process...")
+            logger.info("Loading validation data from validation file...")
+            
+            # Construct validation file path
+            validation_file = f"data/datasets/{self.dataset.lower()}_validate.jsonl"
+            
+            if not os.path.exists(validation_file):
+                logger.warning(f"Validation file not found: {validation_file}")
+                return False
+            
+            # Load validation data
+            validation_data = []
+            with open(validation_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    validation_data.append(json.loads(line))
+            
+            if not validation_data:
+                logger.warning("Validation file is empty")
+                return False
+            
+            logger.info(f"Loaded {len(validation_data)} problems from validation set")
+            
+            # Perform classification
+            await self.problem_classifier.analyze_and_classify_problems(validation_data)
+            
+            # Log statistics
+            stats = self.problem_classifier.get_category_statistics()
+            logger.info(f"Classification complete: {len(stats)} categories identified")
+            for category, info in stats.items():
+                logger.info(f"  - {category}: {info['count']} problems")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to classify problems: {e}", exc_info=True)
+            return False
+    
     def _should_attempt_differentiation(self) -> bool:
         """
         Determine if we should attempt differentiation based on current conditions.
@@ -319,12 +404,17 @@ class EnhancedOptimizer(Optimizer):
         base_probability = self.differentiation_probability  # Base probability (p)
         max_probability = 2 * base_probability  # Maximum probability (2*p)
         
-        # Linear increase from base_p to 2*base_p over max_rounds
-        # For round r: probability = base_p + (2*base_p - base_p) * min(r-2, max_rounds-2) / (max_rounds-2)
-        # Simplified: probability = base_p * (1 + min(r-2, max_rounds-2) / (max_rounds-2))
+        # Linear increase from base_p to 2*base_p over first 3/4 of rounds, then maintain max
+        # Reaches max at 3/4 of max_rounds, then stays at max for remaining 1/4
         if self.max_rounds > 2:
-            progress_ratio = min(self.round - 2, self.max_rounds - 2) / (self.max_rounds - 2)
-            current_probability = base_probability * (1 + progress_ratio)
+            ramp_up_rounds = int(self.max_rounds * 0.75)  # 3/4 of total rounds
+            if self.round <= ramp_up_rounds:
+                # Linear increase from base_p to 2*base_p over ramp_up period
+                progress_ratio = (self.round - 2) / max(1, ramp_up_rounds - 2)
+                current_probability = base_probability * (1 + progress_ratio)
+            else:
+                # Maintain maximum probability for remaining 1/4 of rounds
+                current_probability = max_probability
         else:
             current_probability = base_probability
         
@@ -342,9 +432,6 @@ class EnhancedOptimizer(Optimizer):
         
         # Check if we have workflows to differentiate from
         workflows_data = self.data_utils.load_results(f"{self.root_path}/workflows")
-        if len(workflows_data) < 2:
-            logger.info("Insufficient workflows for differentiation (need at least 2)")
-            return False
         
         logger.info(f"Differentiation conditions met: probability check passed, {len(workflows_data)} workflows available")
         return True
@@ -366,7 +453,7 @@ class EnhancedOptimizer(Optimizer):
                 else:
                     logger.warning(f"Differentiation attempt {attempt + 1} failed, retrying...")
             except Exception as e:
-                logger.error(f"Differentiation attempt {attempt + 1} failed with error: {e}")
+                logger.error(f"Differentiation attempt {attempt + 1} failed with error: {e}", exc_info=True)
                 if attempt < self.max_retries - 1:
                     logger.info(f"Retrying differentiation (attempt {attempt + 2}/{self.max_retries})...")
                     continue
@@ -387,19 +474,26 @@ class EnhancedOptimizer(Optimizer):
             round_summaries = self.workflow_manager.get_round_summaries(workflow_results)
             self._update_differentiation_counts(round_summaries)
             
-            # Find best candidate for differentiation
+            # Find candidates for differentiation with adjusted scores
+            # analyze_differentiation_candidates now returns format compatible with select_round
             candidates = self.differentiation_processor.analyze_differentiation_candidates(round_summaries)
             if not candidates:
                 logger.warning("No suitable differentiation candidates found")
                 return None
             
-            # Select best candidate and update its differentiation count
-            selected_candidate = candidates[0]["workflow"]
+            # Use MCTS-based selection (same as optimization process)
+            # Candidates already have "score" key set to final_weight
+            selected = self.data_utils.select_round(candidates)
+            selected_candidate = selected["workflow"]
             source_round = selected_candidate['round']
+            adjusted_score = selected["score"]
+            original_score = selected["original_score"]
+            
+            # Update differentiation count
             self.workflow_differentiation_counts[source_round] = self.workflow_differentiation_counts.get(source_round, 0) + 1
             
-            logger.info(f"Selected workflow from round {source_round} for problem type specialization")
-            logger.info(f"  Score: {selected_candidate.get('avg_score', 0):.4f}, Weight: {candidates[0].get('final_weight', 0):.4f}")
+            logger.info(f"Selected workflow from round {source_round} for problem type specialization (MCTS-based)")
+            logger.info(f"  Original Score: {original_score:.4f}, Adjusted Score: {adjusted_score:.4f}")
             
             # Load source workflow and create differentiated version
             source_workflow_content = await self.workflow_manager.load_workflow_content(source_round)
@@ -408,11 +502,25 @@ class EnhancedOptimizer(Optimizer):
             # Calculate target round
             next_round = self.round + 1
             
+            # Select target category for differentiation
+            target_category, example_problems = self.problem_classifier.select_target_category_for_differentiation(
+                workflow_differentiation_history=self.workflow_manager.get_differentiation_history()
+            )
+            
+            if not target_category:
+                logger.warning("No suitable target category found for differentiation")
+                return None
+            
+            logger.info(f"Selected target category for differentiation: {target_category}")
+            logger.info(f"Providing {len(example_problems)} example problems for this category")
+            
             differentiation_response = await self.differentiation_processor.create_differentiated_workflow(
                 source_workflow=source_workflow_content,
                 differentiation_direction="problem_type_specialization",
                 operator_description=operator_description,
-                target_round=next_round
+                target_round=next_round,
+                target_category=target_category,
+                category_examples=example_problems
             )
             
             if not differentiation_response:
@@ -423,7 +531,8 @@ class EnhancedOptimizer(Optimizer):
             next_round = self.round + 1
             success = self.differentiation_processor.save_differentiated_workflow_direct(
                 differentiation_response, selected_candidate, "problem_type_specialization",
-                next_round, self.root_path, self.graph_utils, self.experience_utils
+                next_round, self.root_path, self.graph_utils, self.experience_utils,
+                target_category=target_category
             )
             
             if not success:
@@ -468,7 +577,7 @@ class EnhancedOptimizer(Optimizer):
             return differentiation_score
         
         except Exception as e:
-            logger.error(f"Error in single differentiation execution: {e}")
+            logger.error(f"Error in single differentiation execution: {e}", exc_info=True)
             return None
 
     def _update_differentiation_counts(self, round_summaries: List[Dict]) -> None:
@@ -539,7 +648,7 @@ class EnhancedOptimizer(Optimizer):
                 else:
                     logger.warning(f"Fusion attempt {attempt + 1} failed, retrying...")
             except Exception as e:
-                logger.error(f"Fusion attempt {attempt + 1} failed with error: {e}")
+                logger.error(f"Fusion attempt {attempt + 1} failed with error: {e}", exc_info=True)
                 if attempt < self.max_retries - 1:
                     logger.info(f"Retrying fusion (attempt {attempt + 2}/{self.max_retries})...")
                     continue
@@ -629,7 +738,7 @@ class EnhancedOptimizer(Optimizer):
                 return fusion_score
         
         except Exception as e:
-            logger.error(f"Error in single fusion execution: {e}")
+            logger.error(f"Error in single fusion execution: {e}", exc_info=True)
             return None
     
     async def _execute_fusion_async(self) -> bool:
@@ -686,7 +795,7 @@ class EnhancedOptimizer(Optimizer):
             )
             
         except Exception as e:
-            logger.error(f"Error executing fusion: {e}")
+            logger.error(f"Error executing fusion: {e}", exc_info=True)
             return False
     
     async def _evaluate_fused_workflow(self) -> float:
@@ -727,7 +836,7 @@ class EnhancedOptimizer(Optimizer):
             return avg_score
             
         except Exception as e:
-            logger.error(f"Error evaluating fused workflow: {e}")
+            logger.error(f"Error evaluating fused workflow: {e}", exc_info=True)
             return None
 
     async def _optimize_graph(self):

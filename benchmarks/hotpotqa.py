@@ -10,8 +10,8 @@ from scripts.logs import logger
 
 
 class HotpotQABenchmark(BaseBenchmark):
-    def __init__(self, name: str, file_path: str, log_path: str):
-        super().__init__(name, file_path, log_path)
+    def __init__(self, name: str, file_path: str, log_path: str, solved_threshold: float = 0.5):
+        super().__init__(name, file_path, log_path, solved_threshold)
 
     def normalize_answer(self, s: str) -> str:
         def remove_articles(text):

@@ -1,0 +1,41 @@
+{
+    "3": {
+        "score": 0.8023255813953488,
+        "success": {},
+        "failure": {
+            "5": {
+                "modification": "Workflow Differentiation: Specialized from round 3 (score: 0.8023) in direction 'problem_type_specialization'. I'm differentiating the parent workflow from array/list manipulation to graph traversal and network algorithms specialization. The key changes are:\n\n1. **Workflow Structure**: Maintaining the exact sa",
+                "score": 0.7790697674418605
+            }
+        }
+    },
+    "2": {
+        "score": 0.813953488372093,
+        "success": {},
+        "failure": {
+            "3": {
+                "modification": "Workflow Differentiation: Specialized from round 2 (score: 0.8140) in direction 'problem_type_specialization'. The parent workflow is differentiated to specialize in array and list manipulation algorithms. The modifications include:\n\n1. Enhanced the initial code generation with array/list-specific instruction ",
+                "score": 0.8023255813953488
+            },
+            "6": {
+                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [2, 3, 4] (scores: ['0.8140', '0.8023', '0.6279']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
+                "score": 0.813953488372093
+            }
+        }
+    },
+    "1": {
+        "score": 0.7325581395348837,
+        "success": {
+            "2": {
+                "modification": "Add Test operator to validate and potentially fix the generated solution, ensuring proper formatting and correctness before returning the final result.",
+                "score": 0.813953488372093
+            }
+        },
+        "failure": {
+            "4": {
+                "modification": "Workflow Differentiation: Specialized from round 1 (score: 0.7326) in direction 'problem_type_specialization'. The parent workflow is differentiated to specialize in dynamic programming optimization problems. The key modifications are:\n\n1. **Specialized Analysis**: The custom operator now analyzes problems spe",
+                "score": 0.627906976744186
+            }
+        }
+    }
+}

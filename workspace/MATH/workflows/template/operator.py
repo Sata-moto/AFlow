@@ -89,6 +89,12 @@ class Programmer(Operator):
             feedback=feedback
         )
         response = await self._fill_node(CodeGenerateOp, prompt, mode, function_name="solve")
+        
+        # Convert 'response' key to 'code' key for consistency
+        # CodeFormatter returns {"response": code}, but Programmer expects {"code": code}
+        if isinstance(response, dict) and 'response' in response and 'code' not in response:
+            return {"code": response['response'], "error": response.get('error')}
+        
         return response
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
@@ -128,16 +134,32 @@ class ScEnsemble(Operator):
         super().__init__(llm, name)
 
     async def __call__(self, solutions: List[str], problem: str):
-        answer_mapping = {}
-        solution_text = ""
-        for index, solution in enumerate(solutions):
-            answer_mapping[chr(65 + index)] = index
-            solution_text += f"{chr(65 + index)}: \n{str(solution)}\n\n\n"
+        # Add detailed error logging
+        try:
+            if not isinstance(solutions, list):
+                error_msg = f"ScEnsemble Error: 'solutions' must be a list, got {type(solutions).__name__}. Value: {solutions}"
+                logger.error(error_msg)
+                raise TypeError(error_msg)
+            
+            if not solutions:
+                error_msg = "ScEnsemble Error: 'solutions' list is empty"
+                logger.error(error_msg)
+                raise ValueError(error_msg)
+            
+            answer_mapping = {}
+            solution_text = ""
+            for index, solution in enumerate(solutions):
+                answer_mapping[chr(65 + index)] = index
+                solution_text += f"{chr(65 + index)}: \n{str(solution)}\n\n\n"
 
-        prompt = SC_ENSEMBLE_PROMPT.format(problem=problem, solutions=solution_text)
-        response = await self._fill_node(ScEnsembleOp, prompt, mode="xml_fill")
+            prompt = SC_ENSEMBLE_PROMPT.format(problem=problem, solutions=solution_text)
+            response = await self._fill_node(ScEnsembleOp, prompt, mode="xml_fill")
 
-        answer = response.get("solution_letter", "")
-        answer = answer.strip().upper()
+            answer = response.get("solution_letter", "")
+            answer = answer.strip().upper()
 
-        return {"response": solutions[answer_mapping[answer]]}
+            return {"response": solutions[answer_mapping[answer]]}
+        except Exception as e:
+            error_msg = f"ScEnsemble Error: {type(e).__name__}: {str(e)}\nSolutions type: {type(solutions).__name__}\nSolutions value: {solutions}"
+            logger.error(error_msg)
+            raise

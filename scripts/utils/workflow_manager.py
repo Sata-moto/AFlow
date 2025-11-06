@@ -210,6 +210,70 @@ class WorkflowManager:
             
         except Exception as e:
             logger.error(f"Error creating log file: {e}")
+    
+    def get_differentiation_history(self) -> Dict[str, Dict]:
+        """
+        Get differentiation history for all categories.
+        
+        Returns:
+            Dict mapping category names to their differentiation info:
+            {
+                "category_name": {
+                    "last_differentiation_round": int,
+                    "differentiation_count": int
+                }
+            }
+        """
+        differentiation_history = {}
+        
+        try:
+            workflows_path = f"{self.root_path}/workflows"
+            
+            # Check all round directories for differentiation metadata
+            for round_dir in os.listdir(workflows_path):
+                if not round_dir.startswith("round_"):
+                    continue
+                
+                round_path = os.path.join(workflows_path, round_dir)
+                if not os.path.isdir(round_path):
+                    continue
+                
+                # Check for differentiation metadata
+                experience_path = os.path.join(round_path, "experience.json")
+                if os.path.exists(experience_path):
+                    try:
+                        with open(experience_path, 'r', encoding='utf-8') as f:
+                            experience = json.load(f)
+                        
+                        # Check if this is a differentiated workflow
+                        operation = experience.get("operation", {})
+                        if operation.get("type") == "differentiation":
+                            target_category = operation.get("target_category")
+                            if target_category:
+                                round_num = int(round_dir.split("_")[1])
+                                
+                                if target_category not in differentiation_history:
+                                    differentiation_history[target_category] = {
+                                        "last_differentiation_round": round_num,
+                                        "differentiation_count": 1
+                                    }
+                                else:
+                                    history = differentiation_history[target_category]
+                                    history["last_differentiation_round"] = max(
+                                        history["last_differentiation_round"], 
+                                        round_num
+                                    )
+                                    history["differentiation_count"] += 1
+                    
+                    except Exception as e:
+                        logger.warning(f"Error reading experience file {experience_path}: {e}")
+                        continue
+            
+            return differentiation_history
+            
+        except Exception as e:
+            logger.error(f"Error getting differentiation history: {e}")
+            return {}
 
 
 class FusionChecker:

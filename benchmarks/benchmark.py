@@ -15,10 +15,11 @@ from scripts.utils.common import write_json_file
 
 
 class BaseBenchmark(ABC):
-    def __init__(self, name: str, file_path: str, log_path: str):
+    def __init__(self, name: str, file_path: str, log_path: str, solved_threshold: float = 0.5):
         self.name = name
         self.file_path = file_path
         self.log_path = log_path
+        self.solved_threshold = solved_threshold  # Threshold for considering a problem as solved
 
     PASS = "PASS"
     FAIL = "FAIL"
@@ -39,11 +40,11 @@ class BaseBenchmark(ABC):
         t_cost = df["cost"].max()
         a_cost = t_cost / len(df) if len(df) > 0 else 0
         
-        # Extract solved problems (problems with score > 0)
+        # Extract solved problems (problems with score >= solved_threshold)
         solved_problems = set()
         for i, result in enumerate(results):
             # Assume score is in the 4th position (index 3) based on get_result_columns
-            if len(result) > 3 and result[3] > 0:  # score > 0
+            if len(result) > 3 and result[3] >= self.solved_threshold:  # score >= threshold
                 solved_problems.add(i)  # Use index as problem identifier
         
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -51,7 +52,7 @@ class BaseBenchmark(ABC):
         output_file = os.path.join(self.log_path, filename)
         df.to_csv(output_file, index=False)
         logger.info(f"Results saved to {output_file}")
-        logger.info(f"Solved {len(solved_problems)} out of {len(results)} problems")
+        logger.info(f"Solved {len(solved_problems)} out of {len(results)} problems (threshold: {self.solved_threshold})")
         
         return avg_score, a_cost, t_cost, solved_problems
 
@@ -75,6 +76,19 @@ class BaseBenchmark(ABC):
             with log_file.open("r", encoding="utf-8") as f:
                 try:
                     data = json.load(f)
+                    # Handle different log.json formats
+                    if isinstance(data, dict):
+                        # Differentiation/fusion format: {"differentiation_metadata": {...}, "execution_logs": [...]}
+                        if "execution_logs" in data:
+                            data["execution_logs"].append(log_data)
+                            write_json_file(log_file, data, encoding="utf-8", indent=4)
+                            return
+                        else:
+                            # Convert old dict format to list
+                            data = []
+                    elif not isinstance(data, list):
+                        # Unexpected format, reset to empty list
+                        data = []
                 except json.JSONDecodeError:
                     data = []
         else:

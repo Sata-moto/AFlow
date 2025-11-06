@@ -30,6 +30,11 @@ class ExperienceUtils:
                         if experience_data[father_node]["score"] is None:
                             experience_data[father_node]["score"] = data["before"]
 
+                        # Skip rounds that haven't been evaluated yet (after is None)
+                        if data.get("after") is None:
+                            logger.info(f"Skipping {round_dir}: evaluation not completed yet (after=None)")
+                            continue
+
                         if data["succeed"]:
                             experience_data[father_node]["success"][round_number] = {
                                 "modification": data["modification"],
