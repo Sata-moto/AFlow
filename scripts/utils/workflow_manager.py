@@ -274,6 +274,62 @@ class WorkflowManager:
         except Exception as e:
             logger.error(f"Error getting differentiation history: {e}")
             return {}
+    
+    def has_fused_ancestor(self, round_number: int) -> bool:
+        """
+        Check if a workflow or any of its ancestors was created through fusion.
+        This prevents differentiation of fused workflows and all their descendants.
+        
+        Args:
+            round_number: The round number to check
+            
+        Returns:
+            bool: True if this workflow or any ancestor was fused
+        """
+        visited = set()  # Prevent infinite loops
+        current_round = round_number
+        
+        while current_round not in visited:
+            visited.add(current_round)
+            
+            # Check the experience.json for this round
+            round_dir = os.path.join(self.root_path, "workflows", f"round_{current_round}")
+            experience_path = os.path.join(round_dir, "experience.json")
+            
+            if not os.path.exists(experience_path):
+                # No experience file means this is likely round 1 (template)
+                return False
+            
+            try:
+                with open(experience_path, 'r', encoding='utf-8') as f:
+                    experience = json.load(f)
+                
+                # Check if this round is marked as fused
+                if experience.get('is_fused', False):
+                    logger.info(f"Round {round_number} has fused ancestor: round {current_round}")
+                    return True
+                
+                # Check if operation type is fusion (backwards compatibility)
+                operation = experience.get('operation', {})
+                if operation.get('type') == 'fusion':
+                    logger.info(f"Round {round_number} has fused ancestor: round {current_round}")
+                    return True
+                
+                # Move to parent (father node)
+                father_node = experience.get('father node')
+                if father_node is None or father_node == current_round:
+                    # Reached the root
+                    return False
+                
+                current_round = father_node
+                
+            except Exception as e:
+                logger.warning(f"Error reading experience file for round {current_round}: {e}")
+                return False
+        
+        # If we exit the loop, we've detected a cycle (shouldn't happen normally)
+        logger.warning(f"Detected cycle in workflow ancestry for round {round_number}")
+        return False
 
 
 class FusionChecker:

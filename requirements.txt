@@ -33,3 +33,11 @@ requests==2.32.5
 aiofiles==24.1.0
 tree_sitter==0.25.1
 openai==1.108.2
+
+# Local Model Support
+transformers>=4.40.0
+torch>=2.0.0
+bitsandbytes>=0.43.0
+accelerate>=0.27.0
+sentencepiece>=0.2.0
+protobuf>=3.20.0

@@ -53,7 +53,10 @@ class DROPBenchmark(BaseBenchmark):
         return await graph(input_text)
 
     async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, str, float, float]:
-        input_text = problem["context"]
+        original_context = problem["context"]
+        
+        input_text = original_context + "\n\nIMPORTANT: Provide ONLY the final answer (a number or a short phrase). Do not include explanations, reasoning, or extra text. Just give the direct answer."
+        
         expected_output = problem["ref_text"]
         answers = expected_output.split("|")
 

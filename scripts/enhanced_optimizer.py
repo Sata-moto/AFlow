@@ -110,6 +110,13 @@ class EnhancedOptimizer(Optimizer):
                 validation_rounds=self.validation_rounds,
             )
         
+        # Initialize workflow management utilities (needed by differentiation processor)
+        self.workflow_manager = WorkflowManager(
+            root_path=self.root_path,
+            data_utils=self.data_utils,
+            graph_utils=self.graph_utils
+        )
+        
         # Initialize differentiation processor
         if self.enable_differentiation:
             self.differentiation_processor = WorkflowDifferentiation(
@@ -120,6 +127,7 @@ class EnhancedOptimizer(Optimizer):
                 operators=self.operators,
                 optimized_path=optimized_path,
                 validation_rounds=self.validation_rounds,
+                workflow_manager=self.workflow_manager  # Pass workflow_manager
             )
             
             # Initialize problem classifier for directed differentiation
@@ -131,13 +139,6 @@ class EnhancedOptimizer(Optimizer):
             
             # Track last differentiation round for each category
             self.category_last_differentiation = {}
-        
-        # Initialize workflow management utilities
-        self.workflow_manager = WorkflowManager(
-            root_path=self.root_path,
-            data_utils=self.data_utils,
-            graph_utils=self.graph_utils
-        )
         
         # Initialize fusion checker
         self.fusion_checker = FusionChecker(root_path=self.root_path)

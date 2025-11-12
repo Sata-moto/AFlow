@@ -7,6 +7,20 @@
         "extract_answer_code": "None"
     },
     {
+        "question": "Write a function to find the Eulerian number a(n, m).\n\ndef eulerian_num(n, m): ",
+        "right_answer": "Error: .\n Solution: def eulerian_num(n, m):\n    if m < 0 or m > n:\n        return 0\n    if n == 0 and m == 0:\n        return 1\n    if n == 1 and m == 0:\n        return 1\n    if n == 1 and m == 1:\n        return 0\n    A = [[0] * (n + 1) for _ in range(n + 1)]\n    A[0][0] = 1\n    for i in range(1, n + 1):\n        for j in range(i + 1):\n            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]\n    return A[n][m].\n Test: def check():\n    assert eulerian_num(3, 1) == 4\n    assert eulerian_num(4, 1) == 11\n    assert eulerian_num(5, 3) == 26\n\nCorrect Solution:def eulerian_num(n, m): \n\tif (m >= n or n == 0): \n\t\treturn 0 \n\tif (m == 0): \n\t\treturn 1 \n\treturn ((n - m) * eulerian_num(n - 1, m - 1) +(m + 1) * eulerian_num(n - 1, m))",
+        "model_output": "def eulerian_num(n, m):\n    if m < 0 or m > n:\n        return 0\n    if n == 0 and m == 0:\n        return 1\n    if n == 1 and m == 0:\n        return 1\n    if n == 1 and m == 1:\n        return 0\n    A = [[0] * (n + 1) for _ in range(n + 1)]\n    A[0][0] = 1\n    for i in range(1, n + 1):\n        for j in range(i + 1):\n            A[i][j] = (i - j) * A[i - 1][j] + (j + 1) * A[i - 1][j - 1]\n    return A[n][m]",
+        "extracted_output": 0.0,
+        "extract_answer_code": "None"
+    },
+    {
+        "question": "Write a function to find the n'th star number.\n\ndef find_star_num(n): ",
+        "right_answer": "Error: .\n Solution: def find_star_num(n):\n    if n < 1:\n        return 0\n    return n * (2 * n - 1).\n Test: def check():\n    assert find_star_num(3) == 37\n    assert find_star_num(4) == 73\n    assert find_star_num(5) == 121\n\nCorrect Solution:def find_star_num(n): \n\treturn (6 * n * (n - 1) + 1) ",
+        "model_output": "def find_star_num(n):\n    if n < 1:\n        return 0\n    return n * (2 * n - 1)",
+        "extracted_output": 0.0,
+        "extract_answer_code": "None"
+    },
+    {
         "question": "Write a function to extract the number of unique tuples in the given list.\n\ndef extract_freq(test_list):",
         "right_answer": "Error: .\n Solution: def extract_freq(test_list):\n    unique_tuples = set(test_list)\n    return len(unique_tuples).\n Test: def check():\n    assert extract_freq([(3, 4), (1, 2), (4, 3), (5, 6)] ) == 3\n    assert extract_freq([(4, 15), (2, 3), (5, 4), (6, 7)] ) == 4\n    assert extract_freq([(5, 16), (2, 3), (6, 5), (6, 9)] ) == 4\n\nCorrect Solution:def extract_freq(test_list):\n  res = len(list(set(tuple(sorted(sub)) for sub in test_list)))\n  return (res)",
         "model_output": "def extract_freq(test_list):\n    unique_tuples = set(test_list)\n    return len(unique_tuples)",
@@ -14,9 +28,23 @@
         "extract_answer_code": "None"
     },
     {
-        "question": "Write a function to find the surface area of a cylinder.\n\ndef surfacearea_cylinder(r,h):",
-        "right_answer": "Error: .\n Solution: import math\ndef surfacearea_cylinder(r, h):\n    lateral_area = 2 * math.pi * r * h\n    base_area = math.pi * r ** 2\n    total_surface_area = lateral_area + 2 * base_area\n    return total_surface_area.\n Test: def check():\n    assert surfacearea_cylinder(10,5)==942.45\n    assert surfacearea_cylinder(4,5)==226.18800000000002\n    assert surfacearea_cylinder(4,10)==351.848\n\nCorrect Solution:def surfacearea_cylinder(r,h):\n  surfacearea=((2*3.1415*r*r) +(2*3.1415*r*h))\n  return surfacearea",
-        "model_output": "import math\ndef surfacearea_cylinder(r, h):\n    lateral_area = 2 * math.pi * r * h\n    base_area = math.pi * r ** 2\n    total_surface_area = lateral_area + 2 * base_area\n    return total_surface_area",
+        "question": "Write a function to convert a given string to a tuple of characters.\n\ndef string_to_tuple(str1):",
+        "right_answer": "Error: .\n Solution: def string_to_tuple(str1):\n    return tuple(str1).\n Test: def check():\n    assert string_to_tuple(\"python 3.0\")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')\n    assert string_to_tuple(\"item1\")==('i', 't', 'e', 'm', '1')\n    assert string_to_tuple(\"15.10\")==('1', '5', '.', '1', '0')\n\nCorrect Solution:def string_to_tuple(str1):\n    result = tuple(x for x in str1 if not x.isspace()) \n    return result",
+        "model_output": "def string_to_tuple(str1):\n    return tuple(str1)",
+        "extracted_output": 0.0,
+        "extract_answer_code": "None"
+    },
+    {
+        "question": "Write a function to find nth polite number. geeksforgeeks.org/n-th-polite-number/\nimport math \ndef is_polite(n): ",
+        "right_answer": "Error: .\n Solution: import math\ndef is_polite(n):\n    if n < 1:\n        return False\n    if n == 1:\n        return True\n    for k in range(2, n):\n        if (n - k * (k - 1) // 2) % k == 0 and (n - k * (k - 1) // 2) // k > 0:\n            return True\n    return False\nn = 10.\n Test: def check():\n    assert is_polite(7) == 11\n    assert is_polite(4) == 7\n    assert is_polite(9) == 13\n\nCorrect Solution:import math \ndef is_polite(n): \n\tn = n + 1\n\treturn (int)(n+(math.log((n + math.log(n, 2)), 2))) ",
+        "model_output": "import math\ndef is_polite(n):\n    if n < 1:\n        return False\n    if n == 1:\n        return True\n    for k in range(2, n):\n        if (n - k * (k - 1) // 2) % k == 0 and (n - k * (k - 1) // 2) // k > 0:\n            return True\n    return False\nn = 10",
+        "extracted_output": 0.0,
+        "extract_answer_code": "None"
+    },
+    {
+        "question": "Write a function which takes a tuple of tuples and returns the average value for each tuple as a list.\n\ndef average_tuple(nums):",
+        "right_answer": "Error: .\n Solution: def average_tuple(nums):\n    return [sum(t) / len(t) for t in nums].\n Test: def check():\n    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]\n    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]\n    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]\n\nCorrect Solution:def average_tuple(nums):\n    result = [sum(x) / len(x) for x in zip(*nums)]\n    return result",
+        "model_output": "def average_tuple(nums):\n    return [sum(t) / len(t) for t in nums]",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     },
@@ -24,13 +52,6 @@
         "question": "Write a function to convert a snake case string to camel case string.\n\ndef snake_to_camel(word):",
         "right_answer": "Error: .\n Solution: def snake_to_camel(word):\n    components = word.split('_')\n    return components[0] + ''.join((x.title() for x in components[1:])).\n Test: def check():\n    assert snake_to_camel('python_program')=='PythonProgram'\n    assert snake_to_camel('python_language')==('PythonLanguage')\n    assert snake_to_camel('programming_language')==('ProgrammingLanguage')\n\nCorrect Solution:def snake_to_camel(word):\n        import re\n        return ''.join(x.capitalize() or '_' for x in word.split('_'))",
         "model_output": "def snake_to_camel(word):\n    components = word.split('_')\n    return components[0] + ''.join((x.title() for x in components[1:]))",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
-        "question": "Write a function to return two words from a list of words starting with letter 'p'.\nimport re\ndef start_withp(words):",
-        "right_answer": "Error: .\n Solution: import re\ndef start_withp(words):\n    p_words = [word for word in words if word.lower().startswith('p')]\n    return p_words[:2].\n Test: def check():\n    assert start_withp([\"Python PHP\", \"Java JavaScript\", \"c c++\"])==('Python', 'PHP')\n    assert start_withp([\"Python Programming\",\"Java Programming\"])==('Python','Programming')\n    assert start_withp([\"Pqrst Pqr\",\"qrstuv\"])==('Pqrst','Pqr')\n\nCorrect Solution:import re\ndef start_withp(words):\n for w in words:\n        m = re.match(\"(P\\w+)\\W(P\\w+)\", w)\n        if m:\n            return m.groups()",
-        "model_output": "import re\ndef start_withp(words):\n    p_words = [word for word in words if word.lower().startswith('p')]\n    return p_words[:2]",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     },
@@ -49,51 +70,9 @@
         "extract_answer_code": "None"
     },
     {
-        "question": "Write a function to find nth polite number. geeksforgeeks.org/n-th-polite-number/\nimport math \ndef is_polite(n): ",
-        "right_answer": "Error: .\n Solution: def is_polite(n):\n    if n < 1:\n        return False\n    if n % 2 == 1:\n        return True\n    for i in range(1, int(math.sqrt(n)) + 1):\n        if n % i == 0:\n            if i > 1 and n // i % 2 == 1:\n                return True\n            if n // i > 1 and i % 2 == 1:\n                return True\n    return False\nn = 10.\n Test: def check():\n    assert is_polite(7) == 11\n    assert is_polite(4) == 7\n    assert is_polite(9) == 13\n\nCorrect Solution:import math \ndef is_polite(n): \n\tn = n + 1\n\treturn (int)(n+(math.log((n + math.log(n, 2)), 2))) ",
-        "model_output": "def is_polite(n):\n    if n < 1:\n        return False\n    if n % 2 == 1:\n        return True\n    for i in range(1, int(math.sqrt(n)) + 1):\n        if n % i == 0:\n            if i > 1 and n // i % 2 == 1:\n                return True\n            if n // i > 1 and i % 2 == 1:\n                return True\n    return False\nn = 10",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
-        "question": "Write a function to convert a given string to a tuple of characters.\n\ndef string_to_tuple(str1):",
-        "right_answer": "Error: .\n Solution: def string_to_tuple(str1):\n    return tuple(str1).\n Test: def check():\n    assert string_to_tuple(\"python 3.0\")==('p', 'y', 't', 'h', 'o', 'n', '3', '.', '0')\n    assert string_to_tuple(\"item1\")==('i', 't', 'e', 'm', '1')\n    assert string_to_tuple(\"15.10\")==('1', '5', '.', '1', '0')\n\nCorrect Solution:def string_to_tuple(str1):\n    result = tuple(x for x in str1 if not x.isspace()) \n    return result",
-        "model_output": "def string_to_tuple(str1):\n    return tuple(str1)",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
-        "question": "Write a function to find k number of smallest pairs which consist of one element from the first array and one element from the second array.\nimport heapq\ndef k_smallest_pairs(nums1, nums2, k):",
-        "right_answer": "Error: .\n Solution: import heapq\ndef k_smallest_pairs(nums1, nums2, k):\n    if not nums1 or not nums2 or k <= 0:\n        return []\n    min_heap = []\n    for i in range(min(k, len(nums1))):\n        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))\n    result = []\n    while k > 0 and min_heap:\n        (sum_pair, i, j) = heapq.heappop(min_heap)\n        result.append((nums1[i], nums2[j]))\n        if j + 1 < len(nums2):\n            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))\n        k -= 1\n    return result.\n Test: def check():\n    assert k_smallest_pairs([1,3,7],[2,4,6],2)==[[1, 2], [1, 4]]\n    assert k_smallest_pairs([1,3,7],[2,4,6],1)==[[1, 2]]\n    assert k_smallest_pairs([1,3,7],[2,4,6],7)==[[1, 2], [1, 4], [3, 2], [1, 6], [3, 4], [3, 6], [7, 2]]\n\nCorrect Solution:import heapq\ndef k_smallest_pairs(nums1, nums2, k):\n   queue = []\n   def push(i, j):\n       if i < len(nums1) and j < len(nums2):\n           heapq.heappush(queue, [nums1[i] + nums2[j], i, j])\n   push(0, 0)\n   pairs = []\n   while queue and len(pairs) < k:\n       _, i, j = heapq.heappop(queue)\n       pairs.append([nums1[i], nums2[j]])\n       push(i, j + 1)\n       if j == 0:\n           push(i + 1, 0)\n   return pairs",
-        "model_output": "import heapq\ndef k_smallest_pairs(nums1, nums2, k):\n    if not nums1 or not nums2 or k <= 0:\n        return []\n    min_heap = []\n    for i in range(min(k, len(nums1))):\n        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))\n    result = []\n    while k > 0 and min_heap:\n        (sum_pair, i, j) = heapq.heappop(min_heap)\n        result.append((nums1[i], nums2[j]))\n        if j + 1 < len(nums2):\n            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))\n        k -= 1\n    return result",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
-        "question": "Write a function to find the Eulerian number a(n, m).\n\ndef eulerian_num(n, m): ",
-        "right_answer": "Error: .\n Solution: def eulerian_num(n, m):\n    if m < 0 or m > n:\n        return 0\n    if n == 0 and m == 0:\n        return 1\n    if n == 1 and m == 0:\n        return 1\n    if n == 1 and m == 1:\n        return 0\n    A = [[0] * (n + 1) for _ in range(n + 1)]\n    A[0][0] = 1\n    for i in range(1, n + 1):\n        A[i][0] = 0\n        A[i][i] = 0\n    for i in range(1, n + 1):\n        for j in range(1, i):\n            A[i][j] = (i - j) * A[i - 1][j - 1] + (j + 1) * A[i - 1][j]\n    return A[n][m].\n Test: def check():\n    assert eulerian_num(3, 1) == 4\n    assert eulerian_num(4, 1) == 11\n    assert eulerian_num(5, 3) == 26\n\nCorrect Solution:def eulerian_num(n, m): \n\tif (m >= n or n == 0): \n\t\treturn 0 \n\tif (m == 0): \n\t\treturn 1 \n\treturn ((n - m) * eulerian_num(n - 1, m - 1) +(m + 1) * eulerian_num(n - 1, m))",
-        "model_output": "def eulerian_num(n, m):\n    if m < 0 or m > n:\n        return 0\n    if n == 0 and m == 0:\n        return 1\n    if n == 1 and m == 0:\n        return 1\n    if n == 1 and m == 1:\n        return 0\n    A = [[0] * (n + 1) for _ in range(n + 1)]\n    A[0][0] = 1\n    for i in range(1, n + 1):\n        A[i][0] = 0\n        A[i][i] = 0\n    for i in range(1, n + 1):\n        for j in range(1, i):\n            A[i][j] = (i - j) * A[i - 1][j - 1] + (j + 1) * A[i - 1][j]\n    return A[n][m]",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
-        "question": "Write a function that matches a string that has an 'a' followed by one or more 'b's. https://www.w3resource.com/python-exercises/re/python-re-exercise-3.php\nimport re\ndef text_match_zero_one(text):",
-        "right_answer": "Error: .\n Solution: import re\ndef text_match_zero_one(text):\n    pattern = 'a+b+'\n    if re.search(pattern, text):\n        return 'Match found'\n    else:\n        return 'No match'.\n Test: def check():\n    assert text_match_zero_one(\"ac\")==False\n    assert text_match_zero_one(\"dc\")==False\n    assert text_match_zero_one(\"abbbba\")==True\n    assert text_match_zero_one(\"dsabbbba\")==True\n    assert text_match_zero_one(\"asbbbba\")==False\n    assert text_match_zero_one(\"abaaa\")==True\n\nCorrect Solution:import re\ndef text_match_zero_one(text):\n        patterns = 'ab+?'\n        if re.search(patterns,  text):\n                return True\n        else:\n                return False",
-        "model_output": "import re\ndef text_match_zero_one(text):\n    pattern = 'a+b+'\n    if re.search(pattern, text):\n        return 'Match found'\n    else:\n        return 'No match'",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
         "question": "Write a function to remove odd characters in a string.\n\ndef remove_odd(str1):",
         "right_answer": "Error: .\n Solution: def remove_odd(str1):\n    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0)).\n Test: def check():\n    assert remove_odd(\"python\")==(\"yhn\")\n    assert remove_odd(\"program\")==(\"rga\")\n    assert remove_odd(\"language\")==(\"agae\")\n\nCorrect Solution:def remove_odd(str1):\n str2 = ''\n for i in range(1, len(str1) + 1):\n    if(i % 2 == 0):\n        str2 = str2 + str1[i - 1]\n return str2",
         "model_output": "def remove_odd(str1):\n    return ''.join((char for (index, char) in enumerate(str1) if index % 2 == 0))",
-        "extracted_output": 0.0,
-        "extract_answer_code": "None"
-    },
-    {
-        "question": "Write a function which takes a tuple of tuples and returns the average value for each tuple as a list.\n\ndef average_tuple(nums):",
-        "right_answer": "Error: .\n Solution: def average_tuple(nums):\n    return [sum(t) / len(t) for t in nums].\n Test: def check():\n    assert average_tuple(((10, 10, 10, 12), (30, 45, 56, 45), (81, 80, 39, 32), (1, 2, 3, 4)))==[30.5, 34.25, 27.0, 23.25]\n    assert average_tuple(((1, 1, -5), (30, -15, 56), (81, -60, -39), (-10, 2, 3)))== [25.5, -18.0, 3.75]\n    assert average_tuple( ((100, 100, 100, 120), (300, 450, 560, 450), (810, 800, 390, 320), (10, 20, 30, 40)))==[305.0, 342.5, 270.0, 232.5]\n\nCorrect Solution:def average_tuple(nums):\n    result = [sum(x) / len(x) for x in zip(*nums)]\n    return result",
-        "model_output": "def average_tuple(nums):\n    return [sum(t) / len(t) for t in nums]",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     },
@@ -112,16 +91,30 @@
         "extract_answer_code": "None"
     },
     {
-        "question": "Write a function that takes in a sorted array, its length (n), and an element and returns whether the element is the majority element in the given sorted array. (The majority element is the element that occurs more than n/2 times.)\n\ndef is_majority(arr, n, x):",
-        "right_answer": "Error: list index out of range.\n Solution: def is_majority(arr, n, x):\n    if n == 0:\n        return False\n    count = 0\n    for i in range(n):\n        if arr[i] == x:\n            count += 1\n    return count > n // 2.\n Test: def check():\n    assert is_majority([1, 2, 3, 3, 3, 3, 10], 7, 3) == True\n    assert is_majority([1, 1, 2, 4, 4, 4, 6, 6], 8, 4) == False\n    assert is_majority([1, 1, 1, 2, 2], 5, 1) == True\n    assert is_majority([1, 1, 2, 2], 5, 1) == False\n\nCorrect Solution:def is_majority(arr, n, x):\n\ti = binary_search(arr, 0, n-1, x)\n\tif i == -1:\n\t\treturn False\n\tif ((i + n//2) <= (n -1)) and arr[i + n//2] == x:\n\t\treturn True\n\telse:\n\t\treturn False\ndef binary_search(arr, low, high, x):\n\tif high >= low:\n\t\tmid = (low + high)//2 \n\t\tif (mid == 0 or x > arr[mid-1]) and (arr[mid] == x):\n\t\t\treturn mid\n\t\telif x > arr[mid]:\n\t\t\treturn binary_search(arr, (mid + 1), high, x)\n\t\telse:\n\t\t\treturn binary_search(arr, low, (mid -1), x)\n\treturn -1",
-        "model_output": "def is_majority(arr, n, x):\n    if n == 0:\n        return False\n    count = 0\n    for i in range(n):\n        if arr[i] == x:\n            count += 1\n    return count > n // 2",
+        "question": "Write a function that matches a string that has an 'a' followed by one or more 'b's. https://www.w3resource.com/python-exercises/re/python-re-exercise-3.php\nimport re\ndef text_match_zero_one(text):",
+        "right_answer": "Error: .\n Solution: import re\ndef text_match_zero_one(text):\n    pattern = 'a+b+'\n    if re.search(pattern, text):\n        return 'Match found'\n    else:\n        return 'No match'.\n Test: def check():\n    assert text_match_zero_one(\"ac\")==False\n    assert text_match_zero_one(\"dc\")==False\n    assert text_match_zero_one(\"abbbba\")==True\n    assert text_match_zero_one(\"dsabbbba\")==True\n    assert text_match_zero_one(\"asbbbba\")==False\n    assert text_match_zero_one(\"abaaa\")==True\n\nCorrect Solution:import re\ndef text_match_zero_one(text):\n        patterns = 'ab+?'\n        if re.search(patterns,  text):\n                return True\n        else:\n                return False",
+        "model_output": "import re\ndef text_match_zero_one(text):\n    pattern = 'a+b+'\n    if re.search(pattern, text):\n        return 'Match found'\n    else:\n        return 'No match'",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     },
     {
-        "question": "Write a function to find the n'th star number.\n\ndef find_star_num(n): ",
-        "right_answer": "Error: .\n Solution: def find_star_num(n):\n    if n < 1:\n        return 0\n    return n * (2 * n - 1).\n Test: def check():\n    assert find_star_num(3) == 37\n    assert find_star_num(4) == 73\n    assert find_star_num(5) == 121\n\nCorrect Solution:def find_star_num(n): \n\treturn (6 * n * (n - 1) + 1) ",
-        "model_output": "def find_star_num(n):\n    if n < 1:\n        return 0\n    return n * (2 * n - 1)",
+        "question": "Write a python function to count the number of equal numbers from three given integers.\n\ndef test_three_equal(x,y,z):",
+        "right_answer": "Error: .\n Solution: def test_three_equal(x, y, z):\n    count = 0\n    if x == y:\n        count += 1\n    if y == z:\n        count += 1\n    if x == z:\n        count += 1\n    return count.\n Test: def check():\n    assert test_three_equal(1,1,1) == 3\n    assert test_three_equal(-1,-2,-3) == 0\n    assert test_three_equal(1,2,2) == 2\n\nCorrect Solution:def test_three_equal(x,y,z):\n  result = set([x,y,z])\n  if len(result)==3:\n    return 0\n  else:\n    return 4-len(result)",
+        "model_output": "def test_three_equal(x, y, z):\n    count = 0\n    if x == y:\n        count += 1\n    if y == z:\n        count += 1\n    if x == z:\n        count += 1\n    return count",
+        "extracted_output": 0.0,
+        "extract_answer_code": "None"
+    },
+    {
+        "question": "Write a function to return two words from a list of words starting with letter 'p'.\nimport re\ndef start_withp(words):",
+        "right_answer": "Error: .\n Solution: import re\ndef start_withp(words):\n    p_words = [word for word in words if word.lower().startswith('p')]\n    return p_words[:2].\n Test: def check():\n    assert start_withp([\"Python PHP\", \"Java JavaScript\", \"c c++\"])==('Python', 'PHP')\n    assert start_withp([\"Python Programming\",\"Java Programming\"])==('Python','Programming')\n    assert start_withp([\"Pqrst Pqr\",\"qrstuv\"])==('Pqrst','Pqr')\n\nCorrect Solution:import re\ndef start_withp(words):\n for w in words:\n        m = re.match(\"(P\\w+)\\W(P\\w+)\", w)\n        if m:\n            return m.groups()",
+        "model_output": "import re\ndef start_withp(words):\n    p_words = [word for word in words if word.lower().startswith('p')]\n    return p_words[:2]",
+        "extracted_output": 0.0,
+        "extract_answer_code": "None"
+    },
+    {
+        "question": "Write a python function to count the number of rotations required to generate a sorted array. https://www.geeksforgeeks.org/count-of-rotations-required-to-generate-a-sorted-array/\n\ndef count_rotation(arr):   ",
+        "right_answer": "Error: .\n Solution: def count_rotation(arr):\n    n = len(arr)\n    (low, high) = (0, n - 1)\n    while low <= high:\n        if arr[low] <= arr[high]:\n            return low\n        mid = (low + high) // 2\n        next_mid = (mid + 1) % n\n        prev_mid = (mid - 1 + n) % n\n        if arr[mid] <= arr[next_mid] and arr[mid] <= arr[prev_mid]:\n            return mid\n        if arr[mid] <= arr[high]:\n            high = mid - 1\n        else:\n            low = mid + 1\n    return 0.\n Test: def check():\n    assert count_rotation([3,2,1]) == 1\n    assert count_rotation([4,5,1,2,3]) == 2\n    assert count_rotation([7,8,9,1,2,3]) == 3\n    assert count_rotation([1,2,3]) == 0\n    assert count_rotation([1,3,2]) == 2\n\nCorrect Solution:def count_rotation(arr):   \n    for i in range (1,len(arr)): \n        if (arr[i] < arr[i - 1]): \n            return i  \n    return 0",
+        "model_output": "def count_rotation(arr):\n    n = len(arr)\n    (low, high) = (0, n - 1)\n    while low <= high:\n        if arr[low] <= arr[high]:\n            return low\n        mid = (low + high) // 2\n        next_mid = (mid + 1) % n\n        prev_mid = (mid - 1 + n) % n\n        if arr[mid] <= arr[next_mid] and arr[mid] <= arr[prev_mid]:\n            return mid\n        if arr[mid] <= arr[high]:\n            high = mid - 1\n        else:\n            low = mid + 1\n    return 0",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     },
@@ -147,16 +140,16 @@
         "extract_answer_code": "None"
     },
     {
-        "question": "Write a python function to count the number of equal numbers from three given integers.\n\ndef test_three_equal(x,y,z):",
-        "right_answer": "Error: .\n Solution: def test_three_equal(x, y, z):\n    count = 0\n    if x == y:\n        count += 1\n    if y == z:\n        count += 1\n    if x == z:\n        count += 1\n    return count.\n Test: def check():\n    assert test_three_equal(1,1,1) == 3\n    assert test_three_equal(-1,-2,-3) == 0\n    assert test_three_equal(1,2,2) == 2\n\nCorrect Solution:def test_three_equal(x,y,z):\n  result = set([x,y,z])\n  if len(result)==3:\n    return 0\n  else:\n    return 4-len(result)",
-        "model_output": "def test_three_equal(x, y, z):\n    count = 0\n    if x == y:\n        count += 1\n    if y == z:\n        count += 1\n    if x == z:\n        count += 1\n    return count",
+        "question": "Write a function to find k number of smallest pairs which consist of one element from the first array and one element from the second array.\nimport heapq\ndef k_smallest_pairs(nums1, nums2, k):",
+        "right_answer": "Error: .\n Solution: import heapq\ndef k_smallest_pairs(nums1, nums2, k):\n    if not nums1 or not nums2 or k <= 0:\n        return []\n    min_heap = []\n    for i in range(min(k, len(nums1))):\n        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))\n    result = []\n    while k > 0 and min_heap:\n        (sum_pair, i, j) = heapq.heappop(min_heap)\n        result.append((nums1[i], nums2[j]))\n        if j + 1 < len(nums2):\n            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))\n        k -= 1\n    return result.\n Test: def check():\n    assert k_smallest_pairs([1,3,7],[2,4,6],2)==[[1, 2], [1, 4]]\n    assert k_smallest_pairs([1,3,7],[2,4,6],1)==[[1, 2]]\n    assert k_smallest_pairs([1,3,7],[2,4,6],7)==[[1, 2], [1, 4], [3, 2], [1, 6], [3, 4], [3, 6], [7, 2]]\n\nCorrect Solution:import heapq\ndef k_smallest_pairs(nums1, nums2, k):\n   queue = []\n   def push(i, j):\n       if i < len(nums1) and j < len(nums2):\n           heapq.heappush(queue, [nums1[i] + nums2[j], i, j])\n   push(0, 0)\n   pairs = []\n   while queue and len(pairs) < k:\n       _, i, j = heapq.heappop(queue)\n       pairs.append([nums1[i], nums2[j]])\n       push(i, j + 1)\n       if j == 0:\n           push(i + 1, 0)\n   return pairs",
+        "model_output": "import heapq\ndef k_smallest_pairs(nums1, nums2, k):\n    if not nums1 or not nums2 or k <= 0:\n        return []\n    min_heap = []\n    for i in range(min(k, len(nums1))):\n        heapq.heappush(min_heap, (nums1[i] + nums2[0], i, 0))\n    result = []\n    while k > 0 and min_heap:\n        (sum_pair, i, j) = heapq.heappop(min_heap)\n        result.append((nums1[i], nums2[j]))\n        if j + 1 < len(nums2):\n            heapq.heappush(min_heap, (nums1[i] + nums2[j + 1], i, j + 1))\n        k -= 1\n    return result",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     },
     {
-        "question": "Write a python function to count the number of rotations required to generate a sorted array. https://www.geeksforgeeks.org/count-of-rotations-required-to-generate-a-sorted-array/\n\ndef count_rotation(arr):   ",
-        "right_answer": "Error: .\n Solution: def count_rotation(arr):\n    n = len(arr)\n    (low, high) = (0, n - 1)\n    while low <= high:\n        if arr[low] <= arr[high]:\n            return low\n        mid = (low + high) // 2\n        next_index = (mid + 1) % n\n        prev_index = (mid - 1 + n) % n\n        if arr[mid] <= arr[next_index] and arr[mid] <= arr[prev_index]:\n            return mid\n        if arr[mid] <= arr[high]:\n            high = mid - 1\n        else:\n            low = mid + 1\n    return 0.\n Test: def check():\n    assert count_rotation([3,2,1]) == 1\n    assert count_rotation([4,5,1,2,3]) == 2\n    assert count_rotation([7,8,9,1,2,3]) == 3\n    assert count_rotation([1,2,3]) == 0\n    assert count_rotation([1,3,2]) == 2\n\nCorrect Solution:def count_rotation(arr):   \n    for i in range (1,len(arr)): \n        if (arr[i] < arr[i - 1]): \n            return i  \n    return 0",
-        "model_output": "def count_rotation(arr):\n    n = len(arr)\n    (low, high) = (0, n - 1)\n    while low <= high:\n        if arr[low] <= arr[high]:\n            return low\n        mid = (low + high) // 2\n        next_index = (mid + 1) % n\n        prev_index = (mid - 1 + n) % n\n        if arr[mid] <= arr[next_index] and arr[mid] <= arr[prev_index]:\n            return mid\n        if arr[mid] <= arr[high]:\n            high = mid - 1\n        else:\n            low = mid + 1\n    return 0",
+        "question": "Write a function to find the surface area of a cylinder.\n\ndef surfacearea_cylinder(r,h):",
+        "right_answer": "Error: .\n Solution: import math\ndef surfacearea_cylinder(r, h):\n    lateral_area = 2 * math.pi * r * h\n    base_area = math.pi * r ** 2\n    total_surface_area = lateral_area + 2 * base_area\n    return total_surface_area.\n Test: def check():\n    assert surfacearea_cylinder(10,5)==942.45\n    assert surfacearea_cylinder(4,5)==226.18800000000002\n    assert surfacearea_cylinder(4,10)==351.848\n\nCorrect Solution:def surfacearea_cylinder(r,h):\n  surfacearea=((2*3.1415*r*r) +(2*3.1415*r*h))\n  return surfacearea",
+        "model_output": "import math\ndef surfacearea_cylinder(r, h):\n    lateral_area = 2 * math.pi * r * h\n    base_area = math.pi * r ** 2\n    total_surface_area = lateral_area + 2 * base_area\n    return total_surface_area",
         "extracted_output": 0.0,
         "extract_answer_code": "None"
     }

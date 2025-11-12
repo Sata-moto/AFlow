@@ -22,7 +22,7 @@ class SingleProblemClassification(BaseModel):
     """单个问题的分类结果"""
     category: str = Field(..., description="The category name for this problem")
     is_new_category: str = Field(..., description="'true' if this is a new category, 'false' if existing")
-    category_description: str = Field(..., description="Description of the category (required if new category)")
+    category_description: str = Field(default="", description="Description of the category (required if new category, optional otherwise)")
     reasoning: str = Field(..., description="Brief reasoning for the classification")
 
 
@@ -47,7 +47,7 @@ class ProblemClassifier:
         self._classifications = None
         self._category_stats = None
     
-    async def analyze_and_classify_problems(self, validation_data: List[Dict]) -> Dict:
+    async def analyze_and_classify_problems(self, validation_data: List[Dict], max_retries: int = 3) -> Dict:
         """
         逐个分析验证集问题并进行分类
         对每个问题：
@@ -56,6 +56,7 @@ class ProblemClassifier:
         
         Args:
             validation_data: 验证集数据
+            max_retries: 每个问题的最大重试次数
             
         Returns:
             Dict: 分类分析结果
@@ -71,38 +72,67 @@ class ProblemClassifier:
         
         # 逐个分类问题
         for idx, problem_data in enumerate(validation_data):
-            try:
-                logger.info(f"Classifying problem {idx + 1}/{len(validation_data)}")
+            logger.info(f"Classifying problem {idx + 1}/{len(validation_data)}")
+            
+            # 提取问题内容
+            problem_text = self._extract_problem_text(problem_data)
+            problem_id = self._extract_problem_id(problem_data, idx)
+            
+            # 使用重试机制进行分类
+            classification_result = await self._classify_single_problem_with_retry(
+                llm_instance,
+                problem_text,
+                problem_id,
+                categories,
+                category_descriptions,
+                max_retries=max_retries
+            )
+            
+            if classification_result:
+                # 分类成功
+                category = classification_result['category']
+                is_new = classification_result['is_new']
+                category_desc = classification_result.get('category_description', '')
                 
-                # 提取问题内容
-                problem_text = self._extract_problem_text(problem_data)
-                problem_id = self._extract_problem_id(problem_data, idx)
+                # 检查类别数量限制
+                current_category_count = len(categories)
                 
-                # 构建单个问题的分类提示词
-                prompt = self._create_single_classification_prompt(
-                    problem_text, 
-                    problem_id,
-                    categories, 
-                    category_descriptions
-                )
-                
-                # 创建简单的分类响应模型
-                formatter = XmlFormatter.from_model(SingleProblemClassification)
-                response_dict = await llm_instance.call_with_format(prompt, formatter)
-                
-                category = response_dict['category'].strip()
-                is_new = response_dict['is_new_category'].lower() == 'true'
-                
-                # 如果是新类别，添加到列表中
+                # 如果是新类别，检查是否应该添加
                 if is_new and category not in categories:
-                    categories.append(category)
-                    category_descriptions[category] = response_dict['category_description'].strip()
-                    logger.info(f"  → New category created: {category}")
+                    # 如果已经有 5 个或更多类别，拒绝创建新类别
+                    if current_category_count >= 5:
+                        logger.warning(f"  → Rejected new category '{category}': already have {current_category_count} categories (limit: 5)")
+                        logger.warning(f"  → Forcing problem into most similar category instead")
+                        # 将问题分配到现有类别中（这里简单地分配到第一个，实际可以更智能）
+                        category = categories[0] if categories else "Other"
+                        is_new = False
+                        logger.info(f"  → Reassigned to existing category: {category}")
+                    else:
+                        # 允许创建新类别
+                        categories.append(category)
+                        if not category_desc:
+                            category_desc = f"Problems related to {category}"
+                        category_descriptions[category] = category_desc
+                        logger.info(f"  → New category created: {category} (total: {len(categories)}/5)")
+                        
+                        # 如果达到 5 个类别，发出警告
+                        if len(categories) == 5:
+                            logger.warning("  ⚠️  Reached 5 categories - future problems will be forced into existing categories")
+                        
                 elif not is_new and category not in categories:
-                    # 模型说不是新类别但类别不存在，强制添加
-                    categories.append(category)
-                    category_descriptions[category] = response_dict['category_description'].strip()
-                    logger.info(f"  → Category added (fallback): {category}")
+                    # 模型说不是新类别但类别不存在
+                    if current_category_count >= 5:
+                        # 已经达到限制，分配到现有类别
+                        logger.warning(f"  → Category '{category}' doesn't exist and limit reached, using fallback")
+                        category = categories[0] if categories else "Other"
+                        logger.info(f"  → Reassigned to: {category}")
+                    else:
+                        # 还未达到限制，允许添加
+                        categories.append(category)
+                        if not category_desc:
+                            category_desc = f"Problems related to {category}"
+                        category_descriptions[category] = category_desc
+                        logger.info(f"  → Category added (fallback): {category} (total: {len(categories)}/5)")
                 else:
                     logger.info(f"  → Assigned to existing category: {category}")
                 
@@ -110,19 +140,18 @@ class ProblemClassifier:
                 problem_classifications.append({
                     'problem_id': problem_id,
                     'category': category,
-                    'reasoning': response_dict.get('reasoning', '')
+                    'reasoning': classification_result.get('reasoning', '')
                 })
-                
-            except Exception as e:
-                logger.error(f"Error classifying problem {idx + 1}: {e}", exc_info=True)
-                # 分类失败时，分配到 "Other" 类别
+            else:
+                # 所有重试都失败，分配到 "Other" 类别
+                logger.warning(f"Failed to classify problem {idx + 1} after {max_retries} retries")
                 if "Other" not in categories:
                     categories.append("Other")
                     category_descriptions["Other"] = "Problems that don't fit into other categories"
                 problem_classifications.append({
                     'problem_id': problem_id,
                     'category': 'Other',
-                    'reasoning': f'Classification failed: {str(e)}'
+                    'reasoning': f'Classification failed after {max_retries} retries'
                 })
         
         logger.info(f"Classification completed: {len(categories)} categories identified")
@@ -139,6 +168,80 @@ class ProblemClassifier:
         self._save_classifications(classification_result)
         
         return classification_result
+    
+    async def _classify_single_problem_with_retry(
+        self,
+        llm_instance,
+        problem_text: str,
+        problem_id: str,
+        categories: List[str],
+        category_descriptions: Dict[str, str],
+        max_retries: int = 3
+    ) -> Dict:
+        """
+        使用重试机制对单个问题进行分类
+        
+        Args:
+            llm_instance: LLM 实例
+            problem_text: 问题文本
+            problem_id: 问题 ID
+            categories: 已有类别列表
+            category_descriptions: 类别描述字典
+            max_retries: 最大重试次数
+            
+        Returns:
+            Dict: 分类结果，包含 category, is_new, category_description, reasoning
+                  如果失败返回 None
+        """
+        import asyncio
+        
+        for attempt in range(max_retries):
+            try:
+                if attempt > 0:
+                    logger.info(f"  Retry attempt {attempt + 1}/{max_retries}")
+                    # 添加指数退避延迟
+                    await asyncio.sleep(2 ** attempt)
+                
+                # 构建单个问题的分类提示词
+                prompt = self._create_single_classification_prompt(
+                    problem_text, 
+                    problem_id,
+                    categories, 
+                    category_descriptions
+                )
+                
+                # 创建简单的分类响应模型
+                formatter = XmlFormatter.from_model(SingleProblemClassification)
+                response_dict = await llm_instance.call_with_format(prompt, formatter)
+                
+                # 解析响应
+                category = response_dict['category'].strip()
+                is_new = response_dict['is_new_category'].lower() == 'true'
+                category_desc = response_dict.get('category_description', '').strip()
+                reasoning = response_dict.get('reasoning', '')
+                
+                return {
+                    'category': category,
+                    'is_new': is_new,
+                    'category_description': category_desc,
+                    'reasoning': reasoning
+                }
+                
+            except Exception as e:
+                error_msg = str(e)
+                logger.warning(f"  Classification attempt {attempt + 1} failed: {error_msg}")
+                
+                # 如果是最后一次尝试，记录完整错误
+                if attempt == max_retries - 1:
+                    logger.error(f"  All {max_retries} classification attempts failed for problem {problem_id}", exc_info=True)
+                    return None
+                
+                # 对于某些不可恢复的错误，直接失败不重试
+                if "invalid" in error_msg.lower() and "api" not in error_msg.lower():
+                    logger.error(f"  Non-retryable error encountered: {error_msg}")
+                    return None
+        
+        return None
     
     def _extract_problem_text(self, problem_data: Dict) -> str:
         """从问题数据中提取问题文本"""
@@ -158,7 +261,10 @@ class ProblemClassifier:
     
     def _extract_problem_id(self, problem_data: Dict, index: int) -> str:
         """从问题数据中提取问题ID"""
-        if 'id' in problem_data:
+        # 优先使用 task_id (MBPP, HumanEval 等)
+        if 'task_id' in problem_data:
+            return str(problem_data['task_id'])
+        elif 'id' in problem_data:
             return str(problem_data['id'])
         elif 'problem_id' in problem_data:
             return str(problem_data['problem_id'])
@@ -187,13 +293,35 @@ class ProblemClassifier:
             str: 分类提示词
         """
         # 构建已有类别信息
+        current_count = len(existing_categories)
         if existing_categories:
-            categories_info = "Existing categories:\n"
+            categories_info = f"Existing categories ({current_count}/5 recommended):\n"
             for cat in existing_categories:
                 desc = category_descriptions.get(cat, "No description")
                 categories_info += f"- {cat}: {desc}\n"
+            
+            # 添加类别数量状态提示
+            if current_count >= 5:
+                categories_info += f"\n⚠️  LIMIT REACHED: Already have {current_count} categories. DO NOT create new categories unless absolutely impossible to fit into existing ones.\n"
+            elif current_count == 4:
+                categories_info += f"\n⚠️  NEAR LIMIT: Have {current_count}/5 categories. Be very selective about creating new categories.\n"
+            elif current_count == 3:
+                categories_info += f"\nℹ️  OPTIMAL RANGE: Have {current_count}/5 categories. Can add 1-2 more if truly necessary.\n"
+            else:
+                categories_info += f"\nℹ️  Have {current_count}/5 categories. Can add more, but try to keep it under 5 total.\n"
         else:
-            categories_info = "No existing categories yet. This is the first problem to classify."
+            categories_info = "No existing categories yet. This is the first problem to classify.\nTarget: Create 3-5 broad categories total for the entire dataset."
+        
+        # 添加类别数量提示
+        category_count = len(existing_categories)
+        if category_count == 0:
+            count_guidance = "You are classifying the first problem. Create a broad category that can encompass similar solution approaches."
+        elif category_count < 3:
+            count_guidance = f"Current categories: {category_count}. We need 3-5 categories total. You may create new categories if this problem needs a fundamentally different approach."
+        elif category_count < 5:
+            count_guidance = f"Current categories: {category_count}. We are approaching the target of 3-5 categories. Only create a new category if absolutely necessary."
+        else:
+            count_guidance = f"Current categories: {category_count}. We have reached the target range (3-5 categories). STRONGLY prefer existing categories. Only create a new category if the problem is completely incompatible with all existing ones."
         
         prompt = f"""You are a problem classification expert. Your task is to classify problems based on the SOLUTION APPROACH/ALGORITHM TYPE required, NOT based on the specific problem content or application domain.
 
@@ -201,36 +329,48 @@ IMPORTANT: Focus on HOW to solve the problem, not WHAT the problem is about.
 
 {categories_info}
 
+**Category Count Status**: {count_guidance}
+
 Problem ID: {problem_id}
 Problem:
 {problem_text}
 
 Classification Dimensions (Examples):
-- Algorithm Types: Dynamic Programming, Greedy Algorithm, Divide and Conquer, Backtracking, Graph Algorithms, etc.
-- Data Structures: Tree Problems, Graph Problems, Stack/Queue Problems, Hash Table Problems, etc.
-- Problem Types: Search Problems, Optimization Problems, Counting Problems, Simulation Problems, etc.
-- Reasoning Types: Mathematical Derivation, Logical Reasoning, Rule Application, Pattern Recognition, etc.
+- Algorithm Types: Dynamic Programming, Greedy Algorithm, Divide and Conquer, Backtracking, etc.
+- Data Structures: Tree/Graph Problems, Array/String Manipulation, Stack/Queue Problems, etc.
+- Problem Types: Search/Optimization, Counting/Combinatorics, Simulation, Pattern Matching, etc.
+- Reasoning Types: Mathematical Reasoning, Logical Deduction, Rule Application, etc.
 
 Instructions:
-1. **KEY FOCUS**: What algorithm/strategy/approach is needed to solve this problem?
-2. If this problem requires a solution approach that matches one of the existing categories above, assign it to that category (set is_new_category to 'false')
-3. If this problem requires a DIFFERENT solution approach, create a NEW category for it (set is_new_category to 'true')
-4. When creating a new category:
-   - Name should describe the SOLUTION METHOD, e.g.:
-     * "Dynamic Programming" NOT "Knapsack Problems"
-     * "Graph-Shortest Path" NOT "City Navigation Problems"
-     * "Greedy Algorithm" NOT "Resource Allocation"
-     * "Mathematical Derivation" NOT "Geometry Calculations"
-   - Description should explain what algorithmic approach/strategy is needed
-5. Provide brief reasoning explaining WHY this problem needs this solution approach
+1. **TARGET**: Aim for 3-5 total categories that are broad and well-balanced
+2. **KEY FOCUS**: What algorithm/strategy/approach is needed to solve this problem?
+3. **REUSE WHEN POSSIBLE**: If this problem can fit into ANY existing category, choose that category (set is_new_category to 'false')
+4. **CREATE STRATEGICALLY**: 
+   - If we have < 3 categories: Feel free to create new ones for distinct solution approaches
+   - If we have 3-5 categories: Only create new ones if truly necessary
+   - If we have > 5 categories: AVOID creating new ones unless absolutely impossible to fit
+5. When creating a new category:
+   - Use BROAD names that can cover many problems:
+     * ✓ "Dynamic Programming & Recursion" (covers DP, memoization, recursive solutions)
+     * ✓ "Mathematical & Logical Reasoning" (covers math, logic, proofs)
+     * ✓ "Data Structure Operations" (covers arrays, strings, trees, graphs)
+     * ✓ "Search & Optimization" (covers greedy, search algorithms, optimization)
+     * ✓ "Simulation & Implementation" (covers direct simulation, rule following)
+   - Provide a description that explains the broad scope
+6. Reasoning: Explain WHY this problem fits the selected category
 
-Guidelines for good categories:
-- Focus on solution methodology, not problem domain
-- Categories should represent distinct algorithmic or reasoning approaches
-- Good: "Dynamic Programming", "Graph Traversal", "Greedy Strategy", "Mathematical Reasoning"
-- Bad: "Shopping Problems", "Game Questions", "Story Understanding"
-- Avoid overly specific (e.g., "Fibonacci sequence")
-- Avoid overly broad (e.g., "All math problems")
+Guidelines:
+- Each category should represent a DISTINCT solution methodology
+- Categories should be BALANCED in scope (not too narrow, not too broad)
+- Good category examples (3-5 total for a dataset):
+  * "Dynamic Programming & Recursion"
+  * "Mathematical & Logical Reasoning"  
+  * "Data Structure Operations"
+  * "Search & Optimization Algorithms"
+  * "String/Pattern Manipulation"
+- Avoid: Too many specific categories OR one catch-all category
+
+**Remember**: The goal is 3-5 well-defined, balanced categories. Think strategically about how to group similar solution approaches together!
 
 Think carefully about the SOLUTION APPROACH and respond with your classification.
 """
@@ -331,8 +471,8 @@ Think carefully about the SOLUTION APPROACH and respond with your classification
         # 创建问题ID到问题数据的映射（支持字符串和整数ID）
         problem_map = {}
         for problem in validation_data:
-            # 尝试多个可能的ID字段
-            pid = problem.get('id') or problem.get('problem_id') or problem.get('index')
+            # 尝试多个可能的ID字段，优先使用 task_id
+            pid = problem.get('task_id') or problem.get('id') or problem.get('problem_id') or problem.get('index')
             if pid is not None:
                 # 存储多种形式以支持灵活匹配
                 problem_map[pid] = problem

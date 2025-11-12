@@ -36,12 +36,34 @@ class WorkflowDifferentiation:
         self,
         dataset: str,
         question_type: str,
-        opt_llm_config,
-        exec_llm_config,
-        operators: List[str],
+        opt_llm_config: Dict,
+        exec_llm_config: Dict,
+        operators: List,
         optimized_path: str = "workspace",
         validation_rounds: int = 1,
+        workflow_manager = None  # Add workflow_manager parameter
     ):
+        """
+        Initialize the differentiation processor.
+        
+        Args:
+            dataset: Dataset name
+            question_type: Question type
+            opt_llm_config: Optimization LLM config
+            exec_llm_config: Execution LLM config
+            operators: Available operators
+            optimized_path: Base path for optimization workspace
+            validation_rounds: Number of validation rounds
+            workflow_manager: WorkflowManager instance for ancestry checks
+        """
+        self.dataset = dataset
+        self.question_type = question_type
+        self.opt_llm_config = opt_llm_config
+        self.exec_llm_config = exec_llm_config
+        self.operators = operators
+        self.optimized_path = optimized_path
+        self.validation_rounds = validation_rounds
+        self.workflow_manager = workflow_manager  # Store workflow_manager
         self.dataset = dataset
         self.question_type = question_type
         self.opt_llm_config = opt_llm_config
@@ -67,6 +89,7 @@ class WorkflowDifferentiation:
         """
         Analyze workflows to identify good candidates for problem type specialization.
         Focus on avoiding over-differentiation and selecting diverse high-quality workflows.
+        Excludes any workflows that have fused ancestors.
         
         Args:
             workflow_results: List of workflow performance data
@@ -85,6 +108,13 @@ class WorkflowDifferentiation:
         candidates = []
         
         for workflow in workflow_results:
+            round_num = workflow.get("round", 0)
+            
+            # Skip workflows with fused ancestors (most important check)
+            if self.workflow_manager and self.workflow_manager.has_fused_ancestor(round_num):
+                logger.info(f"Skipping round {round_num} for differentiation: has fused ancestor")
+                continue
+            
             # Skip already differentiated workflows
             if self._is_differentiated_workflow(workflow):
                 continue

@@ -256,12 +256,16 @@ class WorkflowFusion:
             # Use standard experience creation method
             experience_data = experience_utils.create_experience_data(fusion_sample, fusion_modification)
             
+            # Add fusion marker to prevent differentiation of this workflow and its descendants
+            experience_data['is_fused'] = True
+            experience_data['fusion_sources'] = source_rounds
+            
             # Save experience.json using standard method
             experience_path = os.path.join(target_dir, "experience.json")
             with open(experience_path, 'w', encoding='utf-8') as f:
                 json.dump(experience_data, f, indent=4, ensure_ascii=False)
             
-            logger.info(f"Created fusion experience.json with father node {best_workflow['round']}")
+            logger.info(f"Created fusion experience.json with father node {best_workflow['round']} and fusion marker")
             
         except Exception as e:
             logger.error(f"Error creating fusion experience file: {e}", exc_info=True)
