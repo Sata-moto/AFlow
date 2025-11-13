@@ -55,7 +55,9 @@ class DROPBenchmark(BaseBenchmark):
     async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, str, float, float]:
         original_context = problem["context"]
         
-        input_text = original_context + "\n\nIMPORTANT: Provide ONLY the final answer (a number or a short phrase). Do not include explanations, reasoning, or extra text. Just give the direct answer."
+        # 将要求放在最前面,避免干扰后续内容
+        # 只要求数字用数字形式,而不是强制所有答案都用数字
+        input_text = "IMPORTANT: If the answer is a number, use digits (e.g., 5) instead of words (e.g., 'five'). Provide only the final answer without explanations.\n\n" + original_context
         
         expected_output = problem["ref_text"]
         answers = expected_output.split("|")
