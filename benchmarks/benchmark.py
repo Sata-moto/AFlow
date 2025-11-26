@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import re
 from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
@@ -12,6 +13,7 @@ from tqdm.asyncio import tqdm_asyncio
 
 from scripts.logs import logger
 from scripts.utils.common import write_json_file
+from scripts.async_llm import AsyncLLM
 
 
 class BaseBenchmark(ABC):
@@ -20,9 +22,16 @@ class BaseBenchmark(ABC):
         self.file_path = file_path
         self.log_path = log_path
         self.solved_threshold = solved_threshold  # Threshold for considering a problem as solved
+        self.judge_llm = None  # Will be initialized lazily
 
     PASS = "PASS"
     FAIL = "FAIL"
+    
+    def _create_judge_llm(self):
+        """创建用于评判的 LLM 实例（使用 gpt-4o-mini）"""
+        if self.judge_llm is None:
+            self.judge_llm = AsyncLLM("gpt-4o-mini")
+        return self.judge_llm
 
     async def load_data(self, specific_indices: List[int] = None) -> List[dict]:
         data = []
@@ -61,15 +70,15 @@ class BaseBenchmark(ABC):
         problem: str,
         expected_output: Any,
         prediction: str,
-        extracted_output: Any,
-        extract_answer_code: str = "None",
+        judge_explanation: str,
+        score: float = 0.0,
     ):
         log_data = {
             "question": problem,
             "right_answer": expected_output,
             "model_output": prediction,
-            "extracted_output": extracted_output,
-            "extract_answer_code": extract_answer_code,
+            "score": score,
+            "judge_explanation": judge_explanation,
         }
         log_file = Path(self.log_path) / "log.json"
         if log_file.exists():
@@ -95,6 +104,226 @@ class BaseBenchmark(ABC):
             data = []
         data.append(log_data)
         write_json_file(log_file, data, encoding="utf-8", indent=4)
+    
+    async def llm_judge_answer(
+        self, 
+        question: str, 
+        ground_truth: str, 
+        prediction: str,
+        task_description: str = "answer the question correctly"
+    ) -> Tuple[float, str]:
+        """
+        使用 LLM 进行语义评判，替代硬匹配
+        带重试机制以避免随机失败
+        
+        Args:
+            question: 原始问题
+            ground_truth: 正确答案（可能包含多个用 | 分隔的答案）
+            prediction: 模型预测答案
+            task_description: 任务描述（用于提示词）
+            
+        Returns:
+            (score, explanation) - 分数（1.0 正确，0.0 错误）和评判理由
+        """
+        # 确保 judge_llm 已初始化
+        if self.judge_llm is None:
+            self._create_judge_llm()
+        
+        # 处理多个可能的正确答案
+        acceptable_answers = [ans.strip() for ans in str(ground_truth).split("|") if ans.strip()]
+        
+        judge_prompt = f"""You are a answer verification judge. Your ONLY task is to check if the model's answer matches any of the acceptable answers.
+
+**CRITICAL INSTRUCTIONS:**
+1. DO NOT solve the question yourself
+2. DO NOT think about what the correct answer should be
+3. ONLY compare the model's answer with the provided acceptable answer(s)
+4. The acceptable answers are **ALREADY CORRECT** - **just check if the model's answer matches them**
+
+**Acceptable Answer(s) (Ground Truth):** 
+{' OR '.join(acceptable_answers)}
+
+**Model's Answer to Evaluate:** 
+{prediction}
+
+Question (**for context only**):
+{question}
+
+**Matching Rules:**
+- Numerical equivalence: "5" = "five" = "5.0" = "5 years"
+- Case insensitive: "Paris" = "paris" = "PARIS"
+- Whitespace/punctuation: "twenty-two" = "twenty two" = "22"
+- Semantic equivalence: "the French" = "French" = "France"
+- If multiple acceptable answers exist (separated by OR), matching ANY ONE is correct
+- Partial matches: If the model's answer CONTAINS the acceptable answer as a key component, it may be correct
+- Extra explanation is OK: "The answer is 5" matches acceptable answer "5"
+
+**Examples:**
+- Acceptable: "66", Model: "66 yards" → CORRECT (contains the number)
+- Acceptable: "2|3", Model: "2" → CORRECT (matches one option)
+- Acceptable: "French", Model: "The French had more troops" → CORRECT (contains the answer)
+- Acceptable: "22", Model: "30 yards" → WRONG (different number)
+
+**Your Task:**
+Compare the model's answer with the acceptable answer(s) using the rules above.
+Respond ONLY with a JSON object:
+{{"correct": true/false, "explanation": "<brief reason>"}}
+
+Examples:
+- {{"correct": true, "explanation": "Matches acceptable answer '66'"}}
+- {{"correct": true, "explanation": "Contains acceptable answer 'French'"}}
+- {{"correct": false, "explanation": "Model answered '30' but acceptable answer is '22'"}}
+- {{"correct": false, "explanation": "Model answered 'combined forces' but acceptable answer is 'French'"}}
+"""
+
+        try:
+            # 带重试的 LLM 调用（最多3次，每次间隔2秒）
+            max_retries = 3
+            last_error = None
+            
+            for attempt in range(max_retries):
+                try:
+                    # 添加超时保护（judge 最多180秒）
+                    response = await asyncio.wait_for(
+                        self.judge_llm(judge_prompt),
+                        timeout=180.0
+                    )
+                    response_text = response.strip()
+                    
+                    # 提取 JSON - 先尝试简单方式，再尝试复杂方式
+                    result = None
+                    
+                    def fix_json_escapes(text):
+                        """修复 JSON 中的非法转义字符"""
+                        result_chars = []
+                        i = 0
+                        while i < len(text):
+                            if text[i] == '\\' and i + 1 < len(text):
+                                next_char = text[i + 1]
+                                # 检查是否是合法的 JSON 转义
+                                if next_char in '"\\\\/bfnrtu':
+                                    # 保持原样
+                                    result_chars.append('\\')
+                                    result_chars.append(next_char)
+                                    i += 2
+                                else:
+                                    # 非法转义，添加额外的反斜杠
+                                    result_chars.append('\\\\')
+                                    i += 1
+                            else:
+                                result_chars.append(text[i])
+                                i += 1
+                        return ''.join(result_chars)
+                    
+                    # 方式1：尝试直接解析整个响应
+                    try:
+                        result = json.loads(response_text)
+                        logger.debug(f"JSON parsed successfully via direct parse")
+                    except json.JSONDecodeError:
+                        logger.debug(f"Direct parse failed, trying with escape fix")
+                        
+                        # 尝试修复非法的 JSON 转义字符
+                        try:
+                            fixed = fix_json_escapes(response_text)
+                            result = json.loads(fixed)
+                            logger.debug(f"JSON parsed successfully after escape fix")
+                        except json.JSONDecodeError:
+                            logger.debug(f"Escape fix failed, trying regex extraction")
+                            
+                            # 方式2：使用宽松的正则提取 JSON
+                            json_match = re.search(r'\{.*?"correct".*?\}', response_text, re.DOTALL)
+                            if json_match:
+                                try:
+                                    # 先尝试直接解析
+                                    result = json.loads(json_match.group())
+                                    logger.debug(f"JSON parsed successfully via regex match")
+                                except json.JSONDecodeError:
+                                    # 再尝试修复后解析
+                                    try:
+                                        fixed = fix_json_escapes(json_match.group())
+                                        result = json.loads(fixed)
+                                        logger.debug(f"JSON parsed successfully via regex + fix")
+                                    except json.JSONDecodeError as e:
+                                        logger.debug(f"All parsing methods failed: {e}")
+                            else:
+                                logger.debug(f"Regex did not match, response: {response_text[:100]}")
+                    
+                    if result and "correct" in result:
+                        is_correct = result.get("correct", False)
+                        explanation = result.get("explanation", "No explanation provided")
+                        
+                        # 二元评分：只有 1.0 或 0.0
+                        score = 1.0 if is_correct else 0.0
+                        
+                        # 如果重试过，记录成功信息
+                        if attempt > 0:
+                            logger.info(f"LLM judge succeeded on attempt {attempt+1}/{max_retries}")
+                        
+                        return score, explanation
+                    else:
+                        # 如果无法解析 JSON，记录并重试
+                        # 只在最后一次失败时才用 WARNING，之前用 DEBUG
+                        if attempt == max_retries - 1:
+                            logger.warning(f"Failed to parse LLM judge response after {max_retries} attempts: {response_text[:200]}")
+                        else:
+                            logger.debug(f"Failed to parse LLM judge response (attempt {attempt+1}/{max_retries}), will retry: {response_text[:100]}")
+                        
+                        last_error = f"JSON parse failed: {response_text[:100]}"
+                        if attempt < max_retries - 1:
+                            await asyncio.sleep(2)  # 等待2秒后重试
+                            continue
+                        else:
+                            # 最后一次尝试也失败，使用 fallback
+                            return self._fallback_score(ground_truth, prediction)
+                
+                except asyncio.TimeoutError:
+                    if attempt == max_retries - 1:
+                        logger.warning(f"LLM judge timed out after {max_retries} attempts")
+                    else:
+                        logger.debug(f"LLM judge timed out (attempt {attempt+1}/{max_retries}), will retry")
+                    
+                    last_error = "Timeout"
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(2)
+                        continue
+                    else:
+                        return self._fallback_score(ground_truth, prediction)
+                
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        logger.warning(f"LLM judge error after {max_retries} attempts: {e}")
+                    else:
+                        logger.debug(f"LLM judge error (attempt {attempt+1}/{max_retries}): {e}, will retry")
+                    
+                    last_error = str(e)
+                    if attempt < max_retries - 1:
+                        await asyncio.sleep(2)
+                        continue
+                    else:
+                        return self._fallback_score(ground_truth, prediction)
+        
+        except Exception as e:
+            # 外层异常捕获（不应该到这里）
+            logger.error(f"Unexpected error in llm_judge_answer: {e}")
+            return self._fallback_score(ground_truth, prediction)
+    
+    def _fallback_score(self, ground_truth: str, prediction: str) -> Tuple[float, str]:
+        """
+        回退评分机制：简单的字符串匹配
+        
+        Returns:
+            (score, explanation) - 二元评分和解释
+        """
+        gt_normalized = str(ground_truth).strip().lower()
+        pred_normalized = str(prediction).strip().lower()
+        
+        # 检查是否有多个可能的答案
+        acceptable_answers = [ans.strip().lower() for ans in gt_normalized.split("|") if ans.strip()]
+        
+        if pred_normalized in acceptable_answers or any(ans in pred_normalized for ans in acceptable_answers):
+            return 1.0, "Fallback: String match"
+        else:
+            return 0.0, "Fallback: No match"
 
     @abstractmethod
     async def evaluate_problem(self, problem: dict, agent: Callable) -> Tuple[Any, ...]:
@@ -108,17 +337,31 @@ class BaseBenchmark(ABC):
     def get_result_columns(self) -> List[str]:
         pass
 
-    async def evaluate_all_problems(self, data: List[dict], agent: Callable, max_concurrent_tasks: int = 50):
+    async def evaluate_all_problems(self, data: List[dict], agent: Callable, max_concurrent_tasks: int = 30):
         semaphore = asyncio.Semaphore(max_concurrent_tasks)
 
         async def sem_evaluate(problem):
             async with semaphore:
-                return await self.evaluate_problem(problem, agent)
+                try:
+                    # 添加超时保护（每个问题最多10分钟）
+                    return await asyncio.wait_for(
+                        self.evaluate_problem(problem, agent),
+                        timeout=600.0
+                    )
+                except asyncio.TimeoutError:
+                    logger.error(f"Problem evaluation timed out after 600s")
+                    # 返回默认失败结果
+                    columns = self.get_result_columns()
+                    return tuple([problem.get("question", str(problem)[:100]), "TIMEOUT", "", 0.0, 0.0][:len(columns)])
+                except Exception as e:
+                    logger.error(f"Problem evaluation failed: {e}")
+                    columns = self.get_result_columns()
+                    return tuple([problem.get("question", str(problem)[:100]), f"ERROR: {e}", "", 0.0, 0.0][:len(columns)])
 
         tasks = [sem_evaluate(problem) for problem in data]
         return await tqdm_asyncio.gather(*tasks, desc=f"Evaluating {self.name} problems", total=len(data))
 
-    async def run_evaluation(self, agent: Callable, va_list: List[int], max_concurrent_tasks: int = 50):
+    async def run_evaluation(self, agent: Callable, va_list: List[int], max_concurrent_tasks: int = 30):
         data = await self.load_data(va_list)
         results = await self.evaluate_all_problems(data, agent, max_concurrent_tasks)
         columns = self.get_result_columns()
@@ -128,7 +371,7 @@ class BaseBenchmark(ABC):
         return average_score, average_cost, total_cost, solved_problems
     
 
-    async def run_baseline(self, agent: Callable, max_concurrent_tasks: int = 50):
+    async def run_baseline(self, agent: Callable, max_concurrent_tasks: int = 30):
         data = await self.load_data()
         results = await self.evaluate_all_problems(data, agent, max_concurrent_tasks)
         columns = self.get_result_columns()

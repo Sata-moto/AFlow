@@ -2,17 +2,53 @@ import re
 import string
 from collections import Counter
 from typing import Callable, List, Tuple
+import json
 
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
 from benchmarks.benchmark import BaseBenchmark
 from scripts.logs import logger
+from scripts.async_llm import AsyncLLM, LLMConfig
 
 
 class DROPBenchmark(BaseBenchmark):
     def __init__(self, name: str, file_path: str, log_path: str, solved_threshold: float = 0.5):
         super().__init__(name, file_path, log_path, solved_threshold)
+        
+        # 初始化评判 LLM (使用 GPT-4o-mini)
+        self.judge_llm = self._create_judge_llm()
+    
+    def _create_judge_llm(self):
+        """创建用于评判的 LLM 实例"""
+        try:
+            # 尝试从配置文件加载
+            from scripts.async_llm import LLMsConfig
+            config = LLMsConfig.default()
+            llm_config = config.get("gpt-4o-mini")
+            return AsyncLLM(llm_config)
+        except:
+            # 如果配置加载失败，使用默认配置
+            llm_config = LLMConfig({
+                "model": "gpt-4o-mini",
+                "temperature": 0,
+                "key": None,  # 将使用环境变量
+                "base_url": "https://api.openai.com/v1"
+            })
+            return AsyncLLM(llm_config)
 
+    def extract_question_only(self, context: str) -> str:
+        """
+        从 context 中提取问题部分，去掉 Passage
+        DROP 格式: "Passage: ... Question: ... Answer:"
+        """
+        # 查找 "Question:" 的位置
+        question_start = context.find("Question:")
+        if question_start != -1:
+            # 从 "Question:" 开始到结尾（包括 "Answer:"）
+            return context[question_start:].strip()
+        # 如果找不到 "Question:"，返回原文本
+        return context
+    
     def normalize_answer(self, s: str) -> List[str]:
         """
         Normalize answers for evaluation.
@@ -32,6 +68,95 @@ class DROPBenchmark(BaseBenchmark):
             return text.lower()
 
         return white_space_fix(remove_articles(remove_punc(lower(s))))
+    
+    async def llm_judge_answer(self, question: str, ground_truth: str, prediction: str) -> Tuple[float, str]:
+        """
+        使用 LLM 进行语义评判，替代硬匹配
+        
+        Args:
+            question: 原始问题（包含 context）
+            ground_truth: 正确答案（可能包含多个用 | 分隔的答案）
+            prediction: 模型预测答案
+            
+        Returns:
+            (score, explanation) - 分数 0-1 和评判理由
+        """
+        # 处理多个可能的正确答案
+        acceptable_answers = [ans.strip() for ans in ground_truth.split("|") if ans.strip()]
+        
+        judge_prompt = f"""You are an expert judge evaluating question-answering systems.
+
+Question (with context):
+{question}
+
+Correct Answer(s): {' OR '.join(acceptable_answers)}
+Model's Answer: {prediction}
+
+Task: Determine if the model's answer is semantically correct compared to the acceptable answer(s).
+
+Consider:
+1. Numerical equivalence (e.g., "5" = "five" = "5.0")
+2. Semantic equivalence (e.g., "the Federales" = "Federales")
+3. Different phrasings of the same meaning
+4. Ignore minor formatting differences
+
+IMPORTANT: Score must be EITHER 1.0 (correct) OR 0.0 (incorrect). NO partial scores.
+
+Respond ONLY with a JSON object in this exact format:
+{{"score": <1.0 or 0.0>, "explanation": "<brief reason>"}}
+
+Examples:
+- Correct: {{"score": 1.0, "explanation": "Semantically correct"}}
+- Correct (number): {{"score": 1.0, "explanation": "Numerically equivalent"}}
+- Wrong: {{"score": 0.0, "explanation": "Incorrect answer"}}
+"""
+
+        try:
+            response = await self.judge_llm(judge_prompt)
+            response_text = response.strip()
+            
+            # 提取 JSON
+            # 尝试找到 JSON 对象
+            json_match = re.search(r'\{[^{}]*"score"[^{}]*\}', response_text)
+            if json_match:
+                result = json.loads(json_match.group())
+                score = float(result.get("score", 0.0))
+                explanation = result.get("explanation", "No explanation provided")
+                
+                # 强制二元评分：只允许 1.0 或 0.0
+                # 任何 >= 0.5 的分数视为正确，否则视为错误
+                if score >= 0.5:
+                    score = 1.0
+                else:
+                    score = 0.0
+                
+                return score, explanation
+            else:
+                # 如果无法解析 JSON，尝试回退到基础匹配
+                logger.warning(f"Failed to parse LLM judge response: {response_text[:200]}")
+                return self._fallback_score(ground_truth, prediction)
+                
+        except Exception as e:
+            logger.error(f"LLM judge error: {e}")
+            # 发生错误时回退到基础评分
+            return self._fallback_score(ground_truth, prediction)
+    
+    def _fallback_score(self, ground_truth: str, prediction: str) -> Tuple[float, str]:
+        """回退评分机制 - 使用原有的 F1 匹配，但二元化"""
+        answers = ground_truth.split("|")
+        f1_scores = []
+        
+        for answer in answers:
+            if answer.strip():
+                f1_score, _ = self.calculate_score(answer.strip(), prediction)
+                f1_scores.append(f1_score)
+        
+        max_score = max(f1_scores) if f1_scores else 0.0
+        
+        # 二元化：F1 >= 0.5 视为正确，否则错误
+        binary_score = 1.0 if max_score >= 0.5 else 0.0
+        
+        return binary_score, f"Fallback F1 score: {max_score:.2f} -> {binary_score}"
 
     def calculate_score(self, ground_truth: str, prediction: str) -> Tuple[float, str]:
         """
@@ -54,35 +179,39 @@ class DROPBenchmark(BaseBenchmark):
 
     async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, str, float, float]:
         original_context = problem["context"]
-        
-        # 将要求放在最前面,避免干扰后续内容
-        # 只要求数字用数字形式,而不是强制所有答案都用数字
-        input_text = "IMPORTANT: If the answer is a number, use digits (e.g., 5) instead of words (e.g., 'five'). Provide only the final answer without explanations.\n\n" + original_context
-        
         expected_output = problem["ref_text"]
-        answers = expected_output.split("|")
-
+        
+        # 在问题前添加简单指令，要求直接回答（只用于工作流输入）
+        instruction = "Please provide a clear, direct answer without showing your reasoning process.\n\n"
+        input_with_instruction = instruction + original_context  # 传给工作流的输入
+        
         try:
-            output, cost = await self._generate_output(graph, input_text)
-            f1_scores = []
-
-            for answer in answers:
-                if answer.strip() != "":
-                    output_parts = output.split("|")
-                    for output_part in output_parts:
-                        f1_score, _ = self.calculate_score(answer, output_part)
-                        f1_scores.append(f1_score)
-
-            uni_score = max(f1_scores)
-
+            output, cost = await self._generate_output(graph, input_with_instruction)
+            
+            # 提取只包含问题的部分（不含 Passage），避免 judge 自行思考
+            question_only = self.extract_question_only(original_context)
+            
+            # 使用 LLM 进行语义评判
+            uni_score, explanation = await self.llm_judge_answer(
+                question=question_only,  # 只传入问题部分
+                ground_truth=expected_output,
+                prediction=output
+            )
+            
             if uni_score < 0.3:
-                self.log_mismatch(input_text, expected_output, output, output)
+                self.log_mismatch(
+                    original_context,  # 记录原始 context，不含指令
+                    expected_output, 
+                    output, 
+                    explanation,
+                    uni_score
+                )
 
-            return input_text, output, expected_output, uni_score, cost
+            return original_context, output, expected_output, uni_score, cost
 
         except Exception as e:
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
-            return input_text, str(e), expected_output, 0.0, 0.0
+            return original_context, str(e), expected_output, 0.0, 0.0
 
     def get_result_columns(self) -> List[str]:
         return ["inputs", "prediction", "expected_output", "score", "cost"]

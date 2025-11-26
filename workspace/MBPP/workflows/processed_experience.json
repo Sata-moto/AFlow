@@ -1,101 +1,12 @@
 {
-    "8": {
-        "score": 0.8837209302325582,
-        "success": {},
-        "failure": {
-            "15": {
-                "modification": "Replace the problem analysis step with a solution validation and formatting step that ensures the generated solution matches the expected format and is properly structured for evaluation",
-                "score": 0.7441860465116279
-            },
-            "16": {
-                "modification": "Replace the problem analysis step with a solution simplification step that focuses on generating the most straightforward implementation first, then uses ensemble to compare simple vs complex approaches",
-                "score": 0.8488372093023255
-            },
-            "14": {
-                "modification": "Replace the problem analysis step with a solution validation step that checks if the generated solution matches the expected format and handles the core requirements correctly, rather than pre-analyzing the problem which leads to over-complicated solutions.",
-                "score": 0.8023255813953488
-            },
-            "10": {
-                "modification": "Workflow Differentiation: Specialized from round 8 (score: 0.8837) in direction 'problem_type_specialization'. The parent workflow is differentiated for Mathematical Derivation problems by making the analysis and solution generation steps more specific to mathematical computation tasks. The key modifications i",
-                "score": 0.8837209302325582
-            }
-        }
-    },
     "1": {
-        "score": 0.7441860465116279,
+        "score": 0.7209302325581395,
         "success": {
-            "5": {
-                "modification": "Add Test operator after initial code generation to validate the solution against test cases and refine if needed, creating a feedback loop for better accuracy and format compliance",
-                "score": 0.7906976744186046
-            },
             "2": {
-                "modification": "Add Test operator to validate generated solutions and refine them if tests fail, creating a feedback loop for better accuracy",
-                "score": 0.8023255813953488
+                "modification": "Add Test operator to validate and improve the generated solution before returning it",
+                "score": 0.813953488372093
             }
         },
-        "failure": {
-            "4": {
-                "modification": "Workflow Differentiation: Specialized from round 1 (score: 0.7442) in direction 'problem_type_specialization'. The parent workflow is differentiated for Mathematical Derivation problems by making the code generation instruction more specific to mathematical computation tasks. The workflow maintains the same si",
-                "score": 0.6976744186046512
-            }
-        }
-    },
-    "2": {
-        "score": 0.8023255813953488,
-        "success": {
-            "9": {
-                "modification": "Add a Custom validation step before testing to analyze the solution logic and provide specific feedback for improvement, helping catch logical errors that the Test operator might miss",
-                "score": 0.8255813953488372
-            }
-        },
-        "failure": {
-            "3": {
-                "modification": "Add ScEnsemble operator to generate multiple solutions and select the best one, improving solution quality and consistency",
-                "score": 0.7906976744186046
-            },
-            "7": {
-                "modification": "Workflow Differentiation: Specialized from round 2 (score: 0.8023) in direction 'problem_type_specialization'. The parent workflow is differentiated for Mathematical Derivation problems by making the instruction prompts more specific to mathematical computation and formula application. The workflow structure r",
-                "score": 0.0
-            }
-        }
-    },
-    "9": {
-        "score": 0.8255813953488372,
-        "success": {},
-        "failure": {
-            "13": {
-                "modification": "Workflow Differentiation: Specialized from round 9 (score: 0.8256) in direction 'problem_type_specialization'. The parent workflow is differentiated for Mathematical Derivation problems by making the prompts more specific to mathematical computation and formula-based problem solving. The key changes include:\n\n",
-                "score": 0.7790697674418605
-            }
-        }
-    },
-    "10": {
-        "score": 0.8837209302325582,
-        "success": {},
-        "failure": {
-            "12": {
-                "modification": "Add problem type detection before analysis to handle both mathematical and general programming problems appropriately, replacing the fixed mathematical analysis with adaptive problem categorization",
-                "score": 0.8604651162790697
-            },
-            "11": {
-                "modification": "Workflow Differentiation: Specialized from round 10 (score: 0.8837) in direction 'problem_type_specialization'. The workflow has been differentiated to specialize in Mathematical Derivation problems. The key modifications include:\n\n1. **Mathematical Analysis**: Enhanced the analysis step to focus specifically o",
-                "score": 0.8488372093023255
-            }
-        }
-    },
-    "3": {
-        "score": 0.7906976744186046,
-        "success": {
-            "8": {
-                "modification": "Add a problem analysis step using Custom operator before code generation to better understand the problem requirements and expected behavior",
-                "score": 0.8837209302325582
-            }
-        },
-        "failure": {
-            "6": {
-                "modification": "Add a format refinement step using the Custom operator with a specific prompt to ensure the output matches the expected format exactly, and modify the instruction for the second solution to focus on simpler, more direct approaches that match test expectations.",
-                "score": 0.7790697674418605
-            }
-        }
+        "failure": {}
     }
 }

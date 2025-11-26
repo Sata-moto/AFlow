@@ -2,8 +2,7 @@
 # @Date    :
 # @Author  : all
 # @Desc    : test on gsm8k
-import re
-from typing import Callable, List, Optional, Tuple
+from typing import Callable, List, Tuple
 
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
@@ -15,43 +14,41 @@ class GSM8KBenchmark(BaseBenchmark):
     def __init__(self, name: str, file_path: str, log_path: str, solved_threshold: float = 0.5):
         super().__init__(name, file_path, log_path, solved_threshold)
 
-    def extract_number(self, text: str) -> Optional[float]:
-        matches = re.findall(r"[-+]?\d+(?:,\d{3})*(?:\.\d+)?|\d+\.\d+", str(text))
-        if matches:
-            last_number = matches[-1].replace(",", "")
-            try:
-                return float(last_number)
-            except ValueError:
-                return None
-        else:
-            return None
-
-    def calculate_score(self, expected_output: float, prediction: float) -> Tuple[float, float]:
-        if prediction is None:
-            return 0.0, prediction
-        return 1.0 if abs(expected_output - prediction) <= 1e-6 else 0.0, prediction
-
     @retry(stop=stop_after_attempt(5), wait=wait_fixed(1), retry=retry_if_exception_type(Exception), reraise=True)
     async def _generate_output(self, graph, input_text):
         return await graph(input_text)
 
-    async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, float, float, float]:
+    async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, str, float, float]:
         input_text = problem["question"]
-        expected_output = self.extract_number(problem["answer"])
+        ground_truth = str(problem["answer"])
 
         try:
             output, cost = await self._generate_output(graph, input_text)
-            predicted_number = self.extract_number(output)
-            score, extracted_output = self.calculate_score(expected_output, predicted_number)
+            
+            # 直接使用原始输出进行 LLM 评判
+            score, explanation = await self.llm_judge_answer(
+                question=input_text,
+                ground_truth=ground_truth,
+                prediction=output,
+                task_description="solve the math problem and provide the correct numerical answer"
+            )
 
             if score == 0:
-                self.log_mismatch(input_text, expected_output, output, extracted_output)
+                self.log_mismatch(input_text, ground_truth, output, explanation, score)
 
-            return input_text, output, expected_output, score, cost
+            return input_text, output, ground_truth, score, cost
 
         except Exception as e:
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
-            return input_text, str(e), expected_output, 0.0, 0.0
+            self.log_mismatch(input_text, ground_truth, str(e), f"Error: {e}", 0.0)
+            return input_text, str(e), ground_truth, 0.0, 0.0
 
+    def calculate_score(self, expected_output: str, prediction: str) -> Tuple[float, str]:
+        """
+        使用 LLM 评判代替硬匹配
+        注意：这个方法是为了兼容父类接口，实际评判在 evaluate_problem 中完成
+        """
+        return 0.0, "Use llm_judge_answer instead"
+    
     def get_result_columns(self) -> List[str]:
-        return ["question", "prediction", "expected_output", "score", "cost"]
+        return ["question", "prediction", "ground_truth", "score", "cost"]
