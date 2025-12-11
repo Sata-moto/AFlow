@@ -1,108 +1,27 @@
 {
-    "9": {
-        "score": 0.885,
-        "success": {
-            "14": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [9, 12, 8] (scores: ['0.8850', '0.8850', '0.8750']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.9
-            }
-        },
-        "failure": {
-            "15": {
-                "modification": "Modified the workflow to use ensemble results for answer verification and formatting validation, and enhanced the custom prompt to better handle multiple valid answers and mathematical calculations",
-                "score": 0.87
-            },
-            "13": {
-                "modification": "Add a verification step using the custom operator to double-check mathematical calculations and ensure proper answer formatting before final output",
-                "score": 0.83
-            },
-            "12": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [9, 1, 7] (scores: ['0.8850', '0.8200', '0.8700']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.885
-            },
-            "17": {
-                "modification": "Add a verification step after ensemble selection that uses the custom operator to validate mathematical calculations, check answer formatting, and handle multiple valid answers before final output",
-                "score": 0.86
-            },
-            "10": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [9, 1, 7] (scores: ['0.8850', '0.8200', '0.8700']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.88
-            }
-        }
-    },
-    "3": {
-        "score": 0.88,
-        "success": {
-            "9": {
-                "modification": "Workflow Differentiation: Specialized from round 3 (score: 0.8800) in direction 'problem_type_specialization'. The parent workflow is differentiated for Logical Reasoning problems by making the prompts more specific to logical reasoning tasks. The workflow structure remains identical with the same three operat",
-                "score": 0.885
-            }
-        },
-        "failure": {
-            "5": {
-                "modification": "Workflow Differentiation: Specialized from round 3 (score: 0.8800) in direction 'problem_type_specialization'. The parent workflow is differentiated for Logical Reasoning problems by making the prompts more specific to logical reasoning tasks. The workflow structure remains identical with the same three operat",
-                "score": 0.88
-            },
-            "8": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [3, 1, 7] (scores: ['0.8800', '0.8200', '0.8700']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.875
-            },
-            "6": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [3, 1, 4] (scores: ['0.8800', '0.8200', '0.8700']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.82
-            }
-        }
-    },
-    "14": {
-        "score": 0.9,
-        "success": {},
-        "failure": {
-            "16": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [14, 12, 8] (scores: ['0.9000', '0.8850', '0.8750']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.875
-            },
-            "18": {
-                "modification": "Workflow Fusion: Combined high-performing workflows from rounds [14, 12, 8] (scores: ['0.9000', '0.8850', '0.8750']). Integrated the best aspects of 3 workflows to achieve improved coverage and performance.",
-                "score": 0.89
-            }
-        }
-    },
     "2": {
-        "score": 0.855,
-        "success": {
-            "3": {
-                "modification": "Add ScEnsemble operator to generate multiple reasoning approaches and select the most consistent answer, improving accuracy and format consistency",
-                "score": 0.88
-            },
-            "4": {
-                "modification": "Workflow Differentiation: Specialized from round 2 (score: 0.8550) in direction 'problem_type_specialization'. The parent workflow is differentiated for Logical Reasoning problems by making the prompts more specific to handle logical deduction, inference, and reasoning tasks. The workflow structure remains ide",
-                "score": 0.87
-            }
-        },
-        "failure": {}
-    },
-    "5": {
-        "score": 0.88,
+        "score": 0.87,
         "success": {},
         "failure": {
-            "11": {
-                "modification": "Workflow Differentiation: Specialized from round 5 (score: 0.8800) in direction 'problem_type_specialization'. The parent workflow is differentiated for Mathematical Derivation problems by:\n\n1. Converting the general \"logical reasoning approaches\" generation into specific \"mathematical derivation approaches\" t",
-                "score": 0.88
-            },
-            "7": {
-                "modification": "Workflow Differentiation: Specialized from round 5 (score: 0.8800) in direction 'problem_type_specialization'. The parent workflow is differentiated for Logical Reasoning problems by making the following concrete modifications:\n\n1. **Specialized Reasoning Generation**: The answer_generate calls now focus speci",
-                "score": 0.87
+            "3": {
+                "modification": "Add ScEnsemble operator to generate 3 independent answers and select the most consistent one, improving accuracy for counting and calculation questions. Also strengthen format instructions to output only raw values without units or extra text.",
+                "score": 0.83
             }
         }
     },
     "1": {
-        "score": 0.82,
+        "score": 0.825,
         "success": {
             "2": {
-                "modification": "Add AnswerGenerate operator to provide step-by-step reasoning before the final Custom operator call, ensuring better calculation accuracy and context understanding",
-                "score": 0.855
+                "modification": "Add AnswerGenerate operator for structured step-by-step reasoning, followed by a Custom review step to verify calculations and data extraction accuracy before producing the final answer.",
+                "score": 0.87
             }
         },
-        "failure": {}
+        "failure": {
+            "4": {
+                "modification": "Add ScEnsemble operator to generate 3 different reasoning attempts and select the most consistent answer, with a refined prompt that emphasizes careful numerical verification and concise answer formatting matching the expected output style.",
+                "score": 0.825
+            }
+        }
     }
 }

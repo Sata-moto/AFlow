@@ -242,10 +242,12 @@ class WorkflowFusion:
             # Create fusion modification description
             source_rounds = [w["round"] for w in envelope_workflows]
             source_scores = [f"{w['avg_score']:.4f}" for w in envelope_workflows]
+            num_workflows = len(envelope_workflows)
             
-            fusion_modification = f"Workflow Fusion: Combined high-performing workflows from rounds {source_rounds} " \
-                                f"(scores: {source_scores}). Integrated the best aspects of {len(envelope_workflows)} " \
-                                f"workflows to achieve improved coverage and performance."
+            fusion_type = "3-way" if num_workflows == 3 else f"{num_workflows}-way"
+            fusion_modification = f"{fusion_type.capitalize()} Workflow Fusion: Combined {num_workflows} high-performing workflows " \
+                                f"from rounds {source_rounds} (scores: {source_scores}). " \
+                                f"Integrated complementary strengths to maximize problem coverage and performance."
             
             # Create a mock sample object for the fusion
             fusion_sample = {
@@ -280,10 +282,14 @@ class WorkflowFusion:
         """
         try:
             # Create a comprehensive log entry for fusion
+            num_workflows = len(envelope_workflows)
+            fusion_type_label = "3-way" if num_workflows == 3 else f"{num_workflows}-way"
+            
             log_data = {
                 "fusion_metadata": {
                     "timestamp": time.time(),
-                    "fusion_type": "envelope_fusion",
+                    "fusion_type": f"{fusion_type_label}_envelope_fusion",
+                    "num_source_workflows": num_workflows,
                     "source_workflows": [
                         {
                             "round": w["round"],
@@ -293,7 +299,7 @@ class WorkflowFusion:
                         for w in envelope_workflows
                     ],
                     "total_unique_problems": len(set().union(*[set(w["solved_problems"]) for w in envelope_workflows])),
-                    "fusion_strategy": "Combined best aspects of envelope workflows using LLM-guided fusion"
+                    "fusion_strategy": f"LLM-guided {fusion_type_label} fusion combining complementary strengths from {num_workflows} high-performing workflows"
                 },
                 # Initialize empty list for actual execution logs (will be populated during evaluation)
                 "execution_logs": []

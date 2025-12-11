@@ -13,10 +13,10 @@ from typing import Dict, Optional, Any
 class LLMConfig:
     def __init__(self, config: dict):
         self.model = config.get("model", "gpt-4o-mini")
-        self.temperature = config.get("temperature", 1)
+        self.temperature = config.get("temperature", None)
         self.key = config.get("key", None)
         self.base_url = config.get("base_url", "https://oneapi.deepwisdom.ai/v1")
-        self.top_p = config.get("top_p", 1)
+        self.top_p = config.get("top_p", None)
 
 class LLMsConfig:
     """Configuration manager for multiple LLM configurations"""
@@ -70,10 +70,10 @@ class LLMsConfig:
         # Create a config dictionary with the expected keys for LLMConfig
         llm_config = {
             "model": llm_name,  # Use the key as the model name
-            "temperature": config.get("temperature", 1),
+            "temperature": config.get("temperature", None),
             "key": config.get("api_key"),  # Map api_key to key
             "base_url": config.get("base_url", "https://oneapi.deepwisdom.ai/v1"),
-            "top_p": config.get("top_p", 1)  # Add top_p parameter
+            "top_p": config.get("top_p", None)  # Add top_p parameter
         }
         
         # Create and return an LLMConfig instance with the specified configuration
@@ -94,7 +94,7 @@ class ModelPricing:
         "gpt-4o": {"input": 0.0025, "output": 0.01},
         "gpt-4o-mini": {"input": 0.00015, "output": 0.0006},
         "gpt-4o-mini-2024-07-18": {"input": 0.00015, "output": 0.0006},
-        "claude-sonnet-4-20250514": {"input": 0.003, "output": 0.015},
+        "claude-opus-4-5-20251101": {"input": 0.003, "output": 0.015},
         "o3":{"input":0.003, "output":0.015},
         "o3-mini": {"input": 0.0011, "output": 0.0025},
     }

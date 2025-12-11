@@ -1,0 +1,122 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+\usepackage{fontspec}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode} % 使用 algpseudocode 以支持 Function 等高级语法
+
+% Set default font
+\babelfont{rm}{Noto Sans}
+
+% Define custom commands
+\newcommand{\Func}[1]{\textsc{#1}}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\begin{document}
+
+\section{Method: Integrated Search Algorithm}
+
+\begin{algorithm}[H]
+\caption{DF-Flow Probabilistic Control \& Selection Algorithm}
+\label{alg:df_flow_control}
+\begin{algorithmic}[1]
+\Require Initial workflow pool $\mathcal{P}_0$, Max iterations $T_{max}$
+\Require \textbf{Hyperparameters:}
+    \Statex \quad Sliding Window $k = 3$
+    \Statex \quad Stagnation Sensitivity $\kappa = 80$
+    \Statex \quad Base Probabilities $\alpha_s = 0.50, \alpha_m = 0.60$
+    \Statex \quad Decay Factors $\eta_s = 0.03, \eta_m = 0.03$
+    \Statex \quad Fusion Weights $\alpha_U = 0.6, \alpha_I = 0.4$
+    \Statex \quad Complementarity Weights $\beta_{triple} = 0.6, \beta_{pair} = 0.4$
+    \Statex \quad Consensus Weights $\gamma_{pair} = 0.7, \gamma_{triple} = 0.3$
+
+\State \textbf{Initialize:} $\mathcal{H}_R \leftarrow [R(\mathcal{P}_0)]$, Global counts $N_{s} \leftarrow 0, N_{m} \leftarrow 0$
+
+\For{$t = 1$ to $T_{max}$}
+    \State \textbf{/* Phase 1: Macro-Scheduling via Stagnation Detection */}
+    \If{$t \ge 2k$}
+        \State $R_{recent} \leftarrow \max(\mathcal{H}_R[t-k+1 : t])$
+        \State $R_{prev} \leftarrow \max(\mathcal{H}_R[t-2k+1 : t-k])$
+        \State $\Delta_t \leftarrow R_{recent} - R_{prev}$
+        \State $plateau_t \leftarrow \frac{1}{1 + \exp(\kappa \cdot \Delta_t)}$ \Comment{Logistic mapping}
+    \Else
+        \State $plateau_t \leftarrow 0$ \Comment{Warm-up phase}
+    \EndIf
+
+    \State \textbf{/* Phase 2: Dynamic Probability Update */}
+    \State $p_{split} \leftarrow \alpha_s \cdot plateau_t \cdot e^{-\eta_s \cdot N_{s}}$
+    \State $p_{fuse} \leftarrow \alpha_m \cdot plateau_t \cdot e^{-\eta_m \cdot N_{m}}$
+    \State $p_{opt} \leftarrow \max(0, 1 - p_{split} - p_{fuse})$
+    \State $\pi_t \leftarrow \text{Normalize}(\{p_{opt}, p_{split}, p_{fuse}\})$
+    
+    \State \textbf{/* Phase 3: Sampling \& Target Selection */}
+    \State Sample operator $op \sim \pi_t$
+    
+    \If{$op == \text{DIFFERENTIATE}$}
+        \State $\mathcal{W}^* \leftarrow \Func{SelectForSplit}(\mathcal{P}_t)$ \Comment{Maximize $\Phi_{split}$}
+        \State $\mathcal{W}_{new} \leftarrow \text{LLM\_Modify}(\mathcal{W}^*, \text{Cluster\_Context})$
+        \State $N_{s} \leftarrow N_{s} + 1$
+    \ElsIf{$op == \text{FUSE}$}
+        \State $\{\mathcal{W}_i, \mathcal{W}_j, \mathcal{W}_k\} \leftarrow \Func{SelectForFuse}(\mathcal{P}_t)$ \Comment{Select 3 workflows}
+        \State $\mathcal{W}_{new} \leftarrow \text{LLM\_Merge}(\mathcal{W}_i, \mathcal{W}_j, \mathcal{W}_k)$ \Comment{3-way fusion}
+        \State $N_{m} \leftarrow N_{m} + 1$
+    \Else \Comment{OPTIMIZE}
+        \State $\mathcal{W}^* \leftarrow \text{SelectBest}(\mathcal{P}_t)$
+        \State $\mathcal{W}_{new} \leftarrow \text{LLM\_Optimize}(\mathcal{W}^*)$
+    \EndIf
+
+    \State Evaluate $\mathcal{W}_{new}$ and update $\mathcal{P}_{t+1} \leftarrow \mathcal{P}_t \cup \{\mathcal{W}_{new}\}$
+    \State Update history $\mathcal{H}_R$.append($\max_{\mathcal{W} \in \mathcal{P}_{t+1}} R(\mathcal{W})$)
+\EndFor
+\State \Return Best workflow in $\mathcal{P}_{T_{max}}$
+\end{algorithmic}
+\end{algorithm}
+
+% ---------------- Sub-functions for Selection ----------------
+\begin{algorithm}[H]
+\caption{Potential-Based Target Selection}
+\label{alg:selection_funcs}
+\begin{algorithmic}[1]
+\Function{SelectForSplit}{$\mathcal{P}$}
+    \State $\mathcal{C} \leftarrow \emptyset$
+    \For{each $\mathcal{W}_i \in \mathcal{P}$}
+        \State Calculate diversity $D_i$ and local plateau $L_i$
+        \State $\Phi_{split}(i) \leftarrow L_i \cdot [\lambda_1(1-R_i) + \lambda_2 D_i] \cdot e^{-\eta_s s_i}$
+        \State Add $(\mathcal{W}_i, \Phi_{split}(i))$ to $\mathcal{C}$
+    \EndFor
+    \State \Return $\mathcal{W}$ sampled from $\text{Softmax}(\mathcal{C})$
+\EndFunction
+
+\Statex
+
+\Function{SelectForFuse}{$\mathcal{P}$}
+    \State \textbf{Step 1: Filter} Candidates $\mathcal{P}' \leftarrow \text{Top-}6(\mathcal{P})$ by coverage score
+    \State \textbf{Step 2: Triple-wise Scoring} \Comment{Select 3 workflows for fusion}
+    \State $\Phi_{best} \leftarrow -\infty, \text{Triple}^* \leftarrow \text{None}$
+    \For{each triple $(\mathcal{W}_i, \mathcal{W}_j, \mathcal{W}_k)$ in $\mathcal{P}'$}
+        \State \Comment{Pairwise complementarity (union coverage)}
+        \State $U_{ij} \leftarrow |C_i \cup C_j|, \quad U_{jk} \leftarrow |C_j \cup C_k|, \quad U_{ik} \leftarrow |C_i \cup C_k|$
+        \State $\Phi_{U}^{pair} \leftarrow \frac{U_{ij} + U_{jk} + U_{ik}}{3}$ \Comment{Average pairwise union}
+        \State \Comment{Pairwise consensus (intersection coverage)}
+        \State $I_{ij} \leftarrow |C_i \cap C_j|, \quad I_{jk} \leftarrow |C_j \cap C_k|, \quad I_{ik} \leftarrow |C_i \cap C_k|$
+        \State $\Phi_{I}^{pair} \leftarrow \frac{I_{ij} + I_{jk} + I_{ik}}{3}$ \Comment{Average pairwise intersection}
+        \State \Comment{Triple-wise metrics}
+        \State $\Phi_{U}^{triple} \leftarrow |C_i \cup C_j \cup C_k|$ \Comment{Triple union}
+        \State $\Phi_{I}^{triple} \leftarrow |C_i \cap C_j \cap C_k|$ \Comment{Triple intersection (strong consensus)}
+        \State \Comment{Combined scoring}
+        \State $\Phi_{U} \leftarrow \beta_{triple} \cdot \Phi_{U}^{triple} + \beta_{pair} \cdot \Phi_{U}^{pair}$
+        \State $\Phi_{I} \leftarrow \gamma_{pair} \cdot \Phi_{I}^{pair} + \gamma_{triple} \cdot \Phi_{I}^{triple}$
+        \State $\Phi_{merge} \leftarrow (\alpha_U \cdot \Phi_{U} + \alpha_I \cdot \Phi_{I}) \cdot \text{Penalty}(i, j, k)$
+        \If{$\Phi_{merge} > \Phi_{best}$}
+            \State $\Phi_{best} \leftarrow \Phi_{merge}, \text{Triple}^* \leftarrow \{\mathcal{W}_i, \mathcal{W}_j, \mathcal{W}_k\}$
+        \EndIf
+    \EndFor
+    \State \Return $\text{Triple}^*$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}

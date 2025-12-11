@@ -108,11 +108,22 @@ def clear_optimization_records(dataset: str, optimized_path: str = "workspace"):
         with open(results_path, 'w', encoding='utf-8') as f:
             f.write("")
     
-    # 4. Remove fusion metadata
+    # 4. Remove fusion and differentiation metadata files
+    # Remove old single fusion_metadata.json
     fusion_metadata_path = os.path.join(workflows_path, "fusion_metadata.json")
     if os.path.exists(fusion_metadata_path):
         print(f"  Removing {fusion_metadata_path}")
         os.remove(fusion_metadata_path)
+    
+    # Remove all numbered fusion metadata files (fusion_metadata_1.json, fusion_metadata_2.json, ...)
+    for fusion_file in glob.glob(os.path.join(workflows_path, "fusion_metadata_*.json")):
+        print(f"  Removing {fusion_file}")
+        os.remove(fusion_file)
+    
+    # Remove all numbered differentiation metadata files (differentiation_metadata_1.json, ...)
+    for diff_file in glob.glob(os.path.join(workflows_path, "differentiation_metadata_*.json")):
+        print(f"  Removing {diff_file}")
+        os.remove(diff_file)
     
     # 5. Remove CSV files and clear log.json in round_1
     round_1_path = os.path.join(workflows_path, "round_1")
@@ -167,7 +178,7 @@ def parse_args():
     parser.add_argument(
         "--opt_model_name",
         type=str,
-        default="claude-sonnet-4-20250514",
+        default="claude-opus-4-5-20251101",
         help="Specifies the name of the model used for optimization tasks.",
     )
     parser.add_argument(
@@ -195,18 +206,6 @@ def parse_args():
         default=0.0,
         help="Minimum score improvement required for fusion adoption.",
     )
-    parser.add_argument(
-        "--fusion_start_round",
-        type=int,
-        default=5,
-        help="Round from which fusion is allowed to start.",
-    )
-    parser.add_argument(
-        "--fusion_interval_rounds",
-        type=int,
-        default=2,
-        help="Minimum rounds between consecutive fusion attempts.",
-    )
     # Differentiation-specific parameters
     parser.add_argument(
         "--enable_differentiation",
@@ -214,17 +213,79 @@ def parse_args():
         default=True,
         help="Whether to enable workflow differentiation during optimization.",
     )
+    # Theoretical probability control parameters (new)
     parser.add_argument(
-        "--differentiation_probability",
-        type=float,
-        default=0.3,
-        help="Probability of attempting differentiation vs regular optimization.",
+        "--sliding_window_k",
+        type=int,
+        default=2,
+        help="Sliding window size for stagnation detection.",
     )
     parser.add_argument(
-        "--max_differentiation_rounds",
-        type=int,
-        default=5,
-        help="Maximum number of differentiation rounds per optimization cycle.",
+        "--stagnation_sensitivity_kappa",
+        type=float,
+        default=50.0,
+        help="Sensitivity parameter kappa for stagnation detection.",
+    )
+    parser.add_argument(
+        "--alpha_s",
+        type=float,
+        default=0.60,
+        help="Base probability for differentiation (α_s).",
+    )
+    parser.add_argument(
+        "--alpha_m",
+        type=float,
+        default=0.50,
+        help="Base probability for fusion (α_m).",
+    )
+    parser.add_argument(
+        "--eta_s",
+        type=float,
+        default=0.1,
+        help="Decay factor for differentiation (η_s).",
+    )
+    parser.add_argument(
+        "--eta_m",
+        type=float,
+        default=0.1,
+        help="Decay factor for fusion (η_m).",
+    )
+    # Fusion selection weights
+    parser.add_argument(
+        "--alpha_U",
+        type=float,
+        default=0.6,
+        help="Fusion complementarity weight (α_U).",
+    )
+    parser.add_argument(
+        "--alpha_I",
+        type=float,
+        default=0.4,
+        help="Fusion consensus weight (α_I).",
+    )
+    parser.add_argument(
+        "--beta_triple",
+        type=float,
+        default=0.6,
+        help="Triple-wise union weight (β_triple).",
+    )
+    parser.add_argument(
+        "--beta_pair",
+        type=float,
+        default=0.4,
+        help="Pairwise union weight (β_pair).",
+    )
+    parser.add_argument(
+        "--gamma_pair",
+        type=float,
+        default=0.7,
+        help="Pairwise intersection weight (γ_pair).",
+    )
+    parser.add_argument(
+        "--gamma_triple",
+        type=float,
+        default=0.3,
+        help="Triple-wise intersection weight (γ_triple).",
     )
     return parser.parse_args()
 
@@ -270,27 +331,39 @@ if __name__ == "__main__":
         enable_fusion=args.enable_fusion,
         max_envelope_workflows=args.max_envelope_workflows,
         fusion_score_threshold=args.fusion_score_threshold,
-        fusion_start_round=args.fusion_start_round,
-        fusion_interval_rounds=args.fusion_interval_rounds,
         enable_differentiation=args.enable_differentiation,
-        differentiation_probability=args.differentiation_probability,
-        max_differentiation_rounds=args.max_differentiation_rounds,
+        # Theoretical probability control parameters
+        sliding_window_k=args.sliding_window_k,
+        stagnation_sensitivity_kappa=args.stagnation_sensitivity_kappa,
+        alpha_s=args.alpha_s,
+        alpha_m=args.alpha_m,
+        eta_s=args.eta_s,
+        eta_m=args.eta_m,
+        # Fusion selection weights
+        alpha_U=args.alpha_U,
+        alpha_I=args.alpha_I,
+        beta_triple=args.beta_triple,
+        beta_pair=args.beta_pair,
+        gamma_pair=args.gamma_pair,
+        gamma_triple=args.gamma_triple,
     )
 
     print("\n" + "="*50)
-    print("Enhanced AFlow with Integrated Workflow Fusion and Differentiation")
+    print("Enhanced AFlow with Theoretical Probability Control")
     print("="*50)
     print(f"Dataset: {config.dataset}")
     print(f"Fusion enabled: {args.enable_fusion}")
     if args.enable_fusion:
-        print(f"Max envelope workflows: {args.max_envelope_workflows}")
-        print(f"Fusion score threshold: {args.fusion_score_threshold}")
-        print(f"Fusion start round: {args.fusion_start_round}")
-        print(f"Fusion interval rounds: {args.fusion_interval_rounds}")
+        print(f"  Max envelope workflows: {args.max_envelope_workflows}")
+        print(f"  Fusion score threshold: {args.fusion_score_threshold}")
     print(f"Differentiation enabled: {args.enable_differentiation}")
-    if args.enable_differentiation:
-        print(f"Differentiation probability: {args.differentiation_probability}")
-        print(f"Max differentiation rounds: {args.max_differentiation_rounds}")
+    print("\nTheoretical Probability Control Parameters:")
+    print(f"  Sliding window k: {args.sliding_window_k}")
+    print(f"  Stagnation sensitivity κ: {args.stagnation_sensitivity_kappa}")
+    print(f"  Base probability α_s (differentiation): {args.alpha_s}")
+    print(f"  Base probability α_m (fusion): {args.alpha_m}")
+    print(f"  Decay factor η_s (differentiation): {args.eta_s}")
+    print(f"  Decay factor η_m (fusion): {args.eta_m}")
     print("="*50)
     
     # Run enhanced optimization with integrated fusion
@@ -304,5 +377,5 @@ if __name__ == "__main__":
     optimizer.optimize("Test")
 
     print("\n" + "="*50)
-    print("Enhanced optimization with integrated fusion completed!")
+    print("Enhanced optimization with theoretical probability control completed!")
     print("="*50)
