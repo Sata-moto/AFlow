@@ -161,7 +161,12 @@ def parse_args():
     )
     parser.add_argument("--initial_round", type=int, default=1, help="Initial round")
     parser.add_argument("--max_rounds", type=int, default=20, help="Max iteration rounds")
-    parser.add_argument("--check_convergence", type=bool, default=True, help="Whether to enable early stop")
+    parser.add_argument(
+        "--check_convergence",
+        type=lambda x: x.lower() == "true",
+        default=True,
+        help="Whether to enable early stop"
+    )
     parser.add_argument("--validation_rounds", type=int, default=1, help="Validation rounds")
     parser.add_argument(
         "--clear_previous_records",
@@ -178,7 +183,7 @@ def parse_args():
     parser.add_argument(
         "--opt_model_name",
         type=str,
-        default="claude-opus-4-5-20251101",
+        default="claude-sonnet-4-20250514",
         help="Specifies the name of the model used for optimization tasks.",
     )
     parser.add_argument(
@@ -223,7 +228,7 @@ def parse_args():
     parser.add_argument(
         "--stagnation_sensitivity_kappa",
         type=float,
-        default=50.0,
+        default=30.0,
         help="Sensitivity parameter kappa for stagnation detection.",
     )
     parser.add_argument(

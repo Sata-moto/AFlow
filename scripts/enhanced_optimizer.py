@@ -60,6 +60,9 @@ class EnhancedOptimizer(Optimizer):
         # Decay Factors
         eta_s: float = 0.03,    # 分化衰减因子 η_s
         eta_m: float = 0.03,    # 融合衰减因子 η_m
+        # === Differentiation Selection Weights ===
+        alpha_split_potential: float = 0.5,  # 分化潜力权重 (0.5 = 平衡潜力和准确率)
+        lambda_category_weight: float = 0.5,  # 类别重要性权重 (0.5 = 平衡贡献度和类别大小)
         # === Fusion Selection Weights ===
         alpha_U: float = 0.6,   # 融合互补性权重 α_U
         alpha_I: float = 0.4,   # 融合一致性权重 α_I
@@ -107,6 +110,10 @@ class EnhancedOptimizer(Optimizer):
         self.eta_s = eta_s  # 分化衰减因子
         self.eta_m = eta_m  # 融合衰减因子
         
+        # Differentiation selection weights
+        self.alpha_split_potential = alpha_split_potential  # 分化潜力权重
+        self.lambda_category_weight = lambda_category_weight  # 类别重要性权重
+        
         # Fusion selection weights
         self.alpha_U = alpha_U      # 融合互补性权重
         self.alpha_I = alpha_I      # 融合一致性权重
@@ -121,6 +128,10 @@ class EnhancedOptimizer(Optimizer):
         
         # Performance history (H_R)
         self.performance_history = []  # 存储每轮的最佳性能
+        
+        # Cost tracking
+        self.round_costs = []  # 每轮的cost记录
+        self.total_cost = 0.0  # 总cost
         
         # Retry parameters for fusion and differentiation
         self.max_retries = 3  # Maximum number of retries for fusion and differentiation
@@ -257,19 +268,20 @@ class EnhancedOptimizer(Optimizer):
                         # 分化操作
                         if self.enable_differentiation:
                             logger.info(f"Executing DIFFERENTIATE operation for round {self.round + 1}")
-                            score = self._attempt_with_retry(
+                            result = self._attempt_with_retry(
                                 lambda: loop.run_until_complete(self._attempt_differentiation()),
                                 "differentiation", 3
                             )
-                            if score is not None:
+                            if result is not None:
+                                score, round_cost = result
                                 self.N_s += 1  # 增加分化计数
                                 logger.info(f"✓ Differentiation successful! Updated N_s = {self.N_s}")
                             else:
                                 logger.warning("Differentiation failed, falling back to optimization")
-                                score = loop.run_until_complete(self._optimize_graph())
+                                score, round_cost = loop.run_until_complete(self._optimize_graph())
                         else:
                             logger.warning("Differentiation disabled, falling back to optimization")
-                            score = loop.run_until_complete(self._optimize_graph())
+                            score, round_cost = loop.run_until_complete(self._optimize_graph())
                     
                     elif operation == 'fuse':
                         # 融合操作
@@ -277,27 +289,28 @@ class EnhancedOptimizer(Optimizer):
                             logger.info(f"Executing FUSE operation for round {self.round + 1}")
                             # 检查融合前置条件
                             if self._check_fusion_preconditions():
-                                score = self._attempt_with_retry(
+                                result = self._attempt_with_retry(
                                     lambda: loop.run_until_complete(self._attempt_fusion()),
                                     "fusion", 3
                                 )
-                                if score is not None:
+                                if result is not None:
+                                    score, round_cost = result
                                     self.N_m += 1  # 增加融合计数
                                     logger.info(f"✓ Fusion successful! Updated N_m = {self.N_m}")
                                 else:
                                     logger.warning("Fusion failed, falling back to optimization")
-                                    score = loop.run_until_complete(self._optimize_graph())
+                                    score, round_cost = loop.run_until_complete(self._optimize_graph())
                             else:
                                 logger.warning("Fusion preconditions not met, falling back to optimization")
-                                score = loop.run_until_complete(self._optimize_graph())
+                                score, round_cost = loop.run_until_complete(self._optimize_graph())
                         else:
                             logger.warning("Fusion disabled, falling back to optimization")
-                            score = loop.run_until_complete(self._optimize_graph())
+                            score, round_cost = loop.run_until_complete(self._optimize_graph())
                     
                     else:  # operation == 'optimize'
                         # 优化操作
                         logger.info(f"Executing OPTIMIZE operation for round {self.round + 1}")
-                        score = loop.run_until_complete(self._optimize_graph())
+                        score, round_cost = loop.run_until_complete(self._optimize_graph())
                     
                     break
                 except Exception as e:
@@ -306,6 +319,7 @@ class EnhancedOptimizer(Optimizer):
                     if retry_count == max_retries:
                         logger.warning("Max retries reached. Moving to next round.")
                         score = None
+                        round_cost = 0.0
 
                     wait_time = 5 * retry_count
                     time.sleep(wait_time)
@@ -316,6 +330,15 @@ class EnhancedOptimizer(Optimizer):
 
             self.round += 1
             logger.info(f"Score for round {self.round}: {score}")
+            
+            # 记录本轮的cost（已经从操作中获取）
+            self.round_costs.append({
+                'round': self.round,
+                'cost': round_cost,
+                'score': score
+            })
+            self.total_cost += round_cost
+            logger.info(f"Cost for round {self.round}: ${round_cost:.4f} (Total: ${self.total_cost:.4f})")
             
             # 更新性能历史记录（用于停滞检测）
             if score is not None:
@@ -334,6 +357,9 @@ class EnhancedOptimizer(Optimizer):
                 break
 
             time.sleep(5)
+        
+        # 打印最终的cost统计
+        self._print_cost_summary()
 
     def _attempt_with_retry(self, operation, operation_name: str, max_retries: int = 3):
         """
@@ -366,6 +392,59 @@ class EnhancedOptimizer(Optimizer):
                     logger.error(f"{operation_name.capitalize()} error after {max_retries} attempts: {e}", exc_info=True)
         
         return None
+    
+
+    def _print_cost_summary(self):
+        """
+        打印完整的cost统计信息
+        """
+        logger.info("=" * 80)
+        logger.info("COST SUMMARY")
+        logger.info("=" * 80)
+        
+        # 打印每轮的cost
+        logger.info(f"{'Round':<10} {'Score':<15} {'Cost ($)':<15}")
+        logger.info("-" * 80)
+        for record in self.round_costs:
+            round_num = record['round']
+            score = record['score'] if record['score'] is not None else 'N/A'
+            cost = record['cost']
+            logger.info(f"{round_num:<10} {str(score):<15} ${cost:.4f}")
+        
+        logger.info("-" * 80)
+        logger.info(f"{'TOTAL':<10} {'':<15} ${self.total_cost:.4f}")
+        
+        # 计算平均cost
+        if len(self.round_costs) > 0:
+            avg_cost = self.total_cost / len(self.round_costs)
+            logger.info(f"{'AVERAGE':<10} {'':<15} ${avg_cost:.4f}")
+        
+        logger.info("=" * 80)
+        
+        # 按操作类型分类统计（如果有操作记录）
+        if hasattr(self, 'operation_history') and self.operation_history:
+            logger.info("\nCost Breakdown by Operation Type:")
+            
+            # 统计每种操作的cost
+            operation_costs = {}
+            for i, record in enumerate(self.round_costs):
+                # 操作历史从round 2开始，因为round 1是初始化
+                if i < len(self.operation_history):
+                    op = self.operation_history[i]
+                    if op not in operation_costs:
+                        operation_costs[op] = {'count': 0, 'total_cost': 0.0}
+                    operation_costs[op]['count'] += 1
+                    operation_costs[op]['total_cost'] += record['cost']
+            
+            # 打印各操作类型的统计
+            for op_type in ['optimize', 'differentiate', 'fuse']:
+                if op_type in operation_costs:
+                    stats = operation_costs[op_type]
+                    percentage = (stats['total_cost'] / self.total_cost * 100) if self.total_cost > 0 else 0
+                    logger.info(f"  {op_type.capitalize():<15}: {stats['count']} rounds, "
+                              f"${stats['total_cost']:.4f} ({percentage:.1f}%)")
+            
+            logger.info("=" * 80)
 
     def _calculate_plateau(self) -> float:
         """
@@ -390,16 +469,29 @@ class EnhancedOptimizer(Optimizer):
         kappa = self.stagnation_sensitivity_kappa
         t = len(self.performance_history)
         
-        # Warm-up phase: 不足 2k 轮时，停滞度为 0
-        if t < 2 * k:
-            logger.debug(f"Warm-up phase: round {t} < {2*k}, plateau = 0.0")
+        # Warm-up phase: 至少需要2轮历史数据才能计算停滞度
+        if t < 2:
+            logger.info(f"[Plateau Calculation] Warm-up phase: t={t} < 2, returning plateau = 0.0")
             return 0.0
         
-        # 计算最近 k 轮的最大性能
-        R_recent = max(self.performance_history[t - k : t])
+        # 动态调整窗口大小: 当历史数据不足 2k 时,使用 t//2 作为窗口大小
+        effective_k = min(k, t // 2)
         
-        # 计算之前 k 轮的最大性能
-        R_prev = max(self.performance_history[t - 2*k : t - k])
+        # 确保窗口大小至少为 1
+        if effective_k < 1:
+            logger.warning(f"Insufficient history for plateau calculation: t={t}, k={k}, effective_k={effective_k}, returning 0.0")
+            return 0.0
+        
+        logger.info(f"[Plateau Calculation] t={t}, k={k}, effective_k={effective_k}")
+        
+        if effective_k < k:
+            logger.debug(f"Using reduced window size: k={effective_k} (original k={k}, history length={t})")
+        
+        # 计算最近 effective_k 轮的最大性能
+        R_recent = max(self.performance_history[t - effective_k : t])
+        
+        # 计算之前 effective_k 轮的最大性能
+        R_prev = max(self.performance_history[t - 2*effective_k : t - effective_k])
         
         # 计算性能差异 Δ_t
         delta_t = R_recent - R_prev
@@ -411,7 +503,8 @@ class EnhancedOptimizer(Optimizer):
             # 处理极端情况
             plateau_t = 1.0 if delta_t < 0 else 0.0
         
-        logger.info(f"Stagnation Detection: R_recent={R_recent:.4f}, R_prev={R_prev:.4f}, "
+        window_info = f" (window_k={effective_k})" if effective_k < k else ""
+        logger.info(f"Stagnation Detection{window_info}: R_recent={R_recent:.4f}, R_prev={R_prev:.4f}, "
                    f"Δ_t={delta_t:.4f}, plateau_t={plateau_t:.4f}")
         
         return plateau_t
@@ -484,137 +577,242 @@ class EnhancedOptimizer(Optimizer):
             }
         }
     
-    def _select_for_split(self, workflow_results: List[Dict]) -> Dict:
+    def _select_for_split(self, workflow_results: List[Dict]) -> tuple:
         """
-        理论化分化目标选择 (Algorithm 2: SelectForSplit)
+        理论化分化目标选择 (Algorithm 2: SelectForSplit - 优势特征提取模型)
         
-        基于势函数 Φ_split 选择最适合分化的工作流：
-        Φ_split(i) = L_i · [λ₁(1-R_i) + λ₂D_i] · exp(-η_s·s_i)
+        基于子问题优势识别最适合分化的工作流：
+        Score_split(W) = max_k [Contrib_k · (Recall_k - Acc_global)]
         
         其中：
-        - L_i: 局部停滞度（该工作流在近期是否停滞）
-        - R_i: 归一化性能得分（性能越低越适合改进）
-        - D_i: 多样性得分（与其他工作流的差异度）
-        - s_i: 该工作流已被分化的次数
-        - λ₁, λ₂: 平衡参数
+        - Acc_global = C_total / N：全局正确率（基准线）
+        - Recall_k = C_k / N_k：子问题k的召回率（统治力）
+        - Contrib_k = C_k / N：子问题k的绝对贡献度（防止小类别偏向）
+        
+        选择策略（权衡潜力和准确率）：
+        1. 计算每个workflow的分化潜力 Split_Potential(W)
+        2. 归一化: x = Split_Potential(W) / max(Split_Potential)
+        3. 修正分数: Adjusted_Score = α·x + (1-α)·Acc_global
+        4. 选择修正分数最高的workflow
+        
+        参数α控制权衡:
+        - α=1.0: 只看分化潜力(可能选择"偏科"但性能差的workflow)
+        - α=0.5: 平衡潜力和准确率(默认)
+        - α=0.0: 只看准确率(退化为选择最佳workflow)
+        
+        算法寻找"高性能偏科专家"：既有专业化潜力，整体性能也不能太差
+        
+        修改历史：
+        - 2025-12-16: 使用绝对贡献度(C_k/N)而非相对贡献度(C_k/C_total)
+        - 2025-12-16: 添加准确率权衡机制
         
         Args:
             workflow_results: 所有工作流的结果列表
             
         Returns:
-            Dict: 选中的工作流信息
+            tuple: (选中的工作流, 目标分化类别)
+                   如果没有合适的工作流，返回 (None, None)
         """
         logger.info("=" * 80)
-        logger.info("SelectForSplit: Calculating split potential for all workflows")
+        logger.info("SelectForSplit: Dominant Feature Extraction for Specialization")
         logger.info("=" * 80)
-        
-        # 超参数
-        lambda_1 = 0.6  # 性能改进权重
-        lambda_2 = 0.4  # 多样性权重
         
         if not workflow_results or len(workflow_results) == 0:
             logger.warning("No workflows available for split selection")
-            return None
+            return None, None
         
-        # 计算全局统计信息
-        all_scores = [w.get('avg_score', 0.0) for w in workflow_results]
-        max_score = max(all_scores) if all_scores else 1.0
-        min_score = min(all_scores) if all_scores else 0.0
-        score_range = max_score - min_score if max_score > min_score else 1.0
+        # Step 1: 加载问题分类元数据
+        category_metadata = self._load_category_metadata()
         
+        if not category_metadata:
+            logger.warning("No category metadata available, cannot use category-based selection")
+            return None, None
+        
+        total_problems = sum(category_metadata.values())
+        logger.info(f"Dataset: {total_problems} total problems across {len(category_metadata)} categories")
+        
+        # Step 2: 为每个工作流计算分化潜力
         candidates = []
         
         for workflow in workflow_results:
             round_num = workflow.get('round', 0)
-            score = workflow.get('avg_score', 0.0)
             
-            # 归一化性能得分 R_i ∈ [0, 1]
-            R_i = (score - min_score) / score_range if score_range > 0 else 0.5
+            # 2.1 加载该工作流的分类统计
+            category_stats = self._load_workflow_category_stats(workflow)
+            c_total = sum(category_stats.values())
             
-            # 计算局部停滞度 L_i
-            # 检查该工作流在近 k 轮是否有提升
-            L_i = self._calculate_local_plateau(workflow, workflow_results)
+            if c_total == 0:
+                logger.debug(f"Round {round_num}: No correct answers, skipping")
+                continue
             
-            # 计算多样性 D_i
-            # 与其他高性能工作流的差异度
-            D_i = self._calculate_diversity(workflow, workflow_results)
+            # 2.2 计算全局正确率（基准线）
+            acc_global = c_total / total_problems
             
-            # 获取该工作流被分化的次数
+            # 2.3 遍历所有类别，找最大优势
+            max_score = -1.0
+            best_category = None
+            category_analysis = {}
+            
+            for category, n_k in category_metadata.items():
+                if n_k == 0:
+                    continue
+                
+                c_k = category_stats.get(category, 0)
+                
+                # 子问题召回率
+                recall_k = c_k / n_k
+                
+                # 只考虑超过全局水平的子领域（有优势）
+                if recall_k > acc_global:
+                    # 子问题绝对贡献度 (相对于整个数据集)
+                    contrib_k = c_k / total_problems
+                    
+                    # 类别重要性权重 (归一化的类别样本比例)
+                    # n_k越大，weight_k越大，表示该类别越重要
+                    weight_k = n_k / total_problems
+                    
+                    # 分化潜力得分 = 加权组合(绝对贡献度, 类别重要性) × 相对优势
+                    # 使用参数lambda_category_weight控制平衡：
+                    #   lambda=0.0: 只看绝对贡献度 (偏向已做对的多的)
+                    #   lambda=0.5: 平衡贡献度和类别重要性
+                    #   lambda=1.0: 只看类别重要性 (偏向样本多的类别)
+                    lambda_weight = getattr(self, 'lambda_category_weight', 0.5)  # 默认0.5
+                    combined_weight = (1 - lambda_weight) * contrib_k + lambda_weight * weight_k
+                    
+                    # 最终分化潜力得分
+                    score_k = combined_weight * (recall_k - acc_global)
+                    
+                    category_analysis[category] = {
+                        'c_k': c_k,
+                        'n_k': n_k,
+                        'recall': recall_k,
+                        'contrib': contrib_k,
+                        'weight': weight_k,
+                        'combined_weight': combined_weight,
+                        'advantage': recall_k - acc_global,
+                        'score': score_k
+                    }
+                    
+                    if score_k > max_score:
+                        max_score = score_k
+                        best_category = category
+                else:
+                    # 记录劣势类别（用于调试）
+                    category_analysis[category] = {
+                        'c_k': c_k,
+                        'n_k': n_k,
+                        'recall': recall_k,
+                        'contrib': c_k / total_problems,
+                        'weight': n_k / total_problems,
+                        'combined_weight': 0.0,
+                        'advantage': recall_k - acc_global,
+                        'score': 0.0  # 无分化价值
+                    }
+            
+            # 2.4 记录该工作流的最终分化潜力
+            final_score = max(0.0, max_score)
+            
+            # 获取已分化次数（用于日志）
             s_i = self.workflow_differentiation_counts.get(round_num, 0)
-            
-            # 计算势函数 Φ_split
-            improvement_potential = lambda_1 * (1 - R_i) + lambda_2 * D_i
-            usage_penalty = np.exp(-self.eta_s * s_i)
-            phi_split = L_i * improvement_potential * usage_penalty
             
             candidates.append({
                 'workflow': workflow,
                 'round': round_num,
-                'score': score,
-                'R_i': R_i,
-                'L_i': L_i,
-                'D_i': D_i,
-                's_i': s_i,
-                'phi_split': phi_split
+                'score': workflow.get('avg_score', 0.0),
+                'c_total': c_total,
+                'acc_global': acc_global,
+                'split_potential': final_score,
+                'target_category': best_category,
+                'category_analysis': category_analysis,
+                'differentiation_count': s_i
             })
             
-            logger.info(f"  Round {round_num}: score={score:.4f}, R_i={R_i:.4f}, L_i={L_i:.4f}, "
-                       f"D_i={D_i:.4f}, s_i={s_i}, Φ_split={phi_split:.4f}")
+            # 详细日志
+            logger.info(f"Round {round_num} (already split {s_i} times):")
+            logger.info(f"  Overall: {c_total}/{total_problems} correct, Acc_global={acc_global:.4f}")
+            if best_category:
+                logger.info(f"  Best specialization: {best_category} (potential={final_score:.4f})")
+            else:
+                logger.info(f"  No advantageous specialization found")
+            
+            # 显示前3个优势类别
+            sorted_cats = sorted(category_analysis.items(), 
+                                key=lambda x: x[1]['score'], 
+                                reverse=True)[:3]
+            for cat, stats in sorted_cats:
+                if stats['score'] > 0:
+                    logger.info(f"    {cat}: {stats['c_k']}/{stats['n_k']} correct, "
+                               f"Recall={stats['recall']:.4f}, Weight={stats['weight']:.4f}, "
+                               f"Combined={stats['combined_weight']:.4f}, "
+                               f"Advantage={stats['advantage']:+.4f}, Score={stats['score']:.4f}")
         
-        # Softmax 采样
-        phi_values = np.array([c['phi_split'] for c in candidates])
+        # Step 3: 检查是否有候选
+        if not candidates:
+            logger.warning("No valid candidates for differentiation")
+            return None, None
         
-        # 避免数值溢出
-        phi_values = phi_values - np.max(phi_values)
-        exp_values = np.exp(phi_values)
-        probabilities = exp_values / np.sum(exp_values)
+        # Step 4: 计算修正后的分化潜力（权衡潜力和准确率）
+        potentials = [c['split_potential'] for c in candidates]
+        accuracies = [c['acc_global'] for c in candidates]
         
-        # 采样选择
-        selected_idx = np.random.choice(len(candidates), p=probabilities)
+        # 如果所有分化潜力都为0，返回None
+        if max(potentials) == 0:
+            logger.warning("All workflows have zero split potential, no specialization opportunity")
+            return None, None
+        
+        # 归一化分化潜力（以最大值归一化）
+        max_potential = max(potentials)
+        normalized_potentials = [p / max_potential if max_potential > 0 else 0 for p in potentials]
+        
+        # 计算修正分数: α * normalized_potential + (1-α) * accuracy
+        # 这样既考虑专业化潜力，也考虑整体性能
+        alpha = self.alpha_split_potential
+        adjusted_scores = [
+            alpha * norm_pot + (1 - alpha) * acc
+            for norm_pot, acc in zip(normalized_potentials, accuracies)
+        ]
+        
+        # 记录修正分数到candidates
+        for i, cand in enumerate(candidates):
+            cand['normalized_potential'] = normalized_potentials[i]
+            cand['adjusted_score'] = adjusted_scores[i]
+        
+        # 选择修正分数最高的工作流
+        selected_idx = adjusted_scores.index(max(adjusted_scores))
+        
+        # 显示前3名候选
+        logger.info(f"Differentiation candidate ranking (top 3 by adjusted score):")
+        logger.info(f"  (α={alpha:.2f} for potential, {1-alpha:.2f} for accuracy)")
+        sorted_indices = sorted(range(len(candidates)), 
+                               key=lambda i: candidates[i]['adjusted_score'], 
+                               reverse=True)[:3]
+        for rank, idx in enumerate(sorted_indices, 1):
+            c = candidates[idx]
+            logger.info(f"  {rank}. Round {c['round']}: "
+                       f"adjusted={c['adjusted_score']:.4f} "
+                       f"(potential={c['split_potential']:.4f}, "
+                       f"norm_pot={c['normalized_potential']:.4f}, "
+                       f"acc={c['acc_global']:.4f}), "
+                       f"category={c['target_category']}")
+        
+        # Step 5: 返回选中的工作流和目标类别
         selected = candidates[selected_idx]
         
         logger.info("=" * 80)
-        logger.info(f"Selected workflow from Round {selected['round']} for differentiation")
-        logger.info(f"  Score: {selected['score']:.4f}, Φ_split: {selected['phi_split']:.4f}")
-        logger.info(f"  Selection probability: {probabilities[selected_idx]:.4f}")
+        logger.info(f"SELECTED: Round {selected['round']} for specialization")
+        logger.info(f"  Target Category: {selected['target_category']}")
+        logger.info(f"  Adjusted Score: {selected['adjusted_score']:.4f}")
+        logger.info(f"    ├─ Normalized Potential: {selected['normalized_potential']:.4f} (weight={alpha:.2f})")
+        logger.info(f"    └─ Global Accuracy: {selected['acc_global']:.4f} (weight={1-alpha:.2f})")
+        logger.info(f"  Raw Split Potential: {selected['split_potential']:.4f}")
+        if selected['target_category']:
+            target_stats = selected['category_analysis'][selected['target_category']]
+            logger.info(f"  Target Stats: Recall={target_stats['recall']:.4f}, "
+                       f"Contrib={target_stats['contrib']:.4f}, "
+                       f"Advantage={target_stats['advantage']:+.4f}")
         logger.info("=" * 80)
         
-        return selected['workflow']
-    
-    def _calculate_local_plateau(self, workflow: Dict, all_workflows: List[Dict]) -> float:
-        """
-        计算局部停滞度：该工作流在近期是否停滞
-        
-        通过比较该工作流与后续轮次中类似工作流的性能变化
-        
-        Returns:
-            float: 停滞度 ∈ [0, 1]，越高表示越停滞
-        """
-        current_round = workflow.get('round', 0)
-        current_score = workflow.get('avg_score', 0.0)
-        
-        # 查找后续轮次的得分
-        future_scores = []
-        for w in all_workflows:
-            if w.get('round', 0) > current_round:
-                future_scores.append(w.get('avg_score', 0.0))
-        
-        if not future_scores:
-            # 最新轮次，默认中等停滞度
-            return 0.5
-        
-        # 计算平均后续得分
-        avg_future = np.mean(future_scores)
-        delta = avg_future - current_score
-        
-        # 使用 logistic 映射
-        kappa_local = 40.0  # 局部灵敏度
-        try:
-            L_i = 1.0 / (1.0 + np.exp(kappa_local * delta))
-        except OverflowError:
-            L_i = 0.0 if delta > 0 else 1.0
-        
-        return L_i
+        return selected['workflow'], selected['target_category']
     
     def _calculate_diversity(self, workflow: Dict, all_workflows: List[Dict]) -> float:
         """
@@ -653,13 +851,130 @@ class EnhancedOptimizer(Optimizer):
         
         return diversity
     
+    def _load_category_metadata(self) -> Dict[str, int]:
+        """
+        加载问题分类元数据：每个类别有多少问题
+        
+        从 workspace/{DATASET}/problem_classifications.json 或
+        workspace/{DATASET}/workflows/problem_classifications.json 加载
+        
+        Returns:
+            Dict[str, int]: {"category_A": N_k, "category_B": N_k, ...}
+        """
+        # 尝试两个可能的位置
+        classification_files = [
+            f"{self.root_path}/problem_classifications.json",
+            f"{self.root_path}/workflows/problem_classifications.json"
+        ]
+        
+        classification_file = None
+        for path in classification_files:
+            if os.path.exists(path):
+                classification_file = path
+                break
+        
+        if not classification_file:
+            logger.warning(f"Classification file not found in: {classification_files}")
+            return {}
+        
+        try:
+            with open(classification_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # 处理两种格式：
+            # 格式1 (新): {"categories": [...], "problem_classifications": [{"problem_id": "123", "category": "A"}, ...]}
+            # 格式2 (旧): {"123": "A", "456": "B", ...}
+            
+            if isinstance(data, dict) and "problem_classifications" in data:
+                # 新格式：从列表中提取
+                problem_list = data["problem_classifications"]
+                classifications = {item["problem_id"]: item["category"] for item in problem_list}
+            elif isinstance(data, dict):
+                # 旧格式：直接使用字典
+                classifications = data
+            else:
+                logger.warning(f"Unexpected format in {classification_file}")
+                return {}
+            
+            # 统计每个类别的问题数量
+            category_counts = {}
+            for problem_id, category in classifications.items():
+                category_counts[category] = category_counts.get(category, 0) + 1
+            
+            logger.info(f"Loaded category metadata: {len(category_counts)} categories, {len(classifications)} problems")
+            for cat, count in sorted(category_counts.items()):
+                logger.debug(f"  {cat}: {count} problems")
+            
+            return category_counts
+            
+        except Exception as e:
+            logger.warning(f"Failed to load category metadata: {e}")
+            import traceback
+            logger.debug(traceback.format_exc())
+            return {}
+    
+    def _load_workflow_category_stats(self, workflow: Dict) -> Dict[str, int]:
+        """
+        加载工作流在各类别的统计：每个类别答对了多少题
+        
+        从 workflows/round_{N}/log.json 加载，统计每个类别的正确数量
+        
+        Args:
+            workflow: 工作流信息字典
+            
+        Returns:
+            Dict[str, int]: {"category_A": C_k, "category_B": C_k, ...}
+        """
+        round_num = workflow.get('round', 0)
+        log_path = f"{self.root_path}/workflows/round_{round_num}/log.json"
+        
+        if not os.path.exists(log_path):
+            logger.warning(f"Log file not found: {log_path}")
+            return {}
+        
+        try:
+            with open(log_path, 'r', encoding='utf-8') as f:
+                log_data = json.load(f)
+            
+            # log.json 可能有两种格式：
+            # 1. 直接是列表: [{"question": ..., "score": ..., "category": ...}, ...]
+            # 2. 带元数据的字典: {"differentiation_metadata": {...}, "execution_logs": [...]}
+            
+            if isinstance(log_data, dict) and "execution_logs" in log_data:
+                entries = log_data["execution_logs"]
+            elif isinstance(log_data, list):
+                entries = log_data
+            else:
+                logger.warning(f"Unexpected log format in {log_path}")
+                return {}
+            
+            # 统计每个类别的正确数量
+            category_counts = {}
+            for entry in entries:
+                if isinstance(entry, dict):
+                    category = entry.get('category', 'unknown')
+                    score = entry.get('score', 0.0)
+                    
+                    # 只统计正确的（score >= 0.5 或 is_correct == True）
+                    is_correct = score >= 0.5 or entry.get('is_correct', False)
+                    
+                    if is_correct:
+                        category_counts[category] = category_counts.get(category, 0) + 1
+            
+            logger.debug(f"Round {round_num} category stats: {category_counts}")
+            return category_counts
+            
+        except Exception as e:
+            logger.warning(f"Failed to load workflow category stats for round {round_num}: {e}")
+            return {}
+    
     def _select_for_fuse(self, workflow_results: List[Dict]) -> tuple:
         """
         理论化融合目标选择 (Algorithm 3: SelectForFuse) - 三路版本
         
-        分两步选择最佳融合三元组：
-        1. 筛选候选集：选择 Top-6 高覆盖率工作流
-        2. 三路评分：综合考虑两两互补性/一致性和三路指标
+        选择最佳融合三元组，考虑：
+        1. 两两互补性/一致性（pairwise metrics）
+        2. 三路互补性/一致性（triple-wise metrics）
         
         评分公式：
             # 两两指标（平均）
@@ -687,6 +1002,39 @@ class EnhancedOptimizer(Optimizer):
         logger.info("SelectForFuse: Finding optimal workflow triple for 3-way fusion")
         logger.info("=" * 80)
         
+        if len(workflow_results) < 3:
+            logger.warning("Insufficient workflows for 3-way fusion (need at least 3)")
+            return None, None, None
+        
+        logger.info(f"Evaluating {len(workflow_results)} candidate workflows for fusion")
+        
+        # 筛选保护：如果工作流太多，只考虑性能较好的
+        original_count = len(workflow_results)
+        
+        # 保护1: 最多考虑前15个工作流（避免组合爆炸）
+        if len(workflow_results) > 15:
+            sorted_by_score = sorted(workflow_results, key=lambda x: x.get('avg_score', 0), reverse=True)
+            workflow_results = sorted_by_score[:15]
+            logger.info(f"Applied top-K filter: {original_count} → {len(workflow_results)} workflows (kept top 15)")
+        
+        # 保护2: 过滤性能太差的工作流（低于中位数的50%）
+        if len(workflow_results) > 5:
+            scores = [w.get('avg_score', 0) for w in workflow_results]
+            median_score = sorted(scores)[len(scores) // 2]
+            min_threshold = median_score * 0.5
+            
+            filtered_workflows = [w for w in workflow_results if w.get('avg_score', 0) >= min_threshold]
+            
+            if len(filtered_workflows) >= 3:
+                before_count = len(workflow_results)
+                workflow_results = filtered_workflows
+                logger.info(f"Applied performance threshold: {min_threshold:.4f} (50% of median {median_score:.4f})")
+                logger.info(f"Filtered workflows: {before_count} → {len(workflow_results)}")
+            else:
+                logger.info(f"Skipped performance filter (would leave < 3 workflows)")
+        
+        logger.info(f"Final candidate pool: {len(workflow_results)} workflows")
+        
         # 使用实例超参数
         alpha_U = self.alpha_U
         alpha_I = self.alpha_I
@@ -694,32 +1042,24 @@ class EnhancedOptimizer(Optimizer):
         beta_pair = self.beta_pair
         gamma_pair = self.gamma_pair
         gamma_triple = self.gamma_triple
-        top_M = min(6, len(workflow_results))  # 候选集大小（与伪代码一致）
         
-        if len(workflow_results) < 3:
-            logger.warning("Insufficient workflows for 3-way fusion (need at least 3)")
-            return None, None, None
+        # 使用所有候选工作流（已经过筛选）
+        candidates = workflow_results
         
-        # Step 1: 筛选 Top-6 高覆盖率候选
-        sorted_workflows = sorted(workflow_results, 
-                                  key=lambda w: w.get('avg_score', 0.0), 
-                                  reverse=True)
-        candidates = sorted_workflows[:top_M]
-        
-        logger.info(f"Step 1: Selected top {len(candidates)} candidates by coverage:")
+        logger.info(f"Candidate workflows for fusion:")
         for c in candidates:
             solved_count = len(c.get('solved_problems', []))
             logger.info(f"  Round {c.get('round', 0)}: score={c.get('avg_score', 0.0):.4f}, "
                        f"solved={solved_count} problems")
         
-        # Step 2: 三路评分
+        # 计算三元组融合势
         best_phi = -float('inf')
         best_triple = (None, None, None)
         best_details = None
         
         total_combinations = len(candidates) * (len(candidates) - 1) * (len(candidates) - 2) // 6
-        logger.info(f"Step 2: Evaluating {total_combinations} triple combinations...")
-        logger.info(f"Hyperparameters: α_U={alpha_U}, α_I={alpha_I}, "
+        logger.info(f"Evaluating {total_combinations} triple combinations...")
+        logger.info(f"Fusion hyperparameters: α_U={alpha_U}, α_I={alpha_I}, "
                    f"β_triple={beta_triple}, β_pair={beta_pair}, "
                    f"γ_pair={gamma_pair}, γ_triple={gamma_triple}")
         
@@ -877,18 +1217,14 @@ class EnhancedOptimizer(Optimizer):
         Returns:
             bool: True if preconditions are met
         """
-        # 检查是否有足够的包络工作流
-        envelope_workflows = self.data_utils.find_envelope_workflows(self.max_envelope_workflows)
-        if len(envelope_workflows) < self.max_envelope_workflows:
-            logger.info(f"Insufficient workflows for fusion (found {len(envelope_workflows)}, need at least {self.max_envelope_workflows})")
+        # 检查是否有至少3个工作流可以融合
+        results = self.data_utils.load_results(f"{self.root_path}/workflows")
+        
+        if len(results) < 3:
+            logger.info(f"Insufficient workflows for fusion (found {len(results)}, need at least 3)")
             return False
         
-        # 检查此融合组合是否已尝试过
-        if self.fusion_checker.check_fusion_already_attempted(envelope_workflows):
-            logger.info("Skipping fusion - this combination has been attempted before")
-            return False
-        
-        logger.info(f"Fusion preconditions met: {len(envelope_workflows)} envelope workflows available")
+        logger.info(f"Fusion preconditions met: {len(results)} workflows available")
         return True
     
     def _should_attempt_fusion(self) -> bool:
@@ -912,18 +1248,13 @@ class EnhancedOptimizer(Optimizer):
             logger.info(f"Skipping fusion - insufficient interval (need {self.fusion_interval_rounds} rounds, only {rounds_since_last} have passed)")
             return False
         
-        # Check if we have enough envelope workflows
-        envelope_workflows = self.data_utils.find_envelope_workflows(self.max_envelope_workflows)
-        if len(envelope_workflows) < self.max_envelope_workflows:
-            logger.info(f"Insufficient workflows for fusion (found {len(envelope_workflows)}, need at least {self.max_envelope_workflows})")
+        # Check if we have at least 3 workflows available
+        results = self.data_utils.load_results(f"{self.root_path}/workflows")
+        if len(results) < 3:
+            logger.info(f"Insufficient workflows for fusion (found {len(results)}, need at least 3)")
             return False
         
-        # Check if this specific fusion combination has been attempted before
-        if self.fusion_checker.check_fusion_already_attempted(envelope_workflows):
-            logger.info("Skipping fusion - this combination has been attempted before")
-            return False
-        
-        logger.info(f"Fusion conditions met: {len(envelope_workflows)} envelope workflows available")
+        logger.info(f"Fusion conditions met: {len(results)} workflows available")
         return True
     
     async def _ensure_problem_classification(self) -> bool:
@@ -1025,7 +1356,8 @@ class EnhancedOptimizer(Optimizer):
             self._update_differentiation_counts(round_summaries)
             
             # === 使用理论化选择方法 (Algorithm 2: SelectForSplit) ===
-            selected_workflow = self._select_for_split(round_summaries)
+            # 返回 (workflow, target_category) 元组
+            selected_workflow, target_category = self._select_for_split(round_summaries)
             
             if selected_workflow is None:
                 logger.warning("No suitable workflow selected for differentiation")
@@ -1039,6 +1371,7 @@ class EnhancedOptimizer(Optimizer):
             
             logger.info(f"Selected workflow from round {source_round} for problem type specialization")
             logger.info(f"  Score: {original_score:.4f}")
+            logger.info(f"  Target specialization category: {target_category if target_category else 'N/A'}")
             
             # Load source workflow and create differentiated version
             source_workflow_content = await self.workflow_manager.load_workflow_content(source_round)
@@ -1047,16 +1380,74 @@ class EnhancedOptimizer(Optimizer):
             # Calculate target round
             next_round = self.round + 1
             
-            # Select target category for differentiation
-            target_category, example_problems = self.problem_classifier.select_target_category_for_differentiation(
-                workflow_differentiation_history=self.workflow_manager.get_differentiation_history()
-            )
+            # 使用 _select_for_split 返回的 target_category
+            if target_category is None:
+                # 如果没有明确的目标类别，使用旧逻辑选择
+                logger.info("No advantageous specialization found, using classifier to select target category")
+                target_category, example_problems = self.problem_classifier.select_target_category_for_differentiation(
+                    workflow_differentiation_history=self.workflow_manager.get_differentiation_history()
+                )
+            else:
+                # 使用选定的目标类别获取示例
+                logger.info(f"Using category-based target from split selection: {target_category}")
+                classifications_data = self.problem_classifier.load_classifications()
+                
+                # 处理不同格式的分类数据
+                classifications = {}
+                if isinstance(classifications_data, dict):
+                    # 检查是否有嵌套的 problem_classifications 键
+                    if 'problem_classifications' in classifications_data:
+                        # 数组格式: {"problem_classifications": [{"problem_id": ..., "category": ...}, ...]}
+                        for item in classifications_data['problem_classifications']:
+                            problem_id = str(item.get('problem_id', ''))
+                            category = item.get('category', 'unknown')
+                            if problem_id:
+                                classifications[problem_id] = category
+                    else:
+                        # 字典格式: {problem_id: category, ...}
+                        classifications = {str(k): v for k, v in classifications_data.items()}
+                elif isinstance(classifications_data, list):
+                    # 纯数组格式: [{"problem_id": ..., "category": ...}, ...]
+                    for item in classifications_data:
+                        problem_id = str(item.get('problem_id', ''))
+                        category = item.get('category', 'unknown')
+                        if problem_id:
+                            classifications[problem_id] = category
+                
+                # 找到属于该类别的问题ID
+                category_problems = [
+                    problem_id for problem_id, cat in classifications.items() 
+                    if cat == target_category
+                ]
+                
+                logger.info(f"Found {len(category_problems)} problems in category '{target_category}'")
+                
+                # 随机选择5个示例
+                import random
+                selected_ids = random.sample(category_problems, min(5, len(category_problems)))
+                
+                # 加载示例问题
+                validation_file = f"data/datasets/{self.dataset.lower()}_validate.jsonl"
+                example_problems = []
+                
+                if os.path.exists(validation_file):
+                    with open(validation_file, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            problem = json.loads(line)
+                            # 尝试不同的 problem_id 字段
+                            problem_id = str(problem.get('id') or problem.get('task_id') or problem.get('problem_id', ''))
+                            if problem_id in selected_ids:
+                                example_problems.append(problem)
+                                if len(example_problems) >= 5:
+                                    break
+                
+                logger.info(f"Loaded {len(example_problems)} example problems from validation file")
             
             if not target_category:
                 logger.warning("No suitable target category found for differentiation")
                 return None
             
-            logger.info(f"Selected target category for differentiation: {target_category}")
+            logger.info(f"Final target category for differentiation: {target_category}")
             logger.info(f"Providing {len(example_problems)} example problems for this category")
             
             differentiation_response = await self.differentiation_processor.create_differentiated_workflow(
@@ -1094,7 +1485,7 @@ class EnhancedOptimizer(Optimizer):
                 return None
             
             data = self.data_utils.load_results(graph_path)
-            differentiation_score = await self.evaluation_utils.evaluate_graph(
+            differentiation_score, total_cost = await self.evaluation_utils.evaluate_graph(
                 self, directory, self.validation_rounds, data, initial=False
             )
             
@@ -1119,7 +1510,7 @@ class EnhancedOptimizer(Optimizer):
             self.differentiation_rounds_used += 1
             
             logger.info(f"Problem type specialization completed with score: {differentiation_score:.4f}")
-            return differentiation_score
+            return differentiation_score, total_cost
         
         except Exception as e:
             logger.error(f"Error in single differentiation execution: {e}", exc_info=True)
@@ -1234,7 +1625,7 @@ class EnhancedOptimizer(Optimizer):
             logger.info(f"  W3 (Round {w3.get('round', 0)}): {w3.get('avg_score', 0.0):.4f}")
             
             # Execute fusion process (creates workflow directly in next round directory)
-            fusion_success = await self._execute_fusion_async()
+            fusion_success = await self._execute_fusion_async([w1, w2, w3])
             
             if not fusion_success:
                 logger.error("Fusion process failed")
@@ -1255,7 +1646,7 @@ class EnhancedOptimizer(Optimizer):
             data = self.data_utils.load_results(graph_path)
             
             # Evaluate using standard evaluation process
-            fusion_score = await self.evaluation_utils.evaluate_graph(
+            fusion_score, total_cost = await self.evaluation_utils.evaluate_graph(
                 self, directory, self.validation_rounds, data, initial=False
             )
             
@@ -1289,7 +1680,7 @@ class EnhancedOptimizer(Optimizer):
                 )
                 self.fusion_metadata_counter += 1
                 
-                return fusion_score
+                return fusion_score, total_cost
             else:
                 logger.info(f"Fusion score {fusion_score:.4f} below threshold {min_envelope_score + self.fusion_score_threshold:.4f}")
                 # Even if below threshold, we keep the fusion workflow since it was already created
@@ -1301,25 +1692,28 @@ class EnhancedOptimizer(Optimizer):
                     fusion_triple_list, fusion_score, self.round, self.fusion_metadata_counter + 1, adopted=True
                 )
                 self.fusion_metadata_counter += 1
-                return fusion_score
+                return fusion_score, total_cost
         
         except Exception as e:
             logger.error(f"Error in single fusion execution: {e}", exc_info=True)
             return None
     
-    async def _execute_fusion_async(self) -> bool:
+    async def _execute_fusion_async(self, fusion_triple: List[Dict]) -> bool:
         """
         Execute the fusion process asynchronously
+        
+        Args:
+            fusion_triple: List of 3 workflows selected for fusion
         
         Returns:
             bool: True if fusion successful
         """
         try:
-            # Find envelope workflows (need exactly 3 for 3-way fusion)
-            envelope_workflows = self.data_utils.find_envelope_workflows(self.max_envelope_workflows)
+            # Use the provided fusion triple instead of finding envelope workflows
+            envelope_workflows = fusion_triple
             
-            if len(envelope_workflows) < self.max_envelope_workflows:
-                logger.warning(f"Insufficient workflows for 3-way fusion: found {len(envelope_workflows)}, need {self.max_envelope_workflows}")
+            if len(envelope_workflows) < 3:
+                logger.warning(f"Insufficient workflows for 3-way fusion: found {len(envelope_workflows)}, need 3")
                 return False
             
             source_rounds = [w['round'] for w in envelope_workflows]
@@ -1429,7 +1823,9 @@ class EnhancedOptimizer(Optimizer):
             directory = self.graph_utils.create_round_directory(graph_path, self.round)
             # Load graph using graph_utils
             self.graph = self.graph_utils.load_graph(self.round, graph_path)
-            avg_score = await self.evaluation_utils.evaluate_graph(self, directory, validation_n, data, initial=True)
+            # Evaluate round 1 but don't return yet - we need to create round 2
+            await self.evaluation_utils.evaluate_graph(self, directory, validation_n, data, initial=True)
+            # Now continue to create round 2 in the while loop below
 
         # Create a loop until the generated graph meets the check conditions
         while True:
@@ -1506,9 +1902,9 @@ class EnhancedOptimizer(Optimizer):
         logger.info(directory)
 
         # Evaluate the graph
-        avg_score = await self.evaluation_utils.evaluate_graph(self, directory, validation_n, data, initial=False)
+        avg_score, total_cost = await self.evaluation_utils.evaluate_graph(self, directory, validation_n, data, initial=False)
 
         # Update the current round score in the experience file
         self.experience_utils.update_experience(directory, experience, avg_score)
 
-        return avg_score
+        return avg_score, total_cost

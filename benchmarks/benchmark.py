@@ -23,6 +23,7 @@ class BaseBenchmark(ABC):
         self.log_path = log_path
         self.solved_threshold = solved_threshold  # Threshold for considering a problem as solved
         self.judge_llm = None  # Will be initialized lazily
+        self.problem_classifications = self._load_problem_classifications()  # Load problem categories
 
     PASS = "PASS"
     FAIL = "FAIL"
@@ -32,12 +33,118 @@ class BaseBenchmark(ABC):
         if self.judge_llm is None:
             self.judge_llm = AsyncLLM("gpt-4o-mini")
         return self.judge_llm
+    
+    def _load_problem_classifications(self) -> dict:
+        """
+        加载问题分类信息
+        
+        Returns:
+            dict: {problem_id: category}
+        """
+        # 尝试从 log_path 的父目录找 problem_classifications.json
+        classification_file = None
+        
+        # 方式1: log_path/../../problem_classifications.json (workspace/DATASET/workflows/round_X -> workspace/DATASET/)
+        candidate1 = os.path.join(os.path.dirname(os.path.dirname(self.log_path)), "problem_classifications.json")
+        if os.path.exists(candidate1):
+            classification_file = candidate1
+        else:
+            # 方式2: log_path/../problem_classifications.json (workspace/DATASET/workflows/)
+            candidate2 = os.path.join(os.path.dirname(self.log_path), "problem_classifications.json")
+            if os.path.exists(candidate2):
+                classification_file = candidate2
+            else:
+                # 方式3: log_path/../../workflows/problem_classifications.json
+                candidate3 = os.path.join(os.path.dirname(os.path.dirname(self.log_path)), "workflows", "problem_classifications.json")
+                if os.path.exists(candidate3):
+                    classification_file = candidate3
+        
+        if classification_file and os.path.exists(classification_file):
+            try:
+                with open(classification_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                
+                # 处理新的文件格式：{"problem_classifications": [{"problem_id": ..., "category": ...}, ...]}
+                if isinstance(data, dict) and "problem_classifications" in data:
+                    classifications = data["problem_classifications"]
+                    problem_map = {}
+                    for item in classifications:
+                        if isinstance(item, dict):
+                            problem_id = str(item.get("problem_id", ""))
+                            category = item.get("category", "unknown")
+                            if problem_id:
+                                problem_map[problem_id] = category
+                    logger.debug(f"Loaded {len(problem_map)} problem classifications from {classification_file}")
+                    return problem_map
+                elif isinstance(data, list):
+                    # 如果直接是数组
+                    problem_map = {}
+                    for item in data:
+                        if isinstance(item, dict):
+                            problem_id = str(item.get("problem_id", ""))
+                            category = item.get("category", "unknown")
+                            if problem_id:
+                                problem_map[problem_id] = category
+                    logger.debug(f"Loaded {len(problem_map)} problem classifications from {classification_file}")
+                    return problem_map
+                elif isinstance(data, dict):
+                    # 旧格式：{problem_id: category}
+                    problem_map = {str(k): v for k, v in data.items() 
+                                 if not k.startswith("categories") and not k.startswith("category_descriptions")}
+                    logger.debug(f"Loaded {len(problem_map)} problem classifications from {classification_file}")
+                    return problem_map
+                else:
+                    logger.warning(f"Unexpected format in classification file: {type(data)}")
+                    return {}
+            except Exception as e:
+                logger.warning(f"Failed to load problem classifications from {classification_file}: {e}")
+                return {}
+        else:
+            logger.debug(f"No problem_classifications.json found (checked: {candidate1}, {candidate2}, {candidate3})")
+            return {}
+    
+    def _get_problem_category(self, problem_id: Any) -> str:
+        """
+        获取问题的类别
+        
+        Args:
+            problem_id: 问题ID
+            
+        Returns:
+            str: 类别名称，如果未找到则返回 "unknown"
+        """
+        if not self.problem_classifications:
+            return "unknown"
+        
+        # 尝试不同的ID格式
+        str_id = str(problem_id)
+        
+        # 直接查找
+        if str_id in self.problem_classifications:
+            return self.problem_classifications[str_id]
+        
+        # 尝试整数格式
+        try:
+            int_id = int(problem_id)
+            if int_id in self.problem_classifications:
+                return self.problem_classifications[int_id]
+            if str(int_id) in self.problem_classifications:
+                return self.problem_classifications[str(int_id)]
+        except (ValueError, TypeError):
+            pass
+        
+        return "unknown"
 
     async def load_data(self, specific_indices: List[int] = None) -> List[dict]:
         data = []
         async with aiofiles.open(self.file_path, mode="r", encoding="utf-8") as file:
+            index = 0
             async for line in file:
-                data.append(json.loads(line))
+                problem = json.loads(line)
+                # 添加 _index 字段，用于生成统一的 problem_id 格式
+                problem['_index'] = index
+                data.append(problem)
+                index += 1
         if specific_indices is not None:
             filtered_data = [data[i] for i in specific_indices if i < len(data)]
             return filtered_data
@@ -72,6 +179,8 @@ class BaseBenchmark(ABC):
         prediction: str,
         judge_explanation: str,
         score: float = 0.0,
+        problem_id: Any = None,
+        category: str = "unknown",
     ):
         log_data = {
             "question": problem,
@@ -79,6 +188,8 @@ class BaseBenchmark(ABC):
             "model_output": prediction,
             "score": score,
             "judge_explanation": judge_explanation,
+            "problem_id": problem_id,
+            "category": category,
         }
         log_file = Path(self.log_path) / "log.json"
         if log_file.exists():
@@ -340,7 +451,12 @@ Examples:
     async def evaluate_all_problems(self, data: List[dict], agent: Callable, max_concurrent_tasks: int = 30):
         semaphore = asyncio.Semaphore(max_concurrent_tasks)
 
-        async def sem_evaluate(problem):
+        async def sem_evaluate(idx_problem):
+            idx, problem = idx_problem
+            # 如果problem没有id/idx字段,使用索引作为ID
+            if 'id' not in problem and 'idx' not in problem:
+                problem['_index'] = idx
+            
             async with semaphore:
                 try:
                     # 添加超时保护（每个问题最多10分钟）
@@ -358,7 +474,7 @@ Examples:
                     columns = self.get_result_columns()
                     return tuple([problem.get("question", str(problem)[:100]), f"ERROR: {e}", "", 0.0, 0.0][:len(columns)])
 
-        tasks = [sem_evaluate(problem) for problem in data]
+        tasks = [sem_evaluate((idx, problem)) for idx, problem in enumerate(data)]
         return await tqdm_asyncio.gather(*tasks, desc=f"Evaluating {self.name} problems", total=len(data))
 
     async def run_evaluation(self, agent: Callable, va_list: List[int], max_concurrent_tasks: int = 30):

@@ -181,6 +181,16 @@ Examples:
         original_context = problem["context"]
         expected_output = problem["ref_text"]
         
+        # 获取problem_id: 优先使用id字段,否则使用_index生成problem_{idx}格式
+        if "id" in problem:
+            problem_id = problem["id"]
+        elif "_index" in problem:
+            problem_id = f"problem_{problem['_index']}"
+        else:
+            problem_id = "unknown"
+        
+        category = self._get_problem_category(problem_id)
+        
         # 在问题前添加简单指令，要求直接回答（只用于工作流输入）
         instruction = "Please provide a clear, direct answer without showing your reasoning process.\n\n"
         input_with_instruction = instruction + original_context  # 传给工作流的输入
@@ -198,19 +208,31 @@ Examples:
                 prediction=output
             )
             
-            if uni_score < 0.3:
-                self.log_mismatch(
-                    original_context,  # 记录原始 context，不含指令
-                    expected_output, 
-                    output, 
-                    explanation,
-                    uni_score
-                )
+            # 所有问题都记录日志（包含类别信息）
+            self.log_mismatch(
+                original_context,  # 记录原始 context，不含指令
+                expected_output, 
+                output, 
+                explanation,
+                uni_score,
+                problem_id,
+                category
+            )
 
             return original_context, output, expected_output, uni_score, cost
 
         except Exception as e:
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
+            # 错误情况也记录日志
+            self.log_mismatch(
+                original_context,
+                expected_output,
+                str(e),
+                f"Error: {e}",
+                0.0,
+                problem_id,
+                category
+            )
             return original_context, str(e), expected_output, 0.0, 0.0
 
     def get_result_columns(self) -> List[str]:

@@ -30,6 +30,7 @@ class EvaluationUtils:
     async def evaluate_graph(self, optimizer, directory, validation_n, data, initial=False):
         evaluator = Evaluator(eval_path=directory)
         sum_score = 0
+        sum_total_cost = 0
         all_solved_problems = set()
 
         # Repeat the test validation_n times to get the average
@@ -54,11 +55,12 @@ class EvaluationUtils:
             optimizer.data_utils.save_results(result_path, data)
 
             sum_score += score
+            sum_total_cost += total_cost
 
         # Store the union of all solved problems for this round
         optimizer.current_round_solved_problems = all_solved_problems
         
-        return sum_score / validation_n
+        return sum_score / validation_n, sum_total_cost
 
     async def evaluate_graph_test(self, optimizer, directory, is_test=True):
         evaluator = Evaluator(eval_path=directory)

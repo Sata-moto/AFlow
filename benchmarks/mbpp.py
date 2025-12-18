@@ -91,6 +91,18 @@ class MBPPBenchmark(BaseBenchmark):
 
     async def evaluate_problem(self, data: dict, graph: Callable) -> Tuple[str, str, str, float, float]:
         input_text = data["prompt"]
+        
+        # 获取problem_id: 优先使用task_id/id字段,否则使用_index生成problem_{idx}格式
+        if "task_id" in data:
+            problem_id = data["task_id"]
+        elif "id" in data:
+            problem_id = data["id"]
+        elif "_index" in data:
+            problem_id = f"problem_{data['_index']}"
+        else:
+            problem_id = "unknown"
+        
+        category = self._get_problem_category(problem_id)
         expected_output = "\nCorrect Solution:\ndef " + data["code"]
 
         try:
@@ -104,10 +116,10 @@ class MBPPBenchmark(BaseBenchmark):
 
             # Calculate score based on the check result
             score = 1.0 if ret[0] == self.PASS else 0.0
+            judge_explanation = test_case_details
 
-            # Log mismatch if the score is 0
-            if score == 0:
-                self.log_mismatch(input_text, expected_output, prediction, score)
+            # 所有问题都记录日志（包含类别信息）
+            self.log_mismatch(input_text, expected_output, prediction, judge_explanation, score, problem_id, category)
 
             return input_text, prediction, expected_output, score, cost
 
@@ -116,6 +128,7 @@ class MBPPBenchmark(BaseBenchmark):
             error_traceback = traceback.format_exc()
             logger.error(f"Error in evaluate_problem:\n{error_traceback}")
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
+            self.log_mismatch(input_text, expected_output, str(e), f"Error: {e}", 0.0, problem_id, category)
             return input_text, str(e), expected_output, 0.0, 0.0
 
     def calculate_score(self, expected_output: str, prediction: str) -> Tuple[float, str]:

@@ -1,0 +1,27 @@
+[32m2025-12-16 20:56:27 - INFO - ================================================================================[0m
+[32m2025-12-16 20:56:27 - INFO - Testing Workflow - Dataset: GSM8K, Round: 20[0m
+[32m2025-12-16 20:56:27 - INFO - ================================================================================[0m
+[32m2025-12-16 20:56:27 - INFO - Loading LLM config from: config/config2.yaml[0m
+Traceback (most recent call last):
+  File "/home/wx/AFlow/test_workflow.py", line 245, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/home/wx/anaconda3/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/home/wx/anaconda3/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/wx/anaconda3/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/wx/AFlow/test_workflow.py", line 230, in main
+    score, avg_cost, total_cost = await test_workflow(
+                                  ^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/wx/AFlow/test_workflow.py", line 76, in test_workflow
+    models_config = LLMsConfig.from_yaml(llm_config_path)
+                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'LLMsConfig' has no attribute 'from_yaml'

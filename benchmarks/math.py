@@ -25,6 +25,18 @@ class MATHBenchmark(BaseBenchmark):
         """评估单个问题"""
         input_text = problem.get("problem", problem.get("question", ""))
         ground_truth = problem.get("solution", problem.get("answer", ""))
+        
+        # 获取problem_id: 优先使用id/idx字段,否则使用_index生成problem_{idx}格式
+        if "id" in problem:
+            problem_id = problem["id"]
+        elif "idx" in problem:
+            problem_id = problem["idx"]
+        elif "_index" in problem:
+            problem_id = f"problem_{problem['_index']}"
+        else:
+            problem_id = "unknown"
+        
+        category = self._get_problem_category(problem_id)
 
         try:
             output, cost = await self._generate_output(graph, input_text)
@@ -37,14 +49,14 @@ class MATHBenchmark(BaseBenchmark):
                 task_description="solve the advanced math problem and provide the correct answer"
             )
 
-            if score == 0:
-                self.log_mismatch(input_text, ground_truth, output, explanation, score)
+            # 所有问题都记录日志（包含类别信息）
+            self.log_mismatch(input_text, ground_truth, output, explanation, score, problem_id, category)
 
             return input_text, output, ground_truth, score, cost
 
         except Exception as e:
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
-            self.log_mismatch(input_text, ground_truth, str(e), f"Error: {e}", 0.0)
+            self.log_mismatch(input_text, ground_truth, str(e), f"Error: {e}", 0.0, problem_id, category)
             return input_text, str(e), ground_truth, 0.0, 0.0
 
     def calculate_score(self, expected_output: str, prediction: str) -> Tuple[float, str]:

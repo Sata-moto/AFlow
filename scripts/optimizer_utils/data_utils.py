@@ -118,8 +118,84 @@ class DataUtils:
         if not data:
             return ""
 
-        sample_size = min(3, len(data))
-        random_samples = random.sample(data, sample_size)
+        # 只保留错误样本 (score != 1.0)
+        error_samples = [item for item in data if item.get('score', 0) != 1.0]
+        
+        if not error_samples:
+            return ""  # 如果没有错误样本，返回空字符串
+        
+        # 过滤掉触发内容过滤的样本，并清洗敏感内容
+        # 策略：
+        # 1. 完全丢弃包含 content_filter 错误的样本
+        # 2. 对于包含敏感词的样本，清洗内容而不是丢弃
+        
+        # 扩展的敏感词列表
+        sensitive_keywords = [
+            # 暴力相关
+            'holocaust', 'massacre', 'killed', 'extermination', 'murder', 'genocide', 
+            'slaughter', 'execution', 'torture', 'violence', 'death toll', 'casualties',
+            'ethnic cleansing', 'war crime', 'atrocity', 'brutality', 'killing', 'mass murder',
+            'pogrom', 'persecution', 'slaughtered', 'murdered', 'executed', 'exterminated',
+            # 死亡相关
+            'death', 'dead', 'died', 'fatalities', 'mortality', 'corpse', 'bodies',
+            # 战争相关
+            'war', 'battle', 'combat', 'conflict', 'invasion', 'occupation', 'bombing',
+            # 纳粹相关
+            'nazi', 'hitler', 'gestapo', 'ss troops', 'third reich',
+            # 种族相关
+            'jews', 'jewish', 'roma', 'romani', 'ethnic', 'racial'
+        ]
+        
+        def sanitize_text(text):
+            """清洗文本，替换敏感词为占位符"""
+            if not isinstance(text, str):
+                return text
+            
+            sanitized = text
+            for keyword in sensitive_keywords:
+                # 不区分大小写地替换
+                import re
+                pattern = re.compile(re.escape(keyword), re.IGNORECASE)
+                sanitized = pattern.sub('[REDACTED]', sanitized)
+            
+            return sanitized
+        
+        filtered_samples = []
+        for item in error_samples:
+            error_msg = item.get('error') or ''
+            model_output = item.get('model_output') or ''
+            judge_explanation = item.get('judge_explanation') or ''
+            
+            # 检查是否包含 content_filter 错误
+            has_content_filter = ('content_filter' in error_msg 
+                                 or 'content_filter' in model_output 
+                                 or 'content_filter' in judge_explanation)
+            
+            # 如果包含content_filter错误，完全丢弃
+            if has_content_filter:
+                logger.debug(f"Skipping sample due to content_filter error")
+                continue
+            
+            # 对样本内容进行清洗
+            cleaned_item = item.copy()
+            if 'question' in cleaned_item:
+                cleaned_item['question'] = sanitize_text(cleaned_item['question'])
+            if 'context' in cleaned_item:
+                cleaned_item['context'] = sanitize_text(cleaned_item['context'])
+            if 'answer' in cleaned_item:
+                cleaned_item['answer'] = sanitize_text(cleaned_item['answer'])
+            if 'model_output' in cleaned_item:
+                cleaned_item['model_output'] = sanitize_text(cleaned_item['model_output'])
+            
+            filtered_samples.append(cleaned_item)
+        
+        if not filtered_samples:
+            logger.warning(f"Round {cur_round}: All error samples contain content_filter issues, skipping.")
+            return ""  # 如果所有错误样本都触发过滤，返回空字符串
+        
+        # 从过滤后的错误样本中随机抽取
+        sample_size = min(3, len(filtered_samples))
+        random_samples = random.sample(filtered_samples, sample_size)
 
         log = ""
         for sample in random_samples:

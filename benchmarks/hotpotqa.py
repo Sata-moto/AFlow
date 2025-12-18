@@ -27,6 +27,18 @@ class HotpotQABenchmark(BaseBenchmark):
         question = problem.get("question", "")
         context = problem.get("context", "")
         
+        # 获取problem_id: 强制使用_index生成problem_{idx}格式，以匹配problem_classifications.json
+        if "_index" in problem:
+            problem_id = f"problem_{problem['_index']}"
+        elif "id" in problem:
+            problem_id = problem["id"]
+        elif "_id" in problem:
+            problem_id = problem["_id"]
+        else:
+            problem_id = "unknown"
+        
+        category = self._get_problem_category(problem_id)
+        
         # 组合问题和上下文
         if context:
             input_text = f"Context: {context}\nQuestion: {question}"
@@ -46,14 +58,14 @@ class HotpotQABenchmark(BaseBenchmark):
                 task_description="answer the multi-hop reasoning question based on the given context"
             )
 
-            if score == 0:
-                self.log_mismatch(input_text, ground_truth, output, explanation, score)
+            # 所有问题都记录日志（包含类别信息）
+            self.log_mismatch(input_text, ground_truth, output, explanation, score, problem_id, category)
 
             return input_text, output, ground_truth, score, cost
 
         except Exception as e:
             logger.info(f"Maximum retries reached. Skipping this sample. Error: {e}")
-            self.log_mismatch(input_text, ground_truth, str(e), f"Error: {e}", 0.0)
+            self.log_mismatch(input_text, ground_truth, str(e), f"Error: {e}", 0.0, problem_id, category)
             return input_text, str(e), ground_truth, 0.0, 0.0
 
     def calculate_score(self, expected_output: str, prediction: str) -> Tuple[float, str]:

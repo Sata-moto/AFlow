@@ -92,9 +92,9 @@ class ModelPricing:
     PRICES = {
         # GPT-4o models
         "gpt-4o": {"input": 0.0025, "output": 0.01},
-        "gpt-4o-mini": {"input": 0.00015, "output": 0.0006},
-        "gpt-4o-mini-2024-07-18": {"input": 0.00015, "output": 0.0006},
-        "claude-opus-4-5-20251101": {"input": 0.003, "output": 0.015},
+        "gpt-4o-mini": {"input": 0.0004, "output": 0.0016},
+        "gpt-4o-mini-2024-07-18": {"input": 0.0004, "output": 0.0016},
+        "claude-sonnet-4-20250514": {"input": 0.012, "output": 0.06},
         "o3":{"input":0.003, "output":0.015},
         "o3-mini": {"input": 0.0011, "output": 0.0025},
     }

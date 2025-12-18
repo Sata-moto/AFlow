@@ -1,10 +1,113 @@
 {
+    "12": {
+        "score": 0.8837209302325582,
+        "success": {
+            "17": {
+                "modification": "Add signature extraction phase and enhance import detection to better handle function naming and missing imports",
+                "score": 0.8953488372093024
+            }
+        },
+        "failure": {
+            "15": {
+                "modification": "Add signature extraction and import detection phases to better handle function naming and missing imports",
+                "score": 0.8488372093023255
+            }
+        }
+    },
+    "2": {
+        "score": 0.8023255813953488,
+        "success": {
+            "5": {
+                "modification": "Add an iterative refinement loop that uses test feedback to improve the solution when initial attempts fail, incorporating the Custom operator for analysis",
+                "score": 0.8255813953488372
+            },
+            "13": {
+                "modification": "Workflow Differentiation: Specialized from round 2 (score: 0.8023) in direction 'problem_type_specialization'. The parent workflow is differentiated to specialize in Data Structure Operations problems. The key modifications include:\n\n1. **Specialized Code Generation**: The custom_code_generate operator now use",
+                "score": 0.813953488372093
+            }
+        },
+        "failure": {
+            "3": {
+                "modification": "Add ScEnsemble operator to generate multiple solutions and select the most consistent one, improving solution quality through diversity and consensus",
+                "score": 0.7441860465116279
+            },
+            "4": {
+                "modification": "Workflow Differentiation: Specialized from round 2 (score: 0.8023) in direction 'problem_type_specialization'. The parent workflow is differentiated for Data Structure Operations by making the prompts more specific to this domain. The workflow maintains the same structure with two main steps: initial code gene",
+                "score": 0.7674418604651163
+            },
+            "6": {
+                "modification": "Workflow Differentiation: Specialized from round 2 (score: 0.8023) in direction 'problem_type_specialization'. I'm differentiating the parent workflow to specialize it for Data Structure Operations problems. The modifications include:\n\n1. **Specialized Code Generation**: Enhanced the custom_code_generate instr",
+                "score": 0.5930232558139535
+            }
+        }
+    },
+    "8": {
+        "score": 0.8604651162790697,
+        "success": {
+            "12": {
+                "modification": "3-way Workflow Fusion: Combined 3 high-performing workflows from rounds [8, 9, 11] (scores: ['0.8605', '0.8605', '0.8488']). Integrated complementary strengths to maximize problem coverage and performance.",
+                "score": 0.8837209302325582
+            }
+        },
+        "failure": {
+            "9": {
+                "modification": "Add a problem interpretation step using the Custom operator before generating solutions to ensure correct understanding of the problem requirements",
+                "score": 0.8604651162790697
+            },
+            "16": {
+                "modification": "Add a mathematical validation step using Custom operator after solution generation to verify the mathematical correctness and logic of the solution before testing",
+                "score": 0.8604651162790697
+            },
+            "14": {
+                "modification": "Add a test case analysis step using Custom operator to understand the exact expected behavior from test cases before solution generation",
+                "score": 0.8604651162790697
+            },
+            "11": {
+                "modification": "Add a dedicated function signature validation step using Custom operator to ensure the generated solution matches the exact expected function signature and behavior before testing",
+                "score": 0.8488372093023255
+            }
+        }
+    },
+    "17": {
+        "score": 0.8953488372093024,
+        "success": {},
+        "failure": {
+            "18": {
+                "modification": "Add comprehensive example analysis phase that extracts patterns from test cases and expected outputs to better understand the problem requirements, particularly focusing on understanding what the function should actually do based on examples rather than just the description",
+                "score": 0.8953488372093024
+            }
+        }
+    },
+    "7": {
+        "score": 0.8488372093023255,
+        "success": {
+            "8": {
+                "modification": "Add mathematical analysis step using Custom operator before solution generation to better understand mathematical problems and edge cases",
+                "score": 0.8604651162790697
+            }
+        },
+        "failure": {}
+    },
     "1": {
-        "score": 0.7209302325581395,
+        "score": 0.7325581395348837,
         "success": {
             "2": {
-                "modification": "Add Test operator to validate and improve the generated solution before returning it",
-                "score": 0.813953488372093
+                "modification": "Add a Test operator to validate solutions against test cases and provide feedback for corrections when tests fail",
+                "score": 0.8023255813953488
+            },
+            "10": {
+                "modification": "Add problem analysis step using Custom operator to better understand the problem requirements and expected output format before generating code",
+                "score": 0.7558139534883721
+            }
+        },
+        "failure": {}
+    },
+    "5": {
+        "score": 0.8255813953488372,
+        "success": {
+            "7": {
+                "modification": "Add ScEnsemble operator to generate multiple solutions and select the best one through self-consistency, improving solution quality by leveraging diverse approaches",
+                "score": 0.8488372093023255
             }
         },
         "failure": {}

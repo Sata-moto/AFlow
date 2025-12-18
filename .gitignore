@@ -6,6 +6,7 @@ optimized
 */__pycache__
 *.pyc
 /workspace
+/baselines
 *.json
 error.log
 tester.txt
